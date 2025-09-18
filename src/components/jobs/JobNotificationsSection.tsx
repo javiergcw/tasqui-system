@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const JobNotificationsSection: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -21,10 +21,10 @@ export const JobNotificationsSection: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
           {/* Text Content */}
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className={`text-3xl lg:text-4xl font-bold ${colorClasses.sidebar.text} mb-4`}>
               Get New Job Notifications
             </h2>
-            <p className="text-lg text-white/90">
+            <p className={`text-lg ${colorClasses.sidebar.text}/90`}>
               Subscribe & get all related jobs notification
             </p>
           </div>
@@ -42,7 +42,7 @@ export const JobNotificationsSection: React.FC = () => {
               />
               <button
                 type="submit"
-                className="px-6 py-3 text-white font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap"
+                className={`px-6 py-3 ${colorClasses.sidebar.text} font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap`}
                 style={{ 
                   backgroundColor: colors.dark[800],
                 }}

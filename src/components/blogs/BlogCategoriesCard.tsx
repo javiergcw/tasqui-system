@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const BlogCategoriesCard: React.FC = () => {
   const categories = [
@@ -18,7 +18,7 @@ export const BlogCategoriesCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainRed }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className="text-xl font-bold text-slate-800">Categories</h3>
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Categories</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       <div className="space-y-2">
@@ -26,13 +26,7 @@ export const BlogCategoriesCard: React.FC = () => {
            <a 
              key={index}
              href="#" 
-             className="flex justify-between items-center text-gray-600 transition-colors py-1"
-             onMouseEnter={(e) => {
-               e.currentTarget.style.color = colors.mainRed;
-             }}
-             onMouseLeave={(e) => {
-               e.currentTarget.style.color = '#6b7280';
-             }}
+             className={`flex justify-between items-center ${colorClasses.text.gray600} transition-colors py-1 hover:${colorClasses.text.red500}`}
            >
             <span>{category.name}</span>
             <span className="text-sm bg-gray-100 px-2 py-1 rounded-full">

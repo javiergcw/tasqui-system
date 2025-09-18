@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { TestimonialCard } from '../TestimonialCard';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const TestimonialsSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -104,7 +104,7 @@ export const TestimonialsSection: React.FC = () => {
         {/* Navigation Controls */}
         <div className="flex justify-center gap-4 md:gap-6 mt-8 md:mt-20">
           <button
-            className="w-10 h-10 md:w-12 md:h-12 bg-red-50 rounded-full flex items-center justify-center hover:bg-red-100 transition-colors duration-200"
+            className={`w-10 h-10 md:w-12 md:h-12 ${colorClasses.background.red50} rounded-full flex items-center justify-center hover:${colorClasses.background.red100} transition-colors duration-200`}
             style={{ color: colors.mainRed }}
             onClick={prevTestimonial}
           >
@@ -113,7 +113,7 @@ export const TestimonialsSection: React.FC = () => {
             </svg>
           </button>
           <button
-            className="w-10 h-10 md:w-12 md:h-12 bg-red-50 rounded-full flex items-center justify-center hover:bg-red-100 transition-colors duration-200"
+            className={`w-10 h-10 md:w-12 md:h-12 ${colorClasses.background.red50} rounded-full flex items-center justify-center hover:${colorClasses.background.red100} transition-colors duration-200`}
             style={{ color: colors.mainRed }}
             onClick={nextTestimonial}
           >

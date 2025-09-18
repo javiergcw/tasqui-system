@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import { colors } from '@/lib/colors';
 
 export const HeroSection: React.FC = () => {
@@ -60,9 +61,11 @@ export const HeroSection: React.FC = () => {
           <div className="flex justify-center lg:justify-end">
             <div className="relative">
               <div className="w-96 h-96 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
-                <img 
+                <Image 
                   src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80"
                   alt="Professional woman"
+                  width={687}
+                  height={687}
                   className="w-full h-full object-cover"
                 />
               </div>

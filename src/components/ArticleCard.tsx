@@ -1,7 +1,8 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { colors } from '@/lib/colors';
+import Image from 'next/image';
+import { colors, colorClasses } from '@/lib/colors';
 
 interface ArticleCardProps {
   image: string;
@@ -35,9 +36,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     >
       {/* Article Image */}
       <div className="w-full h-64 overflow-hidden">
-        <img 
+        <Image 
           src={image}
           alt={title}
+          width={400}
+          height={256}
           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>
@@ -73,12 +76,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </div>
         
         {/* Article Title */}
-        <h3 className="text-xl font-bold text-slate-800 mb-3 hover:text-blue-600 transition-colors duration-200">
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800} mb-3 hover:${colorClasses.text.blue600} transition-colors duration-200`}>
           {title}
         </h3>
         
         {/* Article Snippet */}
-        <p className="text-gray-600 text-sm leading-relaxed mb-4">
+        <p className={`${colorClasses.text.gray600} text-sm leading-relaxed mb-4`}>
           {snippet}
         </p>
         

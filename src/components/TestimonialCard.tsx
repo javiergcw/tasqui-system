@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 interface TestimonialCardProps {
   quote: string;
@@ -16,7 +16,7 @@ export const TestimonialCard: React.FC<TestimonialCardProps> = ({
   return (
     <div className="flex flex-col md:block">
       <div 
-        className="bg-red-50 p-4 md:p-8 rounded-lg transition-all duration-300 cursor-pointer group h-full flex flex-col"
+        className={`${colorClasses.background.red50} p-4 md:p-8 rounded-lg transition-all duration-300 cursor-pointer group h-full flex flex-col`}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = colors.mainRed;
           // Cambiar color solo del texto del testimonio (dentro de la card)

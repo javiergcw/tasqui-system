@@ -1,13 +1,14 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const JobDetailHeroSection: React.FC = () => {
   return (
-    <section className="relative bg-gradient-to-r from-slate-800 to-slate-900 py-20">
+    <section className={`relative ${colorClasses.sidebar.background} py-20`} style={{ background: `linear-gradient(to right, ${colors.dark[800]}, ${colors.dark[900]})` }}>
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+        <h1 className={`text-5xl md:text-6xl font-bold ${colorClasses.sidebar.text} mb-6`}>
           Job Details
         </h1>
 
@@ -16,12 +17,19 @@ export const JobDetailHeroSection: React.FC = () => {
           <nav className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
             <Link
               href="/"
-              className="text-white hover:text-blue-300 transition-colors font-medium"
+              className={`${colorClasses.sidebar.text} hover:${colorClasses.text.blue300} transition-colors font-medium`}
             >
               Home
             </Link>
-            <span className="text-white/60">&gt;</span>
-            <span className="text-white font-medium">Job Details</span>
+            <span className={`${colorClasses.sidebar.text}/60`}>&gt;</span>
+            <Link
+              href="/find-job"
+              className={`${colorClasses.sidebar.text} hover:${colorClasses.text.blue300} transition-colors font-medium`}
+            >
+              Find Jobs
+            </Link>
+            <span className={`${colorClasses.sidebar.text}/60`}>&gt;</span>
+            <span className={`${colorClasses.sidebar.text} font-medium`}>Job Details</span>
           </nav>
         </div>
       </div>

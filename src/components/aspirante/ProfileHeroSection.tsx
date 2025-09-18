@@ -3,15 +3,15 @@ import React from 'react';
 import Link from 'next/link';
 import { colors, colorClasses } from '@/lib/colors';
 
-export const CompaniesHeroSection: React.FC = () => {
+export const ProfileHeroSection: React.FC = () => {
   return (
     <section className={`relative ${colorClasses.sidebar.background} py-20`} style={{ background: `linear-gradient(to right, ${colors.dark[800]}, ${colors.dark[900]})` }}>
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className={`text-5xl md:text-6xl font-bold ${colorClasses.sidebar.text} mb-6`}>
-          Company
+          Mi Perfil
         </h1>
-
+        
         {/* Breadcrumb Navigation */}
         <div className="flex justify-center">
           <nav className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
@@ -22,7 +22,7 @@ export const CompaniesHeroSection: React.FC = () => {
               Home
             </Link>
             <span className={`${colorClasses.sidebar.text}/60`}>&gt;</span>
-            <span className={`${colorClasses.sidebar.text} font-medium`}>Company</span>
+            <span className={`${colorClasses.sidebar.text} font-medium`}>Mi Perfil</span>
           </nav>
         </div>
       </div>

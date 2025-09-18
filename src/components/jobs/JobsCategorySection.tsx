@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { JobCategoryCard } from './JobCategoryCard';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const JobsCategorySection: React.FC = () => {
   const categories = [
@@ -85,10 +85,10 @@ export const JobsCategorySection: React.FC = () => {
     <section className="bg-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-slate-800 mb-4">
+          <h2 className={`text-4xl font-bold ${colorClasses.text.slate800} mb-4`}>
             Popular Jobs Category
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className={`text-lg ${colorClasses.text.gray600} max-w-3xl mx-auto`}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
           </p>
         </div>

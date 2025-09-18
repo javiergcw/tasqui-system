@@ -1,0 +1,167 @@
+'use client';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { colorClasses } from '@/lib/colors';
+import { DatosPersonales } from './DatosPersonales';
+import { FormacionAcademica } from './FormacionAcademica';
+import { ExperienciaLaboral } from './ExperienciaLaboral';
+import { VacantesAplicadas } from './VacantesAplicadas';
+import { EntrevistasProgramadas } from './EntrevistasProgramadas';
+
+export const ProfileMainSection: React.FC = () => {
+  const [activeTab, setActiveTab] = useState('datos-personales');
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'datos-personales':
+        return <DatosPersonales />;
+      case 'formacion-academica':
+        return <FormacionAcademica />;
+      case 'experiencia-laboral':
+        return <ExperienciaLaboral />;
+      case 'vacantes-aplicadas':
+        return <VacantesAplicadas />;
+      case 'entrevistas-programadas':
+        return <EntrevistasProgramadas />;
+      default:
+        return <DatosPersonales />;
+    }
+  };
+
+  return (
+    <section className={`py-16 ${colorClasses.background.gray50}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-4 gap-8">
+          {/* Columna izquierda - Perfil y navegación */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-lg">
+              {/* Perfil del usuario */}
+              <div className="text-center mb-8">
+                <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
+                  <Image
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                    alt="John Smith"
+                    width={150}
+                    height={150}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                </div>
+                <h3 className={`text-xl font-bold ${colorClasses.text.gray900} mb-2`}>
+                  John Smith
+                </h3>
+                <p className={colorClasses.text.gray600}>
+                  Web Developer
+                </p>
+              </div>
+
+              {/* Menú de navegación */}
+              <nav className="w-full">
+                {/* Datos Personales */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'datos-personales' 
+                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
+                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                  }`}
+                  onClick={() => setActiveTab('datos-personales')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'datos-personales' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                    <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                    </svg>
+                    Datos Personales
+                  </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
+                {/* Formación Académica */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'formacion-academica' 
+                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
+                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                  }`}
+                  onClick={() => setActiveTab('formacion-academica')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'formacion-academica' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+                  </svg>
+                    Formación Académica
+                  </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
+                {/* Experiencia Laboral */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'experiencia-laboral' 
+                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
+                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                  }`}
+                  onClick={() => setActiveTab('experiencia-laboral')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'experiencia-laboral' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+                  </svg>
+                    Experiencia Laboral
+                </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
+                {/* Vacantes Aplicadas */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'vacantes-aplicadas' 
+                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
+                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                  }`}
+                  onClick={() => setActiveTab('vacantes-aplicadas')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'vacantes-aplicadas' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                    Mis Vacantes Aplicadas
+                </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
+                {/* Entrevistas Programadas */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'entrevistas-programadas' 
+                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
+                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                  }`}
+                  onClick={() => setActiveTab('entrevistas-programadas')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'entrevistas-programadas' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                    Entrevistas Programadas
+                </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+
+          {/* Columna derecha - Contenido dinámico */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-lg shadow-lg p-6">
+              {renderTabContent()}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+

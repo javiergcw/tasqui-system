@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Logo } from '../Logo';
 import { Navigation } from '../Navigation';
 import { ActionButtons } from '../ActionButtons';
-import { colors } from '@/lib/colors';
+import { colorClasses } from '@/lib/colors';
 
 interface SidebarProps {
   className?: string;
@@ -32,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   ];
 
   return (
-    <header className={`bg-slate-900 shadow-lg ${className}`}>
+    <header className={`${colorClasses.sidebar.background} shadow-lg ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -53,7 +53,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <button 
-              className="text-white hover:text-slate-100 p-2"
+              className={`${colorClasses.sidebar.text} ${colorClasses.sidebar.textHover} p-2`}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
@@ -92,12 +92,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
         {/* Mobile menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-slate-900 border-t border-slate-800">
+            <div className={`px-2 pt-2 pb-3 space-y-1 ${colorClasses.sidebar.background} border-t border-slate-800`}>
               {navigationItems.map((item) => (
                 <a
                   key={item.label}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-white hover:text-slate-100 hover:bg-slate-800 rounded-md transition-colors"
+                  className={`block px-3 py-2 text-base font-medium ${colorClasses.sidebar.text} ${colorClasses.sidebar.textHover} hover:bg-slate-800 rounded-md transition-colors`}
                 >
                   {item.label}
                 </a>
@@ -106,19 +106,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                 <div className="flex flex-col space-y-2 px-3">
                   <a
                     href="#"
-                    className="text-white hover:text-slate-100 font-medium text-sm transition-colors"
+                    className={`${colorClasses.sidebar.text} ${colorClasses.sidebar.textHover} font-medium text-sm transition-colors`}
                   >
                     Sign Up
                   </a>
                   <button 
-                    className="text-white px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full"
-                    style={{ backgroundColor: colors.mainRed }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.primary[600];
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
-                    }}
+                    className={`${colorClasses.button.primary} px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full`}
                   >
                     Sign In
                   </button>

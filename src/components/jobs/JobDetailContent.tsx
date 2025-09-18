@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import { colorClasses } from '@/lib/colors';
 import { JobDetailHeader } from './JobDetailHeader';
 
 export const JobDetailContent: React.FC = () => {
@@ -10,7 +10,7 @@ export const JobDetailContent: React.FC = () => {
       <div className="bg-white p-4 md:p-6 lg:p-8 -mt-4 md:-mt-6 lg:-mt-8">
         {/* Description Section */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-slate-800 mb-4">Description</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Description</h3>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
@@ -23,7 +23,7 @@ export const JobDetailContent: React.FC = () => {
 
         {/* Requirements Section */}
         <div className="mb-8">
-          <h3 className="text-2xl font-bold text-slate-800 mb-4">Requirements</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Requirements</h3>
           <p className="text-gray-700 leading-relaxed mb-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
@@ -49,42 +49,42 @@ export const JobDetailContent: React.FC = () => {
 
         {/* Job Details Section */}
         <div>
-          <h3 className="text-2xl font-bold text-slate-800 mb-4">Job Details</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Job Details</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 lg:gap-x-24 max-w-2xl">
             <div className="space-y-4">
               <div>
-                <span className="text-gray-600 font-medium">Company: </span>
-                <span className="text-slate-800 font-semibold">Tourt Design LTD</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Company: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>Tourt Design LTD</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Location: </span>
-                <span className="text-slate-800 font-semibold">Wellesley Rd, London</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Location: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>Wellesley Rd, London</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Job Type: </span>
-                <span className="text-slate-800 font-semibold">Full Time</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Job Type: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>Full Time</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Email: </span>
-                <span className="text-slate-800 font-semibold">hello@company.com</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Email: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>hello@company.com</span>
               </div>
             </div>
             <div className="space-y-4">
               <div>
-                <span className="text-gray-600 font-medium">Experience: </span>
-                <span className="text-slate-800 font-semibold">2 Years</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Experience: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>2 Years</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Language: </span>
-                <span className="text-slate-800 font-semibold">English</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Language: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>English</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Salary: </span>
-                <span className="text-slate-800 font-semibold">$10,000</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Salary: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>$10,000</span>
               </div>
               <div>
-                <span className="text-gray-600 font-medium">Website: </span>
-                <span className="text-slate-800 font-semibold">www.company.com</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Website: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>www.company.com</span>
               </div>
             </div>
           </div>
@@ -93,14 +93,7 @@ export const JobDetailContent: React.FC = () => {
         {/* Apply Now Button */}
         <div className="mt-8">
           <button
-            className="py-4 px-8 text-white font-semibold transition-colors duration-200"
-            style={{ backgroundColor: colors.primary[500] }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[500];
-            }}
+            className={`py-4 px-8 ${colorClasses.button.primary} font-semibold transition-colors duration-200`}
           >
             Apply Now
           </button>

@@ -60,3 +60,12 @@ export { BlogCommentSection } from './blogs/BlogCommentSection';
 
 // Exportar componentes de la página companies
 export { CompaniesHeroSection } from './companies/CompaniesHeroSection';
+
+// Exportar componentes de la página aspirante
+export { ProfileHeroSection } from './aspirante/ProfileHeroSection';
+export { ProfileMainSection } from './aspirante/ProfileMainSection';
+export { DatosPersonales } from './aspirante/DatosPersonales';
+export { FormacionAcademica } from './aspirante/FormacionAcademica';
+export { ExperienciaLaboral } from './aspirante/ExperienciaLaboral';
+export { VacantesAplicadas } from './aspirante/VacantesAplicadas';
+export { EntrevistasProgramadas } from './aspirante/EntrevistasProgramadas';

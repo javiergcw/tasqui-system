@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { ArticleCard } from '../ArticleCard';
-import { colors } from '@/lib/colors';
+import { colorClasses } from '@/lib/colors';
 
 export const BlogsSection: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -97,10 +97,10 @@ export const BlogsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-slate-800 mb-6">
+          <h2 className={`text-4xl font-bold ${colorClasses.text.slate800} mb-6`}>
             Latest Blog Posts
           </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className={`text-lg ${colorClasses.text.gray600} max-w-3xl mx-auto`}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.
           </p>
         </div>
@@ -126,28 +126,11 @@ export const BlogsSection: React.FC = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${
+            className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105 ${
               currentPage === 1
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white border border-gray-300 hover:scale-105'
+                ? colorClasses.button.paginationDisabled
+                : colorClasses.button.pagination
             }`}
-            style={{
-              color: currentPage === 1 ? undefined : colors.mainRed
-            }}
-            onMouseEnter={(e) => {
-              if (currentPage !== 1) {
-                e.currentTarget.style.backgroundColor = colors.ctaBlue;
-                e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.borderColor = colors.ctaBlue;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (currentPage !== 1) {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = colors.mainRed;
-                e.currentTarget.style.borderColor = '#d1d5db';
-              }
-            }}
           >
             <svg 
               className="w-5 h-5 transition-transform duration-300 animate-pulse" 
@@ -164,29 +147,11 @@ export const BlogsSection: React.FC = () => {
             <button
               key={page}
               onClick={() => handlePageChange(page)}
-              className={`w-10 h-10 rounded-lg font-medium transition-all duration-300 ${
+              className={`w-10 h-10 rounded-lg font-medium transition-all duration-300 hover:scale-105 ${
                 currentPage === page
-                  ? 'text-white shadow-lg scale-105'
-                  : 'bg-white border border-gray-300 hover:scale-105'
+                  ? colorClasses.button.paginationActive
+                  : colorClasses.button.pagination
               }`}
-              style={{
-                backgroundColor: currentPage === page ? colors.ctaBlue : undefined,
-                color: currentPage === page ? undefined : colors.mainRed
-              }}
-              onMouseEnter={(e) => {
-                if (currentPage !== page) {
-                  e.currentTarget.style.backgroundColor = colors.ctaBlue;
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.borderColor = colors.ctaBlue;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (currentPage !== page) {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.color = colors.mainRed;
-                  e.currentTarget.style.borderColor = '#d1d5db';
-                }
-              }}
             >
               {page}
             </button>
@@ -196,28 +161,11 @@ export const BlogsSection: React.FC = () => {
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 ${
+            className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105 ${
               currentPage === totalPages
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                : 'bg-white border border-gray-300 hover:scale-105'
+                ? colorClasses.button.paginationDisabled
+                : colorClasses.button.pagination
             }`}
-            style={{
-              color: currentPage === totalPages ? undefined : colors.mainRed
-            }}
-            onMouseEnter={(e) => {
-              if (currentPage !== totalPages) {
-                e.currentTarget.style.backgroundColor = colors.ctaBlue;
-                e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.borderColor = colors.ctaBlue;
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (currentPage !== totalPages) {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = colors.mainRed;
-                e.currentTarget.style.borderColor = '#d1d5db';
-              }
-            }}
           >
             <svg 
               className="w-5 h-5 transition-transform duration-300 animate-pulse" 

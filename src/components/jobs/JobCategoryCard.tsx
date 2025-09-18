@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 interface JobCategoryCardProps {
   name: string;
@@ -11,7 +11,7 @@ interface JobCategoryCardProps {
 export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, icon }) => {
   return (
     <div 
-      className="bg-white border-2 border-dashed border-red-500 p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group"
+      className={`bg-white border-2 ${colorClasses.border.dashed} p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group`}
       style={{
         borderColor: colors.primary[500]
       }}
@@ -63,10 +63,10 @@ export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, ic
           </div>
         </div>
         <div className="flex-1">
-          <h3 className="text-lg font-bold text-slate-800 mb-1">
+          <h3 className={`text-lg font-bold ${colorClasses.text.slate800} mb-1`}>
             {name}
           </h3>
-          <p className="text-gray-600 text-sm">
+          <p className={`${colorClasses.text.gray600} text-sm`}>
             {jobs} new Job
           </p>
         </div>

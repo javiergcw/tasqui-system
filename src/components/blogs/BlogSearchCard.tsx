@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { colors } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const BlogSearchCard: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,7 +16,7 @@ export const BlogSearchCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainRed }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className="text-xl font-bold text-slate-800">Search</h3>
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Search</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       <form onSubmit={handleSearch} className="relative">
@@ -25,7 +25,7 @@ export const BlogSearchCard: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search blogs..."
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className={`w-full px-4 py-2 ${colorClasses.border.gray200} rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500`}
         />
         <button 
           type="submit"

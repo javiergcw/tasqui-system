@@ -1,11 +1,12 @@
 import React from 'react';
 import { CompanyCard } from '../CompanyCard';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const TopCompaniesSection: React.FC = () => {
   const companies = [
     {
       logo: (
-        <div className="w-12 h-12 bg-red-500 rounded flex items-center justify-center">
+        <div className={`w-12 h-12 ${colorClasses.button.primary.split(' ')[0]} rounded flex items-center justify-center`}>
           <span className="text-2xl font-bold text-white">A</span>
         </div>
       ),
@@ -15,7 +16,7 @@ export const TopCompaniesSection: React.FC = () => {
     },
     {
       logo: (
-        <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-orange-500 rounded flex items-center justify-center">
+        <div className={`w-12 h-12 ${colorClasses.gradient.purpleOrange} rounded flex items-center justify-center`}>
           <span className="text-2xl font-bold text-white">R</span>
         </div>
       ),
@@ -25,7 +26,7 @@ export const TopCompaniesSection: React.FC = () => {
     },
     {
       logo: (
-        <div className="w-12 h-12 bg-orange-500 rounded flex items-center justify-center">
+        <div className="w-12 h-12 rounded flex items-center justify-center" style={{ backgroundColor: colors.orange[500] }}>
           <span className="text-2xl font-bold text-white">L</span>
         </div>
       ),
@@ -35,7 +36,7 @@ export const TopCompaniesSection: React.FC = () => {
     },
     {
       logo: (
-        <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-500 rounded flex items-center justify-center">
+        <div className={`w-12 h-12 ${colorClasses.gradient.greenBlue} rounded flex items-center justify-center`}>
           <span className="text-2xl font-bold text-white">*</span>
         </div>
       ),

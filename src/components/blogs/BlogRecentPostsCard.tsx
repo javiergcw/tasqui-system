@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import Image from 'next/image';
+import { colors, colorClasses } from '@/lib/colors';
 
 export const BlogRecentPostsCard: React.FC = () => {
   const recentPosts = [
@@ -36,31 +37,26 @@ export const BlogRecentPostsCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainRed }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className="text-xl font-bold text-slate-800">Popular Post</h3>
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Popular Post</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       <div className="space-y-4">
         {recentPosts.map((post) => (
           <div key={post.id} className="flex space-x-3 hover:bg-gray-50 p-2 rounded transition-colors cursor-pointer">
-            <img
+            <Image
               src={post.image}
               alt={post.title}
+              width={64}
+              height={64}
               className="w-16 h-16 object-cover rounded flex-shrink-0"
             />
             <div className="flex-1 min-w-0">
                <h4 
-                 className="font-semibold text-slate-800 text-sm mb-1 line-clamp-2 transition-colors"
-                 style={{ color: 'inherit' }}
-                 onMouseEnter={(e) => {
-                   e.currentTarget.style.color = colors.mainRed;
-                 }}
-                 onMouseLeave={(e) => {
-                   e.currentTarget.style.color = '';
-                 }}
+                 className={`font-semibold ${colorClasses.text.slate800} text-sm mb-1 line-clamp-2 transition-colors hover:${colorClasses.text.red500}`}
                >
                 {post.title}
               </h4>
-              <p className="text-gray-600 text-xs">{post.date}</p>
+              <p className={`${colorClasses.text.gray600} text-xs`}>{post.date}</p>
             </div>
           </div>
         ))}

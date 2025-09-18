@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors } from '@/lib/colors';
+import { colorClasses } from '@/lib/colors';
 
 export const SearchBar: React.FC = () => {
   return (
@@ -18,7 +18,7 @@ export const SearchBar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Job Title or Keyword"
-                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
               />
             </div>
 
@@ -33,7 +33,7 @@ export const SearchBar: React.FC = () => {
               <input
                 type="text"
                 placeholder="Location"
-                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
+                className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
               />
             </div>
 
@@ -44,7 +44,7 @@ export const SearchBar: React.FC = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
-              <select className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700 appearance-none bg-white">
+              <select className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700 appearance-none bg-white">
                 <option>Category</option>
                 <option>Technology</option>
                 <option>Design</option>
@@ -56,14 +56,7 @@ export const SearchBar: React.FC = () => {
 
             {/* Search Button */}
             <button 
-              className="text-white px-8 py-2 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2"
-              style={{ backgroundColor: colors.mainRed }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.primary[600];
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.mainRed;
-              }}
+              className={`${colorClasses.button.primary} px-8 py-2 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2`}
             >
               FIND A JOB
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,4 +1,5 @@
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobDetailHeroSection, JobDetailMainSection } from '@/components';
+import { colorClasses } from '@/lib/colors';
 
 interface JobDetailPageProps {
   params: {
@@ -7,8 +8,10 @@ interface JobDetailPageProps {
 }
 
 export default function JobDetailPage({ params }: JobDetailPageProps) {
+  // TODO: Usar params.id para obtener el trabajo específico
+  console.log('Job ID:', params.id);
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className={`min-h-screen ${colorClasses.background.gray50} dark:from-gray-900 dark:to-gray-800`}>
       <Sidebar />
       
       {/* Hero Section */}
