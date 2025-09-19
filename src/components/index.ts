@@ -43,6 +43,7 @@ export { KeywordsCard } from './jobs/KeywordsCard';
 export { ShareInCard } from './jobs/ShareInCard';
 export { ApplyNowButton } from './jobs/ApplyNowButton';
 export { JobDetailHeader } from './jobs/JobDetailHeader';
+export { JobApplicationModal } from './jobs/JobApplicationModal';
 
 // Exportar componentes de la página blogs
 export { BlogsHeroSection } from './blogs/BlogsHeroSection';
@@ -88,6 +89,14 @@ export { EmployerProfileMainSection } from './employer/EmployerProfileMainSectio
 export { ApplicantsHeroSection } from './employer/ApplicantsHeroSection';
 export { ApplicantsSection } from './employer/ApplicantsSection';
 export { ApplicantsFilter } from './employer/ApplicantsFilter';
+export { ApplicantDetailHeroSection } from './employer/ApplicantDetailHeroSection';
+export { ApplicantDetailMainSection } from './employer/ApplicantDetailMainSection';
+export { ApplicantInfoCard } from './employer/ApplicantInfoCard';
+export { AboutMeCard } from './employer/AboutMeCard';
+export { EducationCard } from './employer/EducationCard';
+export { ExperienceCard } from './employer/ExperienceCard';
+export { SkillsCard } from './employer/SkillsCard';
+export { ActionButtonsCard } from './employer/ActionButtonsCard';
 
 // Exportar componentes de la página aspirante (componentes adicionales)
 export { DatosPersonales } from './aspirante/DatosPersonales';

@@ -95,7 +95,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
                       backgroundColor: 'transparent'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.primary[500];
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';

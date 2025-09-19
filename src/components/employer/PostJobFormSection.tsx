@@ -246,7 +246,7 @@ export function PostJobFormSection() {
               <button
                 type="submit"
                 className="px-12 py-4 text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: colors.primary[500] }}
+                style={{ backgroundColor: colors.mainRed }}
               >
                 Post A Job
               </button>

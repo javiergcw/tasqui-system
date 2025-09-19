@@ -56,7 +56,7 @@ export const EntrevistasProgramadas: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <button
                   className="px-4 py-2 text-white text-sm font-medium rounded-md transition-colors"
-                  style={{ backgroundColor: colors.primary[500] }}
+                  style={{ backgroundColor: colors.mainRed }}
                 >
                   Ver Detalles
                 </button>

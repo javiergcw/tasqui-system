@@ -1,9 +1,19 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { colorClasses } from '@/lib/colors';
 import { JobDetailHeader } from './JobDetailHeader';
+import { JobApplicationModal } from './JobApplicationModal';
 
 export const JobDetailContent: React.FC = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleApplyNow = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
   return (
     <div className="lg:col-span-2">
       <JobDetailHeader />
@@ -93,12 +103,20 @@ export const JobDetailContent: React.FC = () => {
         {/* Apply Now Button */}
         <div className="mt-8">
           <button
+            onClick={handleApplyNow}
             className={`py-4 px-8 ${colorClasses.button.primary} font-semibold transition-colors duration-200`}
           >
             Apply Now
           </button>
         </div>
       </div>
+
+      {/* Job Application Modal */}
+      <JobApplicationModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        companyName="TAXAC GROUP S.A.S"
+      />
     </div>
   );
 };

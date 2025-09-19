@@ -55,7 +55,7 @@ export const ExperienciaLaboral: React.FC = () => {
         <button
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
           className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-          style={{ backgroundColor: colors.primary[500] }}
+          style={{ backgroundColor: colors.mainRed }}
         >
           {mostrarFormulario ? 'Cancelar' : '+ Agregar Experiencia'}
         </button>
@@ -129,7 +129,7 @@ export const ExperienciaLaboral: React.FC = () => {
             <button
               onClick={handleAgregarExperiencia}
               className="px-6 py-2 text-white font-medium rounded-md transition-colors"
-              style={{ backgroundColor: colors.primary[500] }}
+              style={{ backgroundColor: colors.mainRed }}
             >
               Guardar Experiencia
             </button>

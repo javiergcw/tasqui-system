@@ -13,11 +13,11 @@ export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, ic
     <div 
       className={`bg-white border-2 ${colorClasses.border.dashed} p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group`}
       style={{
-        borderColor: colors.primary[500]
+        borderColor: colors.mainRed
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.primary[500];
-        e.currentTarget.style.borderColor = colors.primary[500];
+        e.currentTarget.style.backgroundColor = colors.mainRed;
+        e.currentTarget.style.borderColor = colors.mainRed;
         const textElements = e.currentTarget.querySelectorAll('h3, p');
         textElements.forEach((el: Element) => {
           (el as HTMLElement).style.color = '#ffffff';
@@ -29,12 +29,12 @@ export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, ic
         }
         const icon = e.currentTarget.querySelector('.icon-container svg') as HTMLElement;
         if (icon) {
-          icon.style.color = colors.primary[500];
+          icon.style.color = colors.mainRed;
         }
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = '#ffffff';
-        e.currentTarget.style.borderColor = colors.primary[500];
+        e.currentTarget.style.borderColor = colors.mainRed;
         const textElements = e.currentTarget.querySelectorAll('h3, p');
         textElements.forEach((el: Element) => {
           (el as HTMLElement).style.color = '';
@@ -42,11 +42,11 @@ export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, ic
         const iconContainer = e.currentTarget.querySelector('.icon-container') as HTMLElement;
         if (iconContainer) {
           iconContainer.style.backgroundColor = colors.primary[100];
-          iconContainer.style.borderColor = colors.primary[500];
+          iconContainer.style.borderColor = colors.mainRed;
         }
         const icon = e.currentTarget.querySelector('.icon-container svg') as HTMLElement;
         if (icon) {
-          icon.style.color = colors.primary[500];
+          icon.style.color = colors.mainRed;
         }
       }}
     >
@@ -55,10 +55,10 @@ export const JobCategoryCard: React.FC<JobCategoryCardProps> = ({ name, jobs, ic
           className="icon-container w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 border-2 border-dashed"
           style={{ 
             backgroundColor: colors.primary[100],
-            borderColor: colors.primary[500]
+            borderColor: colors.mainRed
           }}
         >
-          <div style={{ color: colors.primary[500] }}>
+          <div style={{ color: colors.mainRed }}>
             {icon}
           </div>
         </div>

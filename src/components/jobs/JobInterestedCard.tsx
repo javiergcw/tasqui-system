@@ -95,7 +95,7 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
               className="px-4 py-2 text-xs font-semibold rounded-full"
               style={{ 
                 backgroundColor: '#ffffff',
-                color: colors.primary[500]
+                color: colors.mainRed
               }}
             >
               {contractType}
@@ -106,19 +106,19 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
             className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             style={{ 
               backgroundColor: '#ffffff',
-              border: `2px dashed ${colors.primary[500]}`,
-              color: colors.primary[500]
+              border: `2px dashed ${colors.mainRed}`,
+              color: colors.mainRed
             }}
             onClick={(e) => {
               e.stopPropagation(); // Evita que se active la navegación del card
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[500];
+              e.currentTarget.style.backgroundColor = colors.mainRed;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#ffffff';
-              e.currentTarget.style.color = colors.primary[500];
+              e.currentTarget.style.color = colors.mainRed;
             }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

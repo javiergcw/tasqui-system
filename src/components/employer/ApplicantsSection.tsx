@@ -2,15 +2,21 @@
 
 import Image from 'next/image';
 import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import { colors } from '@/lib/colors';
 import { ApplicantsFilter } from './ApplicantsFilter';
 
 export const ApplicantsSection: React.FC = () => {
+  const router = useRouter();
   const [filters, setFilters] = useState({
     search: '',
     rating: 'all',
     stage: 'all'
   });
+
+  const handleApplicantClick = (applicantId: number) => {
+    router.push(`/employer/applicants/${applicantId}`);
+  };
 
   const applicants = useMemo(() => [
     {
@@ -137,7 +143,11 @@ export const ApplicantsSection: React.FC = () => {
         {filteredApplicants.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {filteredApplicants.map((applicant) => (
-            <div key={applicant.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div 
+              key={applicant.id} 
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden cursor-pointer hover:shadow-md transition-shadow duration-200"
+              onClick={() => handleApplicantClick(applicant.id)}
+            >
               {/* Profile Image */}
               <div className="relative w-full h-64">
                 <Image
@@ -197,16 +207,17 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.facebook}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.primary[500],
-                      color: colors.primary[500]
+                      borderColor: colors.mainRed,
+                      color: colors.mainRed
                     }}
+                    onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = colors.dark[800];
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.primary[500];
-                      e.currentTarget.style.color = colors.primary[500];
+                      e.currentTarget.style.borderColor = colors.mainRed;
+                      e.currentTarget.style.color = colors.mainRed;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -218,16 +229,17 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.twitter}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.primary[500],
-                      color: colors.primary[500]
+                      borderColor: colors.mainRed,
+                      color: colors.mainRed
                     }}
+                    onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = colors.dark[800];
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.primary[500];
-                      e.currentTarget.style.color = colors.primary[500];
+                      e.currentTarget.style.borderColor = colors.mainRed;
+                      e.currentTarget.style.color = colors.mainRed;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -239,16 +251,17 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.linkedin}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.primary[500],
-                      color: colors.primary[500]
+                      borderColor: colors.mainRed,
+                      color: colors.mainRed
                     }}
+                    onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = colors.dark[800];
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.primary[500];
-                      e.currentTarget.style.color = colors.primary[500];
+                      e.currentTarget.style.borderColor = colors.mainRed;
+                      e.currentTarget.style.color = colors.mainRed;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

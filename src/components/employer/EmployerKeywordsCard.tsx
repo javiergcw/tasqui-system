@@ -28,8 +28,8 @@ export const EmployerKeywordsCard: React.FC = () => {
               border: `1px dashed ${colors.gray[300]}`
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[500];
-              e.currentTarget.style.borderColor = colors.primary[500];
+              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.borderColor = colors.mainRed;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
