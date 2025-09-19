@@ -7,6 +7,7 @@ import { FormacionAcademica } from './FormacionAcademica';
 import { ExperienciaLaboral } from './ExperienciaLaboral';
 import { VacantesAplicadas } from './VacantesAplicadas';
 import { EntrevistasProgramadas } from './EntrevistasProgramadas';
+import { colors } from '@/lib/colors';
 
 export const ProfileMainSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState('datos-personales');
@@ -60,12 +61,25 @@ export const ProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'datos-personales' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'datos-personales' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'datos-personales') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'datos-personales') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('datos-personales')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'datos-personales' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'datos-personales' ? 'text-white' : 'text-slate-800'}`}>
                     <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                     </svg>
@@ -79,12 +93,25 @@ export const ProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'formacion-academica' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'formacion-academica' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'formacion-academica') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'formacion-academica') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('formacion-academica')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'formacion-academica' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'formacion-academica' ? 'text-white' : 'text-slate-800'}`}>
                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
@@ -99,12 +126,25 @@ export const ProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'experiencia-laboral' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'experiencia-laboral' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'experiencia-laboral') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'experiencia-laboral') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('experiencia-laboral')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'experiencia-laboral' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'experiencia-laboral' ? 'text-white' : 'text-slate-800'}`}>
                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6" />
                   </svg>
@@ -118,12 +158,25 @@ export const ProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'vacantes-aplicadas' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'vacantes-aplicadas' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'vacantes-aplicadas') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'vacantes-aplicadas') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('vacantes-aplicadas')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'vacantes-aplicadas' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'vacantes-aplicadas' ? 'text-white' : 'text-slate-800'}`}>
                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
@@ -137,12 +190,25 @@ export const ProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'entrevistas-programadas' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'entrevistas-programadas' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'entrevistas-programadas') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'entrevistas-programadas') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('entrevistas-programadas')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'entrevistas-programadas' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'entrevistas-programadas' ? 'text-white' : 'text-slate-800'}`}>
                   <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>

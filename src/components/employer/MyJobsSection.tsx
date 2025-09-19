@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { MyJobCard } from './MyJobCard';
 import { MyJobsFilter } from './MyJobsFilter';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses, colors } from '@/lib/colors';
 
 interface FilterData {
   status: string;
@@ -273,8 +273,9 @@ export const MyJobsSection: React.FC = () => {
               className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105 ${
                 currentPage === 1
                   ? colorClasses.button.paginationDisabled
-                  : colorClasses.button.pagination
+                  : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
               }`}
+              style={currentPage !== 1 ? { color: colors.mainRed } : {}}
             >
               <svg 
                 className="w-5 h-5 transition-transform duration-300 animate-pulse" 
@@ -294,8 +295,9 @@ export const MyJobsSection: React.FC = () => {
                 className={`w-10 h-10 rounded-lg font-medium transition-all duration-300 hover:scale-105 ${
                   currentPage === page
                     ? colorClasses.button.paginationActive
-                    : colorClasses.button.pagination
+                    : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
                 }`}
+                style={currentPage !== page ? { color: colors.mainRed } : {}}
               >
                 {page}
               </button>
@@ -308,8 +310,9 @@ export const MyJobsSection: React.FC = () => {
               className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all duration-300 hover:scale-105 ${
                 currentPage === totalPages
                   ? colorClasses.button.paginationDisabled
-                  : colorClasses.button.pagination
+                  : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
               }`}
+              style={currentPage !== totalPages ? { color: colors.mainRed } : {}}
             >
               <svg 
                 className="w-5 h-5 transition-transform duration-300 animate-pulse" 

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses, colors } from '@/lib/colors';
 
 export const SearchBar: React.FC = () => {
   return (
@@ -56,7 +56,14 @@ export const SearchBar: React.FC = () => {
 
             {/* Search Button */}
             <button 
-              className={`${colorClasses.button.primary} px-8 py-2 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2`}
+              className="px-8 py-2 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2 text-white"
+              style={{ backgroundColor: colors.mainRed }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[600];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.mainRed;
+              }}
             >
               FIND A JOB
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

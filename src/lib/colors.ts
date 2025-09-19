@@ -50,7 +50,7 @@ export const colorClasses = {
   button: {
     primary: 'bg-red-500 hover:bg-red-600 text-white',
     secondary: 'bg-transparent hover:bg-slate-800 text-white',
-    pagination: 'bg-white border border-gray-300 text-red-500 hover:bg-slate-900 hover:text-white hover:border-slate-900',
+    pagination: 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900',
     paginationActive: 'bg-slate-900 text-white shadow-lg',
     paginationDisabled: 'bg-gray-100 text-gray-400 cursor-not-allowed',
   },

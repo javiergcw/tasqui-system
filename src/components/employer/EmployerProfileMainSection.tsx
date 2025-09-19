@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses,colors } from '@/lib/colors';
 
 export const EmployerProfileMainSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState('company-data');
@@ -52,12 +52,25 @@ export const EmployerProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'company-data' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'company-data' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'company-data') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'company-data') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('company-data')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'company-data' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'company-data' ? 'text-white' : 'text-slate-800'}`}>
                     <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clipRule="evenodd" />
                     </svg>
@@ -71,12 +84,25 @@ export const EmployerProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'dashboard' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'dashboard' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'dashboard') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'dashboard') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('dashboard')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-800'}`}>
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
@@ -90,12 +116,25 @@ export const EmployerProfileMainSection: React.FC = () => {
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
                     activeTab === 'kanban' 
-                      ? `border border-dashed rounded-md ${colorClasses.button.primary}` 
-                      : `text-slate-800 hover:${colorClasses.button.primary}`
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
                   }`}
+                  style={activeTab === 'kanban' ? { backgroundColor: colors.mainRed } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'kanban') {
+                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'kanban') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
                   onClick={() => setActiveTab('kanban')}
                 >
-                  <div className={`flex items-center px-4 ${activeTab === 'kanban' ? 'text-white' : 'text-slate-800 hover:text-white'}`}>
+                  <div className={`flex items-center px-4 ${activeTab === 'kanban' ? 'text-white' : 'text-slate-800'}`}>
                     <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
@@ -153,11 +192,16 @@ const CompanyDataForm: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-800">Company Information</h2>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className={`px-6 py-2 rounded-lg font-medium transition-colors duration-200 ${
-            isEditing
-              ? 'bg-green-600 text-white hover:bg-green-700'
-              : 'bg-red-600 text-white hover:bg-red-700'
-          }`}
+          className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white"
+          style={{ 
+            backgroundColor: isEditing ? '#16a34a' : colors.mainRed 
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = isEditing ? '#15803d' : colors.primary[600];
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainRed;
+          }}
         >
           {isEditing ? 'Save Changes' : 'Edit Information'}
         </button>
@@ -176,7 +220,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.companyName}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
 
@@ -189,7 +236,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.industry}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             >
               <option value="Technology">Technology</option>
               <option value="Healthcare">Healthcare</option>
@@ -210,7 +260,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.companySize}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             >
               <option value="1-10 employees">1-10 employees</option>
               <option value="11-50 employees">11-50 employees</option>
@@ -230,7 +283,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.foundedYear}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
 
@@ -244,7 +300,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.website}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
 
@@ -258,7 +317,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.email}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
         </div>
@@ -296,7 +358,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.address}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
 
@@ -310,7 +375,10 @@ const CompanyDataForm: React.FC = () => {
               value={formData.phone}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{ 
+                '--tw-ring-color': colors.mainRed 
+              } as React.CSSProperties}
             />
           </div>
         </div>
@@ -326,7 +394,14 @@ const CompanyDataForm: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200"
+              className="px-6 py-2 text-white rounded-lg transition-colors duration-200"
+              style={{ backgroundColor: colors.mainRed }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[600];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.mainRed;
+              }}
             >
               Save Changes
             </button>

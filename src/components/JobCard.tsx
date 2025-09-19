@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { colorClasses } from '@/lib/colors';
+import { colors, colorClasses } from '@/lib/colors';
 
 interface JobCardProps {
   id: string;
@@ -84,7 +84,14 @@ export const JobCard: React.FC<JobCardProps> = ({
       <div className="flex-shrink-0 w-full md:w-auto">
         <button 
           onClick={handleBrowseJob}
-          className={`w-full md:w-auto ${colorClasses.button.primary} px-4 py-2 md:px-6 md:py-3 rounded font-semibold transition-colors duration-200 text-sm md:text-base`}
+          className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 rounded font-semibold transition-colors duration-200 text-sm md:text-base text-white"
+          style={{ backgroundColor: colors.mainRed }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = colors.primary[600];
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = colors.mainRed;
+          }}
         >
           Browse Job
         </button>

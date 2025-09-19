@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Logo } from '../Logo';
 import { Navigation } from '../Navigation';
 import { ActionButtons } from '../ActionButtons';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses,colors } from '@/lib/colors';
 
 interface SidebarProps {
   className?: string;
@@ -111,7 +111,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                     Sign Up
                   </a>
                   <button 
-                    className={`${colorClasses.button.primary} px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full`}
+                    className={`${colors.mainRed} px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full`}
                   >
                     Sign In
                   </button>

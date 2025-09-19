@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses,colors} from '@/lib/colors';
 import { JobDetailHeader } from './JobDetailHeader';
 import { JobApplicationModal } from './JobApplicationModal';
 
@@ -104,7 +104,14 @@ export const JobDetailContent: React.FC = () => {
         <div className="mt-8">
           <button
             onClick={handleApplyNow}
-            className={`py-4 px-8 ${colorClasses.button.primary} font-semibold transition-colors duration-200`}
+            className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg"
+            style={{ backgroundColor: colors.mainRed }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.primary[600];
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainRed;
+            }}
           >
             Apply Now
           </button>

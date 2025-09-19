@@ -3,7 +3,7 @@ import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { ProfileHeroSection } from '@/components/aspirante/ProfileHeroSection';
 import { ProfileMainSection } from '@/components/aspirante/ProfileMainSection';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses, colors } from '@/lib/colors';
 
 export default function ProfilePage() {
   return (

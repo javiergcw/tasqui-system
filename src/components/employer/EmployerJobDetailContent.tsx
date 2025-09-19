@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colorClasses } from '@/lib/colors';
+import { colorClasses,colors } from '@/lib/colors';
 import { EmployerJobDetailHeader } from './EmployerJobDetailHeader';
 
 export const EmployerJobDetailContent: React.FC = () => {
@@ -93,7 +93,14 @@ export const EmployerJobDetailContent: React.FC = () => {
         {/* Employer Actions */}
         <div className="mt-8 flex gap-4">
           <button
-            className={`py-4 px-8 ${colorClasses.button.primary} font-semibold transition-colors duration-200`}
+            className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg"
+            style={{ backgroundColor: colors.mainRed }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.primary[600];
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainRed;
+            }}
           >
             Edit Job
           </button>

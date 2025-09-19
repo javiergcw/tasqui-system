@@ -3,6 +3,7 @@ import React from 'react';
 import { SearchBar } from '../SearchBar';
 import { JobsCategorySection } from './JobsCategorySection';
 
+
 export const SearchWithCategoriesSection: React.FC = () => {
   return (
     <div className="relative py-12 bg-white">
