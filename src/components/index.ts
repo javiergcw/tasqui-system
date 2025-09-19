@@ -64,6 +64,32 @@ export { CompaniesHeroSection } from './companies/CompaniesHeroSection';
 // Exportar componentes de la página aspirante
 export { ProfileHeroSection } from './aspirante/ProfileHeroSection';
 export { ProfileMainSection } from './aspirante/ProfileMainSection';
+
+// Exportar componentes de la página employer
+export { PostJobHeroSection } from './employer/PostJobHeroSection';
+export { PostJobFormSection } from './employer/PostJobFormSection';
+export { MyJobsHeroSection } from './employer/MyJobsHeroSection';
+export { MyJobsSection } from './employer/MyJobsSection';
+export { MyJobCard } from './employer/MyJobCard';
+export { EmployerJobDetailHeroSection } from './employer/EmployerJobDetailHeroSection';
+export { EmployerJobDetailMainSection } from './employer/EmployerJobDetailMainSection';
+export { EmployerJobDetailContent } from './employer/EmployerJobDetailContent';
+export { EmployerJobDetailSidebar } from './employer/EmployerJobDetailSidebar';
+export { EmployerJobDetailHeader } from './employer/EmployerJobDetailHeader';
+export { EmployerPostedByCard } from './employer/EmployerPostedByCard';
+export { EmployerLocationCard } from './employer/EmployerLocationCard';
+export { EmployerKeywordsCard } from './employer/EmployerKeywordsCard';
+export { EmployerShareInCard } from './employer/EmployerShareInCard';
+export { EmployerEditJobHeroSection } from './employer/EmployerEditJobHeroSection';
+export { EmployerEditJobFormSection } from './employer/EmployerEditJobFormSection';
+export { MyJobsFilter } from './employer/MyJobsFilter';
+export { EmployerProfileHeroSection } from './employer/EmployerProfileHeroSection';
+export { EmployerProfileMainSection } from './employer/EmployerProfileMainSection';
+export { ApplicantsHeroSection } from './employer/ApplicantsHeroSection';
+export { ApplicantsSection } from './employer/ApplicantsSection';
+export { ApplicantsFilter } from './employer/ApplicantsFilter';
+
+// Exportar componentes de la página aspirante (componentes adicionales)
 export { DatosPersonales } from './aspirante/DatosPersonales';
 export { FormacionAcademica } from './aspirante/FormacionAcademica';
 export { ExperienciaLaboral } from './aspirante/ExperienciaLaboral';

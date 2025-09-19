@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { colors } from '@/lib/colors';
 
 export const EntrevistasProgramadas: React.FC = () => {
-  const [entrevistas, setEntrevistas] = useState([ // setEntrevistas se usará para funcionalidades futuras
+  const [entrevistas] = useState([ // setEntrevistas se usará para funcionalidades futuras
     {
       id: 1,
       empresa: 'Digital Agency',
