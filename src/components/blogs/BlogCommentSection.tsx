@@ -28,7 +28,7 @@ export const BlogCommentSection: React.FC = () => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-sm relative">
       {/* Red line on the border */}
-      <div className="absolute left-0 top-8 w-1 h-6" style={{ backgroundColor: colors.mainRed }}></div>
+      <div className="absolute left-0 top-8 w-1 h-6" style={{ backgroundColor: colors.mainGreen }}></div>
 
       {/* Section Header */}
       <div className="flex items-center mb-6">
@@ -96,12 +96,12 @@ export const BlogCommentSection: React.FC = () => {
               <button
                 type="submit"
                 className="px-8 py-3 text-white font-semibold rounded-lg transition-colors duration-200"
-                style={{ backgroundColor: colors.mainRed }}
+                style={{ backgroundColor: colors.mainGreen }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[600];
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.mainGreen;
                 }}
               >
                 Post a Comment

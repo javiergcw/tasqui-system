@@ -28,8 +28,8 @@ export const KeywordsCard: React.FC = () => {
               border: `1px dashed ${colors.gray[300]}`
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
-              e.currentTarget.style.borderColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+              e.currentTarget.style.borderColor = colors.mainGreen;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {

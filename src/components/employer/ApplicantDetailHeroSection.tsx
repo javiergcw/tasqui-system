@@ -1,11 +1,12 @@
 import { colors } from '@/lib/colors';
+import Link from 'next/link';
 
 export const ApplicantDetailHeroSection = () => {
   return (
     <section 
       className="py-16 px-4"
       style={{
-        background: `linear-gradient(135deg, ${colors.dark[800]} 0%, ${colors.dark[900]} 100%)`
+        background: `linear-gradient(135deg, ${colors.heroGreen} 0%, ${colors.ctaGreen} 50%, ${colors.heroGreen} 100%)`
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -14,9 +15,9 @@ export const ApplicantDetailHeroSection = () => {
             Detalle del Candidato
           </h1>
           <nav className="text-gray-300">
-            <span className="text-gray-400">Home</span>
+            <Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
             <span className="mx-2">›</span>
-            <span className="text-gray-400">Applicants</span>
+            <Link href="/company/applicants" className="text-gray-400 hover:text-white transition-colors">Applicants</Link>
             <span className="mx-2">›</span>
             <span className="text-white">Detalle del Candidato</span>
           </nav>

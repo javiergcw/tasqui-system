@@ -62,15 +62,15 @@ export const ScrollToTopButton: React.FC = () => {
                 ? 'animate-[slideUp_0.6s_ease-out_forwards]' 
                 : 'animate-[slideIn_0.3s_ease-out_forwards]'
           }`}
-          style={{ backgroundColor: colors.mainRed }}
+          style={{ backgroundColor: colors.mainGreen }}
           onMouseEnter={(e) => {
             if (!isAnimating) {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
             }
           }}
           onMouseLeave={(e) => {
             if (!isAnimating) {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }
           }}
         >

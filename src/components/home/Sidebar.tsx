@@ -32,7 +32,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   ];
 
   return (
-    <header className={`${colorClasses.sidebar.background} shadow-lg ${className}`}>
+    <header 
+      className={`shadow-lg ${className}`}
+      style={{ backgroundColor: colors.ctaGreen }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
@@ -92,7 +95,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
         {/* Mobile menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden">
-            <div className={`px-2 pt-2 pb-3 space-y-1 ${colorClasses.sidebar.background} border-t border-slate-800`}>
+            <div 
+              className="px-2 pt-2 pb-3 space-y-1 border-t border-slate-800"
+              style={{ backgroundColor: colors.sidebarGreen }}
+            >
               {navigationItems.map((item) => (
                 <a
                   key={item.label}
@@ -111,7 +117,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
                     Sign Up
                   </a>
                   <button 
-                    className={`${colors.mainRed} px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full`}
+                    className={`${colors.mainGreen} px-4 py-2 rounded-lg font-medium text-sm transition-colors w-full`}
                   >
                     Sign In
                   </button>

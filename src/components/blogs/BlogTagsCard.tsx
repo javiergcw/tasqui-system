@@ -16,7 +16,7 @@ export const BlogTagsCard: React.FC = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-sm relative">
       {/* Red line on the border */}
-      <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainRed }}></div>
+      <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainGreen }}></div>
 
       <div className="flex items-center mb-4">
         <h3 className="text-xl font-bold text-slate-800">Tags</h3>
@@ -33,8 +33,8 @@ export const BlogTagsCard: React.FC = () => {
               border: `1px dashed ${colors.gray[300]}`
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
-              e.currentTarget.style.borderColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+              e.currentTarget.style.borderColor = colors.mainGreen;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {

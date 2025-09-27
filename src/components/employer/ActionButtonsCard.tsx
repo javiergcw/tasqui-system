@@ -18,12 +18,12 @@ export const ActionButtonsCard = () => {
         <button
           onClick={handleHireMe}
           className="px-6 py-3 font-semibold text-white transition-colors duration-200"
-          style={{ backgroundColor: colors.mainRed }}
+          style={{ backgroundColor: colors.mainGreen }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = colors.primary[600];
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = colors.mainRed;
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
           Hire Me
@@ -32,12 +32,12 @@ export const ActionButtonsCard = () => {
         <button
           onClick={handleDownloadCV}
           className="px-6 py-3 font-semibold text-white transition-colors duration-200"
-          style={{ backgroundColor: colors.mainRed }}
+          style={{ backgroundColor: colors.mainGreen }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = colors.primary[600];
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = colors.mainRed;
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
           Download CV

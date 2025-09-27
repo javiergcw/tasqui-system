@@ -54,7 +54,7 @@ export const FormacionAcademica: React.FC = () => {
         </h2>
         <button
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className={`px-4 py-2 ${colors.mainRed} font-medium rounded-md transition-colors`}
+          className={`px-4 py-2 ${colors.mainGreen} font-medium rounded-md transition-colors`}
         >
           {mostrarFormulario ? 'Cancelar' : '+ Agregar Formación'}
         </button>
@@ -127,7 +127,7 @@ export const FormacionAcademica: React.FC = () => {
           <div className="flex gap-4 mt-4">
             <button
               onClick={handleAgregarFormacion}
-              className={`px-6 py-2 ${colors.mainRed} font-medium rounded-md transition-colors`}
+              className={`px-6 py-2 ${colors.mainGreen} font-medium rounded-md transition-colors`}
             >
               Guardar Formación
             </button>

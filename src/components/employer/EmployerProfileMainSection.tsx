@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { colorClasses,colors } from '@/lib/colors';
+import { colorClasses, colors } from '@/lib/colors';
 
 export const EmployerProfileMainSection: React.FC = () => {
   const [activeTab, setActiveTab] = useState('company-data');
@@ -15,6 +15,8 @@ export const EmployerProfileMainSection: React.FC = () => {
         return <DashboardTab />;
       case 'kanban':
         return <KanbanTab />;
+      case 'tickets':
+        return <TicketsTab />;
       default:
         return <CompanyDataForm />;
     }
@@ -49,16 +51,15 @@ export const EmployerProfileMainSection: React.FC = () => {
               {/* Menú de navegación */}
               <nav className="w-full">
                 {/* Company Data */}
-                <div 
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
-                    activeTab === 'company-data' 
-                      ? 'border border-dashed rounded-md' 
+                <div
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'company-data'
+                      ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                  }`}
-                  style={activeTab === 'company-data' ? { backgroundColor: colors.mainRed } : {}}
+                    }`}
+                  style={activeTab === 'company-data' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'company-data') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -81,16 +82,15 @@ export const EmployerProfileMainSection: React.FC = () => {
                 <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
                 {/* Dashboard */}
-                <div 
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
-                    activeTab === 'dashboard' 
-                      ? 'border border-dashed rounded-md' 
+                <div
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'dashboard'
+                      ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                  }`}
-                  style={activeTab === 'dashboard' ? { backgroundColor: colors.mainRed } : {}}
+                    }`}
+                  style={activeTab === 'dashboard' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'dashboard') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -113,16 +113,15 @@ export const EmployerProfileMainSection: React.FC = () => {
                 <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
                 {/* Kanban */}
-                <div 
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
-                    activeTab === 'kanban' 
-                      ? 'border border-dashed rounded-md' 
+                <div
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'kanban'
+                      ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                  }`}
-                  style={activeTab === 'kanban' ? { backgroundColor: colors.mainRed } : {}}
+                    }`}
+                  style={activeTab === 'kanban' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'kanban') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -139,6 +138,37 @@ export const EmployerProfileMainSection: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
                     Applications
+                  </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
+                {/* Tickets */}
+                <div
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'tickets'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                    }`}
+                  style={activeTab === 'tickets' ? { backgroundColor: colors.mainGreen } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'tickets') {
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'tickets') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
+                  onClick={() => setActiveTab('tickets')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'tickets' ? 'text-white' : 'text-slate-800'}`}>
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Support Tickets
                   </div>
                 </div>
               </nav>
@@ -193,14 +223,14 @@ const CompanyDataForm: React.FC = () => {
         <button
           onClick={() => setIsEditing(!isEditing)}
           className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white"
-          style={{ 
-            backgroundColor: isEditing ? '#16a34a' : colors.mainRed 
+          style={{
+            backgroundColor: isEditing ? '#16a34a' : colors.mainGreen
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#15803d' : colors.primary[600];
+            e.currentTarget.style.backgroundColor = isEditing ? '#15803d' : colors.hoverGreen;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainRed;
+            e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainGreen;
           }}
         >
           {isEditing ? 'Save Changes' : 'Edit Information'}
@@ -221,8 +251,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -237,8 +267,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             >
               <option value="Technology">Technology</option>
@@ -261,8 +291,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             >
               <option value="1-10 employees">1-10 employees</option>
@@ -284,8 +314,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -301,8 +331,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -318,8 +348,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -339,7 +369,7 @@ const CompanyDataForm: React.FC = () => {
             onChange={handleInputChange}
             disabled={!isEditing}
             rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
           />
         </div>
 
@@ -359,8 +389,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -376,8 +406,8 @@ const CompanyDataForm: React.FC = () => {
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{ 
-                '--tw-ring-color': colors.mainRed 
+              style={{
+                '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
             />
           </div>
@@ -395,12 +425,12 @@ const CompanyDataForm: React.FC = () => {
             <button
               type="submit"
               className="px-6 py-2 text-white rounded-lg transition-colors duration-200"
-              style={{ backgroundColor: colors.mainRed }}
+              style={{ backgroundColor: colors.mainGreen }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.primary[600];
+                e.currentTarget.style.backgroundColor = colors.hoverGreen;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.mainRed;
+                e.currentTarget.style.backgroundColor = colors.mainGreen;
               }}
             >
               Save Changes
@@ -441,11 +471,11 @@ const DashboardTab: React.FC = () => {
     { id: '4', name: 'Emily Davis', job: 'UI/UX Designer', status: 'Pending', date: '2024-01-17' }
   ];
 
-  const filteredJobs = jobs.filter(job => 
+  const filteredJobs = jobs.filter(job =>
     selectedJob === 'all' || job.id === selectedJob
   );
 
-  const filteredApplications = applications.filter(app => 
+  const filteredApplications = applications.filter(app =>
     (selectedJob === 'all' || app.job === jobs.find(j => j.id === selectedJob)?.title) &&
     (statusFilter === 'all' || app.status.toLowerCase() === statusFilter.toLowerCase())
   );
@@ -517,18 +547,17 @@ const DashboardTab: React.FC = () => {
       {/* Job Metrics */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Job Metrics</h3>
-        
+
         {/* Mobile Cards View */}
         <div className="block md:hidden space-y-4">
           {filteredJobs.map((job) => (
             <div key={job.id} className="bg-gray-50 p-4 rounded-lg border">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="font-medium text-gray-900 text-sm">{job.title}</h4>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                  job.status === 'Active' ? 'bg-green-100 text-green-800' :
-                  job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-red-100 text-red-800'
-                }`}>
+                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${job.status === 'Active' ? 'bg-green-100 text-green-800' :
+                    job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-red-100 text-red-800'
+                  }`}>
                   {job.status}
                 </span>
               </div>
@@ -543,13 +572,13 @@ const DashboardTab: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                <button 
+                <button
                   onClick={() => handleViewJob(job.id)}
-                  className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                  className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                 >
                   View
                 </button>
-                <button 
+                <button
                   onClick={() => handleEditJob(job.id)}
                   className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                 >
@@ -580,24 +609,23 @@ const DashboardTab: React.FC = () => {
                 <tr key={job.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{job.title}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      job.status === 'Active' ? 'bg-green-100 text-green-800' :
-                      job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${job.status === 'Active' ? 'bg-green-100 text-green-800' :
+                        job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
+                          'bg-red-100 text-red-800'
+                      }`}>
                       {job.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.applications}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.views}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button 
+                    <button
                       onClick={() => handleViewJob(job.id)}
-                      className="text-blue-600 hover:text-blue-900 mr-3"
+                      className="text-green-600 hover:text-green-900 mr-3"
                     >
                       View
                     </button>
-                    <button 
+                    <button
                       onClick={() => handleEditJob(job.id)}
                       className="text-green-600 hover:text-green-900 mr-3"
                     >
@@ -642,19 +670,18 @@ const DashboardTab: React.FC = () => {
             </select>
           </div>
         </div>
-        
+
         {/* Mobile Cards View */}
         <div className="block md:hidden space-y-4">
           {filteredApplications.map((app) => (
             <div key={app.id} className="bg-gray-50 p-4 rounded-lg border">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="font-medium text-gray-900 text-sm">{app.name}</h4>
-                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                  app.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                  app.status === 'Reviewed' ? 'bg-blue-100 text-blue-800' :
-                  app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
-                  'bg-red-100 text-red-800'
-                }`}>
+                <span className={`px-2 py-1 text-xs font-semibold rounded-full ${app.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                    app.status === 'Reviewed' ? 'bg-blue-100 text-blue-800' :
+                      app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
+                        'bg-red-100 text-red-800'
+                  }`}>
                   {app.status}
                 </span>
               </div>
@@ -669,13 +696,13 @@ const DashboardTab: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
-                <button className="px-3 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200">
+                <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
                   View CV
                 </button>
                 <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
                   Schedule
                 </button>
-                <button className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200">
+                <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
                   Reject
                 </button>
               </div>
@@ -701,20 +728,19 @@ const DashboardTab: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{app.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{app.job}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      app.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
-                      app.status === 'Reviewed' ? 'bg-blue-100 text-blue-800' :
-                      app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${app.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
+                        app.status === 'Reviewed' ? 'bg-blue-100 text-blue-800' :
+                          app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
+                            'bg-red-100 text-red-800'
+                      }`}>
                       {app.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{app.date}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">View CV</button>
+                    <button className="text-green-600 hover:text-green-900 mr-3">View CV</button>
                     <button className="text-green-600 hover:text-green-900 mr-3">Schedule</button>
-                    <button className="text-red-600 hover:text-red-900">Reject</button>
+                    <button className="text-green-600 hover:text-green-800">Reject</button>
                   </td>
                 </tr>
               ))}
@@ -763,8 +789,8 @@ const KanbanTab: React.FC = () => {
   const handleDrop = (e: React.DragEvent, newStatus: string) => {
     e.preventDefault();
     const applicationId = e.dataTransfer.getData('applicationId');
-    
-    setApplications(prev => prev.map(app => 
+
+    setApplications(prev => prev.map(app =>
       app.id === applicationId ? { ...app, status: newStatus } : app
     ));
   };
@@ -776,61 +802,61 @@ const KanbanTab: React.FC = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-xl md:text-2xl font-bold text-gray-800">Application Management</h2>
-      
+
       {/* Kanban Board */}
       <div className="w-full overflow-x-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
-        {columns.map(column => (
-          <div
-            key={column.id}
-            className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, column.id)}
-          >
-            <div className="flex items-center justify-between mb-4 flex-shrink-0">
-              <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
-              <span className="bg-white px-2 py-1 rounded-full text-xs font-medium text-gray-600">
-                {getApplicationsByStatus(column.id).length}
-              </span>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto space-y-3 pr-2">
-              {getApplicationsByStatus(column.id).map(application => (
-                <div
-                  key={application.id}
-                  draggable
-                  onDragStart={(e) => handleDragStart(e, application.id)}
-                  className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 cursor-move hover:shadow-md transition-shadow duration-200 flex-shrink-0"
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-medium text-gray-900 text-sm md:text-base">{application.name}</h4>
-                    <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                  </div>
-                  
-                  <p className="text-xs md:text-sm text-gray-600 mb-2">{application.job}</p>
-                  <p className="text-xs md:text-sm text-gray-500 mb-3">{application.email}</p>
-                  
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-500">{application.date}</span>
-                    <div className="flex space-x-1">
-                      <button className="p-1 text-blue-600 hover:bg-blue-100 rounded">
-                        <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                      </button>
-                      <button className="p-1 text-green-600 hover:bg-green-100 rounded">
-                        <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                      </button>
+          {columns.map(column => (
+            <div
+              key={column.id}
+              className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, column.id)}
+            >
+              <div className="flex items-center justify-between mb-4 flex-shrink-0">
+                <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
+                <span className="bg-white px-2 py-1 rounded-full text-xs font-medium text-gray-600">
+                  {getApplicationsByStatus(column.id).length}
+                </span>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                {getApplicationsByStatus(column.id).map(application => (
+                  <div
+                    key={application.id}
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, application.id)}
+                    className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 cursor-move hover:shadow-md transition-shadow duration-200 flex-shrink-0"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="font-medium text-gray-900 text-sm md:text-base">{application.name}</h4>
+                      <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
+                    </div>
+
+                    <p className="text-xs md:text-sm text-gray-600 mb-2">{application.job}</p>
+                    <p className="text-xs md:text-sm text-gray-500 mb-3">{application.email}</p>
+
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500">{application.date}</span>
+                      <div className="flex space-x-1">
+                        <button className="p-1 text-green-600 hover:bg-green-100 rounded">
+                          <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                        </button>
+                        <button className="p-1 text-green-600 hover:bg-green-100 rounded">
+                          <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         </div>
       </div>
 
@@ -848,6 +874,402 @@ const KanbanTab: React.FC = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Tickets Tab Component
+const TicketsTab: React.FC = () => {
+  const [tickets, setTickets] = useState([
+    {
+      id: '1',
+      title: 'Problema con la plataforma',
+      description: 'No puedo acceder a mi cuenta de empresa',
+      status: 'OPEN',
+      created_at: '2024-01-20',
+      assigned_admin: null
+    },
+    {
+      id: '2',
+      title: 'Solicitud de nueva funcionalidad',
+      description: 'Me gustaría agregar filtros avanzados en la búsqueda',
+      status: 'IN_PROGRESS',
+      created_at: '2024-01-19',
+      assigned_admin: 'Admin User'
+    },
+    {
+      id: '3',
+      title: 'Error en el sistema de pagos',
+      description: 'El sistema no procesa correctamente los pagos',
+      status: 'CLOSED',
+      created_at: '2024-01-18',
+      assigned_admin: 'Admin User'
+    },
+    {
+      id: '4',
+      title: 'Consulta sobre facturación',
+      description: 'Necesito ayuda con la configuración de facturación',
+      status: 'OPEN',
+      created_at: '2024-01-17',
+      assigned_admin: null
+    }
+  ]);
+
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: ''
+  });
+
+  const columns = [
+    { id: 'OPEN', title: 'Abierto', color: 'bg-yellow-100 border-yellow-300' },
+    { id: 'IN_PROGRESS', title: 'En Progreso', color: 'bg-blue-100 border-blue-300' },
+    { id: 'CLOSED', title: 'Cerrado', color: 'bg-green-100 border-green-300' }
+  ];
+
+  const getTicketsByStatus = (status: string) => {
+    return tickets.filter(ticket => ticket.status === status);
+  };
+
+  const handleCreateTicket = () => {
+    setIsCreateModalOpen(true);
+    setFormData({ title: '', description: '' });
+  };
+
+  const handleEditTicket = (ticket: any) => {
+    setSelectedTicket(ticket);
+    setFormData({ title: ticket.title, description: ticket.description });
+    setIsEditModalOpen(true);
+  };
+
+  const handleViewTicket = (ticket: any) => {
+    setSelectedTicket(ticket);
+    setIsDetailModalOpen(true);
+  };
+
+  const handleSubmitCreate = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newTicket = {
+      id: (tickets.length + 1).toString(),
+      title: formData.title,
+      description: formData.description,
+      status: 'OPEN',
+      created_at: new Date().toISOString().split('T')[0],
+      assigned_admin: null
+    };
+    setTickets([...tickets, newTicket]);
+    setIsCreateModalOpen(false);
+    setFormData({ title: '', description: '' });
+  };
+
+  const handleSubmitEdit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setTickets(tickets.map(ticket =>
+      ticket.id === selectedTicket.id
+        ? { ...ticket, title: formData.title, description: formData.description }
+        : ticket
+    ));
+    setIsEditModalOpen(false);
+    setSelectedTicket(null);
+    setFormData({ title: '', description: '' });
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'OPEN':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'IN_PROGRESS':
+        return 'bg-blue-100 text-blue-800';
+      case 'CLOSED':
+        return 'bg-green-100 text-green-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Support Tickets</h2>
+        <button
+          onClick={handleCreateTicket}
+          className="px-4 py-2 text-white rounded-lg font-medium transition-colors duration-200"
+          style={{ backgroundColor: colors.mainGreen }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = colors.hoverGreen;
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
+          }}
+        >
+          Crear Solicitud
+        </button>
+      </div>
+
+      {/* Kanban Board */}
+      <div className="w-full overflow-x-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+          {columns.map(column => (
+            <div
+              key={column.id}
+              className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
+            >
+              <div className="flex items-center justify-between mb-4 flex-shrink-0">
+                <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
+                <span className="bg-white px-2 py-1 rounded-full text-xs font-medium text-gray-600">
+                  {getTicketsByStatus(column.id).length}
+                </span>
+              </div>
+
+              <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                  {getTicketsByStatus(column.id).map(ticket => (
+                    <div
+                      key={ticket.id}
+                      onClick={() => handleViewTicket(ticket)}
+                      className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                    >
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
+                        {ticket.status}
+                      </span>
+                    </div>
+
+                    <p className="text-xs md:text-sm text-gray-600 mb-3 line-clamp-3">{ticket.description}</p>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-gray-500">{ticket.created_at}</span>
+                        <div className="flex space-x-1">
+                          {ticket.status === 'OPEN' && (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleEditTicket(ticket);
+                              }}
+                              className="p-1 text-green-600 hover:bg-green-100 rounded"
+                            >
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                    {ticket.assigned_admin && (
+                      <div className="mt-2 text-xs text-gray-500">
+                        Asignado a: {ticket.assigned_admin}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Create Ticket Modal */}
+      {isCreateModalOpen && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Crear Nueva Solicitud</h3>
+            <form onSubmit={handleSubmitCreate} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Título
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsCreateModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-white rounded-lg"
+                  style={{ backgroundColor: colors.mainGreen }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.mainGreen;
+                  }}
+                >
+                  Crear Solicitud
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Ticket Modal */}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Editar Solicitud</h3>
+            <form onSubmit={handleSubmitEdit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Título
+                </label>
+                <input
+                  type="text"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción
+                </label>
+                <textarea
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  required
+                />
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-white rounded-lg"
+                  style={{ backgroundColor: colors.mainGreen }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.mainGreen;
+                  }}
+                >
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Ticket Detail Modal */}
+      {isDetailModalOpen && selectedTicket && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-6">
+              <h3 className="text-xl font-semibold text-gray-800">Detalle de la Solicitud</h3>
+              <button
+                onClick={() => setIsDetailModalOpen(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {/* Ticket Info */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Solicitud</label>
+                    <p className="text-sm text-gray-900 font-mono">#{selectedTicket.id}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedTicket.status)}`}>
+                      {selectedTicket.status === 'OPEN' ? 'Abierto' : 
+                       selectedTicket.status === 'IN_PROGRESS' ? 'En Progreso' : 'Cerrado'}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Creación</label>
+                    <p className="text-sm text-gray-900">{selectedTicket.created_at}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Asignado a</label>
+                    <p className="text-sm text-gray-900">{selectedTicket.assigned_admin || 'Sin asignar'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ticket Content */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Título</label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg">{selectedTicket.title}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedTicket.description}</p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                {selectedTicket.status === 'OPEN' && (
+                  <button
+                    onClick={() => {
+                      setIsDetailModalOpen(false);
+                      handleEditTicket(selectedTicket);
+                    }}
+                    className="px-4 py-2 text-white rounded-lg"
+                    style={{ backgroundColor: colors.mainGreen }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
+                    }}
+                  >
+                    Editar Solicitud
+                  </button>
+                )}
+                <button
+                  onClick={() => setIsDetailModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

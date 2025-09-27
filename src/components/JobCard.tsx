@@ -33,7 +33,7 @@ export const JobCard: React.FC<JobCardProps> = ({
     <div className="bg-white rounded p-4 md:p-6 flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 transition-all duration-300">
       {/* Company Logo/Avatar */}
       <div className="flex-shrink-0 flex md:block">
-        <div className={`w-12 h-12 md:w-16 md:h-16 ${colorClasses.background.pink200} ${colorClasses.border.dashed} ${colorClasses.border.red500} rounded-full flex items-center justify-center`}>
+        <div className={`w-12 h-12 md:w-16 md:h-16 bg-green-200 ${colorClasses.border.dashed} ${colorClasses.border.green500} rounded-full flex items-center justify-center`}>
           <span className="text-lg md:text-2xl font-bold text-gray-700">{companyInitial}</span>
         </div>
       </div>
@@ -75,7 +75,7 @@ export const JobCard: React.FC<JobCardProps> = ({
           </div>
         </div>
         
-        <span className={`px-2 py-1 md:px-3 md:py-1 ${colorClasses.background.red100} ${colorClasses.border.dashed} ${colorClasses.border.red500} ${colorClasses.text.red500} text-xs md:text-sm font-medium rounded`}>
+        <span className={`px-2 py-1 md:px-3 md:py-1 bg-green-100 ${colorClasses.border.dashed} ${colorClasses.border.green500} ${colorClasses.text.green500} text-xs md:text-sm font-medium rounded`}>
           {jobType}
         </span>
       </div>
@@ -85,12 +85,12 @@ export const JobCard: React.FC<JobCardProps> = ({
         <button 
           onClick={handleBrowseJob}
           className="w-full md:w-auto px-4 py-2 md:px-6 md:py-3 rounded font-semibold transition-colors duration-200 text-sm md:text-base text-white"
-          style={{ backgroundColor: colors.mainRed }}
+          style={{ backgroundColor: colors.mainGreen }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = colors.primary[600];
+            e.currentTarget.style.backgroundColor = colors.hoverGreen;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = colors.mainRed;
+            e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
           Browse Job

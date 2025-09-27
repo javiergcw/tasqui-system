@@ -8,7 +8,7 @@ export const DatosPersonales: React.FC = () => {
     <>
       {/* Información básica */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainRed }}>
+        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainGreen }}>
           Basic Information
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -21,7 +21,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Name"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -34,7 +34,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -47,7 +47,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Phone"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -60,7 +60,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Job Title"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -68,24 +68,24 @@ export const DatosPersonales: React.FC = () => {
         <div className="flex gap-4 mt-6">
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Edit
           </button>
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Save
@@ -98,7 +98,7 @@ export const DatosPersonales: React.FC = () => {
 
       {/* Dirección */}
       <div>
-        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainRed }}>
+        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainGreen }}>
           Address
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -111,7 +111,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Country"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -124,7 +124,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your City"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -137,7 +137,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="City Zip"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -150,7 +150,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Region"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -158,24 +158,24 @@ export const DatosPersonales: React.FC = () => {
         <div className="flex gap-4 mt-6">
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Edit
           </button>
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Save
@@ -188,7 +188,7 @@ export const DatosPersonales: React.FC = () => {
 
       {/* Other Information */}
       <div className="mb-8">
-        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainRed }}>
+        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainGreen }}>
           Other Information
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -201,7 +201,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Your Age"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -214,7 +214,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Work Experience"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -227,7 +227,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Language"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -240,7 +240,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="Skills"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -248,24 +248,24 @@ export const DatosPersonales: React.FC = () => {
         <div className="flex gap-4 mt-6">
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Edit
           </button>
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Save
@@ -278,7 +278,7 @@ export const DatosPersonales: React.FC = () => {
 
       {/* Social links */}
       <div>
-        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainRed }}>
+        <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainGreen }}>
           Social links
         </h2>
         <div className="grid md:grid-cols-2 gap-6">
@@ -291,7 +291,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="www.facebook.com/user"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -304,7 +304,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="www.twitter.com/user"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -317,7 +317,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="www.Linkedin.com/user"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -330,7 +330,7 @@ export const DatosPersonales: React.FC = () => {
               placeholder="www.Github.com/user"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
-                '--tw-ring-color': colors.mainRed 
+                '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
             />
           </div>
@@ -338,24 +338,24 @@ export const DatosPersonales: React.FC = () => {
         <div className="flex gap-4 mt-6">
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Edit
           </button>
           <button
             className="px-6 py-2 font-medium rounded-md transition-colors text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Save

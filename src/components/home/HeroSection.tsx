@@ -5,10 +5,18 @@ import { colors } from '@/lib/colors';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+    <section 
+      className="relative min-h-screen overflow-hidden"
+      style={{
+        background: `linear-gradient(135deg, ${colors.heroGreen} 0%, ${colors.ctaGreen} 50%, ${colors.heroGreen} 100%)`
+      }}
+    >
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')] bg-cover bg-center bg-no-repeat opacity-20"></div>
-      <div className="absolute inset-0 bg-slate-900/80"></div>
+      <div 
+        className="absolute inset-0"
+        style={{ backgroundColor: `${colors.ctaGreen}40` }}
+      ></div>
       
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center min-h-[80vh]">
@@ -32,24 +40,24 @@ export const HeroSection: React.FC = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button 
                 className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200"
-                style={{ backgroundColor: colors.mainRed }}
+                style={{ backgroundColor: colors.heroGreen }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[600];
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.heroGreen;
                 }}
               >
                 Upload your CV
               </button>
               <button 
                 className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200"
-                style={{ backgroundColor: colors.mainRed }}
+                style={{ backgroundColor: colors.heroGreen }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[600];
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.heroGreen;
                 }}
               >
                 Contact Us
@@ -72,11 +80,11 @@ export const HeroSection: React.FC = () => {
               {/* Decorative elements */}
               <div 
                 className="absolute -top-4 -right-4 w-8 h-8 rounded-full"
-                style={{ backgroundColor: colors.mainRed }}
+                style={{ backgroundColor: colors.heroGreen }}
               ></div>
               <div 
                 className="absolute -bottom-4 -left-4 w-6 h-6 rounded-full"
-                style={{ backgroundColor: colors.ctaBlue }}
+                style={{ backgroundColor: colors.ctaGreen }}
               ></div>
             </div>
           </div>

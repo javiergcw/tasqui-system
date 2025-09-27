@@ -53,9 +53,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <svg 
               className="w-4 h-4" 
               fill="none" 
-              stroke={colors.mainRed} 
+              stroke={colors.mainGreen} 
               viewBox="0 0 24 24"
-              style={{ stroke: colors.mainRed }}
+              style={{ stroke: colors.mainGreen }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
@@ -65,9 +65,9 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <svg 
               className="w-4 h-4" 
               fill="none" 
-              stroke={colors.mainRed} 
+              stroke={colors.mainGreen} 
               viewBox="0 0 24 24"
-              style={{ stroke: colors.mainRed }}
+              style={{ stroke: colors.mainGreen }}
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
@@ -88,12 +88,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         {/* Read More Link */}
         <div 
           className="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200"
-          style={{ color: colors.mainRed }}
+          style={{ color: colors.mainGreen }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.color = colors.primary[600];
+            e.currentTarget.style.color = colors.mainGreen;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.color = colors.mainRed;
+            e.currentTarget.style.color = colors.mainGreen;
           }}
         >
           Read More

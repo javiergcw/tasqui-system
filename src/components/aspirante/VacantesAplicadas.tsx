@@ -88,7 +88,7 @@ export const VacantesAplicadas: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold" style={{ color: colors.primary[600] }}>
+        <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
           Mis Vacantes Aplicadas
         </h2>
         <div className="flex items-center gap-4">

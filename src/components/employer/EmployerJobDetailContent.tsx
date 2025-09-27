@@ -94,12 +94,12 @@ export const EmployerJobDetailContent: React.FC = () => {
         <div className="mt-8 flex gap-4">
           <button
             className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Edit Job

@@ -33,8 +33,8 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
     <div
       className="p-6 transition-all duration-300 cursor-pointer hover:shadow-lg"
       style={{
-        backgroundColor: colors.primary[50], // Light pink background
-        border: `1px dashed ${colors.primary[200]}`, // Dashed border
+        backgroundColor: colors.lighterGreen, // Lighter green background
+        border: `1px dashed ${colors.mainGreen}`, // Dashed border
         borderRadius: '0.5rem', // Slightly rounded corners
       }}
       onClick={handleCardClick}
@@ -45,7 +45,7 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
           className="flex-shrink-0 w-16 h-16 flex items-center justify-center"
           style={{
             backgroundColor: '#ffffff', // White background for logo area
-            border: `2px dashed ${colors.primary[200]}`, // Dashed border for logo area
+            border: `2px dashed ${colors.mainGreen}`, // Dashed border for logo area
             borderRadius: '0.25rem', // Slightly rounded corners for logo area
           }}
         >
@@ -61,7 +61,7 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
           <h3 className={`text-xl font-bold ${colorClasses.text.slate800} mb-1`}>
             {jobTitle}
           </h3>
-          <p className={`${colorClasses.text.red500} font-medium mb-2`}>
+          <p className={`${colorClasses.text.green500} font-medium mb-2`}>
             {companyName}
           </p>
 
@@ -95,7 +95,7 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
               className="px-4 py-2 text-xs font-semibold rounded-full"
               style={{ 
                 backgroundColor: '#ffffff',
-                color: colors.mainRed
+                color: colors.mainGreen
               }}
             >
               {contractType}
@@ -106,19 +106,19 @@ export const JobInterestedCard: React.FC<JobInterestedCardProps> = ({
             className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
             style={{ 
               backgroundColor: '#ffffff',
-              border: `2px dashed ${colors.mainRed}`,
-              color: colors.mainRed
+              border: `2px dashed ${colors.mainGreen}`,
+              color: colors.mainGreen
             }}
             onClick={(e) => {
               e.stopPropagation(); // Evita que se active la navegación del card
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
               e.currentTarget.style.color = '#ffffff';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = '#ffffff';
-              e.currentTarget.style.color = colors.mainRed;
+              e.currentTarget.style.color = colors.mainGreen;
             }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

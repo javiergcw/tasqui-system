@@ -3,7 +3,7 @@ import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { ApplicantsHeroSection } from '@/components/employer/ApplicantsHeroSection';
-import { ApplicantsSection } from '@/components/employer/ApplicantsSection';
+import { CompanyApplicantsSection } from '@/components/employer/CompanyApplicantsSection';
 import { colorClasses } from '@/lib/colors';
 
 export default function ApplicantsPage() {
@@ -12,7 +12,7 @@ export default function ApplicantsPage() {
       <Sidebar />
       <main>
         <ApplicantsHeroSection />
-        <ApplicantsSection />
+        <CompanyApplicantsSection />
       </main>
       <Footer />
       <CopyrightSection />

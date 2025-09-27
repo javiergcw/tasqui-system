@@ -104,18 +104,30 @@ export const TestimonialsSection: React.FC = () => {
         {/* Navigation Controls */}
         <div className="flex justify-center gap-4 md:gap-6 mt-8 md:mt-20">
           <button
-            className={`w-10 h-10 md:w-12 md:h-12 ${colorClasses.background.red50} rounded-full flex items-center justify-center hover:${colorClasses.background.red100} transition-colors duration-200`}
-            style={{ color: colors.mainRed }}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-200"
+            style={{ backgroundColor: colors.mainGreen, color: 'white' }}
             onClick={prevTestimonial}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.lightGreen;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+            }}
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
             </svg>
           </button>
           <button
-            className={`w-10 h-10 md:w-12 md:h-12 ${colorClasses.background.red50} rounded-full flex items-center justify-center hover:${colorClasses.background.red100} transition-colors duration-200`}
-            style={{ color: colors.mainRed }}
+            className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-200"
+            style={{ backgroundColor: colors.mainGreen, color: 'white' }}
             onClick={nextTestimonial}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.lightGreen;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+            }}
           >
             <svg className="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 24 24">
               <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />

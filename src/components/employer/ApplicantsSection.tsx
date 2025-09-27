@@ -15,7 +15,7 @@ export const ApplicantsSection: React.FC = () => {
   });
 
   const handleApplicantClick = (applicantId: number) => {
-    router.push(`/employer/applicants/${applicantId}`);
+    router.push(`/admin/applicants/${applicantId}`);
   };
 
   const applicants = useMemo(() => [
@@ -207,8 +207,8 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.facebook}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.mainRed,
-                      color: colors.mainRed
+                      borderColor: colors.mainGreen,
+                      color: colors.mainGreen
                     }}
                     onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
@@ -216,8 +216,8 @@ export const ApplicantsSection: React.FC = () => {
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.mainRed;
-                      e.currentTarget.style.color = colors.mainRed;
+                      e.currentTarget.style.borderColor = colors.mainGreen;
+                      e.currentTarget.style.color = colors.mainGreen;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -229,8 +229,8 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.twitter}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.mainRed,
-                      color: colors.mainRed
+                      borderColor: colors.mainGreen,
+                      color: colors.mainGreen
                     }}
                     onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
@@ -238,8 +238,8 @@ export const ApplicantsSection: React.FC = () => {
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.mainRed;
-                      e.currentTarget.style.color = colors.mainRed;
+                      e.currentTarget.style.borderColor = colors.mainGreen;
+                      e.currentTarget.style.color = colors.mainGreen;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -251,8 +251,8 @@ export const ApplicantsSection: React.FC = () => {
                     href={applicant.social.linkedin}
                     className="w-8 h-8 bg-white border rounded flex items-center justify-center transition-colors duration-200"
                     style={{
-                      borderColor: colors.mainRed,
-                      color: colors.mainRed
+                      borderColor: colors.mainGreen,
+                      color: colors.mainGreen
                     }}
                     onClick={(e) => e.stopPropagation()}
                     onMouseEnter={(e) => {
@@ -260,8 +260,8 @@ export const ApplicantsSection: React.FC = () => {
                       e.currentTarget.style.color = colors.dark[800];
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = colors.mainRed;
-                      e.currentTarget.style.color = colors.mainRed;
+                      e.currentTarget.style.borderColor = colors.mainGreen;
+                      e.currentTarget.style.color = colors.mainGreen;
                     }}
                   >
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

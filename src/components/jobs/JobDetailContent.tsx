@@ -105,12 +105,12 @@ export const JobDetailContent: React.FC = () => {
           <button
             onClick={handleApplyNow}
             className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
             Apply Now

@@ -57,7 +57,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.jobTitle}
                     onChange={handleInputChange}
                     placeholder="Job Title or Keyword"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -72,7 +72,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.companyName}
                     onChange={handleInputChange}
                     placeholder="Company Name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -87,7 +87,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.companyWebsite}
                     onChange={handleInputChange}
                     placeholder="e.g www.companyname.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -101,7 +101,7 @@ export function EmployerEditJobFormSection() {
                       name="jobType"
                       value={formData.jobType}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
                     >
                       <option value="">Job Type</option>
                       <option value="full-time">Full Time</option>
@@ -129,7 +129,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.salary}
                     onChange={handleInputChange}
                     placeholder="e.g. $20,000"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
               </div>
@@ -146,7 +146,7 @@ export function EmployerEditJobFormSection() {
                       name="jobCategory"
                       value={formData.jobCategory}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
                     >
                       <option value="">Category</option>
                       <option value="technology">Technology</option>
@@ -177,7 +177,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.companyEmail}
                     onChange={handleInputChange}
                     placeholder="e.g. hello@company.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -192,7 +192,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.location}
                     onChange={handleInputChange}
                     placeholder="e.g. London"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -207,7 +207,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.jobTags}
                     onChange={handleInputChange}
                     placeholder="e.g. web design, graphics design, video editing"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export function EmployerEditJobFormSection() {
                     value={formData.experience}
                     onChange={handleInputChange}
                     placeholder="e.g. 1 year"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 placeholder-gray-600"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
               </div>
@@ -239,7 +239,7 @@ export function EmployerEditJobFormSection() {
                 onChange={handleInputChange}
                 placeholder="Job Description"
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-y text-gray-900 placeholder-gray-600"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent resize-y text-gray-900 placeholder-gray-600"
               />
             </div>
 
@@ -248,7 +248,7 @@ export function EmployerEditJobFormSection() {
               <button
                 type="submit"
                 className="px-12 py-4 text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: colors.mainRed }}
+                style={{ backgroundColor: colors.mainGreen }}
               >
                 Update Job
               </button>

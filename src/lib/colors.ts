@@ -18,12 +18,17 @@ export const colors = {
   },
   
   // Colores específicos para Call to Action
-  ctaBlue: '#010b29',
-  mainRed: '#ef4444',
+  ctaGreen: '#111700',
+  mainGreen: '#95c602',
+  sidebarGreen: '#2f3e01',
+  heroGreen: '#2f3e01',
+  hoverGreen: '#7ba302',
+  lightGreen: '#192f0085',
+  lighterGreen: '#e8f5e8',
   
   // Colores específicos para Footer
   footerBackground: '#060f24',
-  copyrightBackground: '#03143b',
+  copyrightBackground: '#3e5101',
   
   // Colores grises
   gray: {
@@ -44,11 +49,11 @@ export const colorClasses = {
     background: 'bg-slate-900',
     text: 'text-white',
     textHover: 'hover:text-slate-100',
-    active: 'text-red-500',
-    activeBg: 'bg-red-500',
+    active: 'text-green-500',
+    activeBg: 'bg-green-500',
   },
   button: {
-    primary: 'bg-red-500 hover:bg-red-600 text-white',
+    primary: 'bg-green-500 hover:bg-green-600 text-white',
     secondary: 'bg-transparent hover:bg-slate-800 text-white',
     pagination: 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900',
     paginationActive: 'bg-slate-900 text-white shadow-lg',
@@ -62,13 +67,13 @@ export const colorClasses = {
   },
   border: {
     gray200: 'border-gray-200',
-    red500: 'border-red-500',
+    green500: 'border-green-500',
     dashed: 'border-dashed',
   },
   text: {
     blue600: 'text-blue-600',
     blue300: 'text-blue-300',
-    red500: 'text-red-500',
+    green500: 'text-green-500',
     gray600: 'text-gray-600',
     gray300: 'text-gray-300',
     gray900: 'text-gray-900',

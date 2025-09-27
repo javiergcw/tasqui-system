@@ -57,12 +57,12 @@ export const SearchBar: React.FC = () => {
             {/* Search Button */}
             <button 
               className="px-8 py-2 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2 text-white"
-              style={{ backgroundColor: colors.mainRed }}
+              style={{ backgroundColor: colors.mainGreen }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.primary[600];
+                e.currentTarget.style.backgroundColor = colors.mainGreen;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.mainRed;
+                e.currentTarget.style.backgroundColor = colors.mainGreen;
               }}
             >
               FIND A JOB

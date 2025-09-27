@@ -49,13 +49,13 @@ export const ExperienciaLaboral: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-bold" style={{ color: colors.primary[600] }}>
+        <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
           Experiencia Laboral
         </h2>
         <button
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
           className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-          style={{ backgroundColor: colors.mainRed }}
+          style={{ backgroundColor: colors.mainGreen }}
         >
           {mostrarFormulario ? 'Cancelar' : '+ Agregar Experiencia'}
         </button>
@@ -129,7 +129,7 @@ export const ExperienciaLaboral: React.FC = () => {
             <button
               onClick={handleAgregarExperiencia}
               className="px-6 py-2 text-white font-medium rounded-md transition-colors"
-              style={{ backgroundColor: colors.mainRed }}
+              style={{ backgroundColor: colors.mainGreen }}
             >
               Guardar Experiencia
             </button>

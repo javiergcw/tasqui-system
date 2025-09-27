@@ -19,12 +19,12 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ className = '' }) 
       {/* Sign In Button */}
       <button 
         className="text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors duration-200"
-        style={{ backgroundColor: colors.mainRed }}
+        style={{ backgroundColor: colors.mainGreen }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = colors.primary[600];
+          e.currentTarget.style.backgroundColor = colors.mainGreen;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = colors.mainRed;
+          e.currentTarget.style.backgroundColor = colors.mainGreen;
         }}
       >
         Sign In

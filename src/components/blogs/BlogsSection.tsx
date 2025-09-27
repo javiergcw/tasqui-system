@@ -131,7 +131,7 @@ export const BlogsSection: React.FC = () => {
                 ? colorClasses.button.paginationDisabled
                 : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
             }`}
-            style={currentPage !== 1 ? { color: colors.mainRed } : {}}
+            style={currentPage !== 1 ? { color: colors.mainGreen } : {}}
           >
             <svg 
               className="w-5 h-5 transition-transform duration-300 animate-pulse" 
@@ -153,7 +153,7 @@ export const BlogsSection: React.FC = () => {
                   ? colorClasses.button.paginationActive
                   : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
               }`}
-              style={currentPage !== page ? { color: colors.mainRed } : {}}
+              style={currentPage !== page ? { color: colors.mainGreen } : {}}
             >
               {page}
             </button>
@@ -168,7 +168,7 @@ export const BlogsSection: React.FC = () => {
                 ? colorClasses.button.paginationDisabled
                 : 'bg-white border border-gray-300 hover:bg-slate-900 hover:text-white hover:border-slate-900'
             }`}
-            style={currentPage !== totalPages ? { color: colors.mainRed } : {}}
+            style={currentPage !== totalPages ? { color: colors.mainGreen } : {}}
           >
             <svg 
               className="w-5 h-5 transition-transform duration-300 animate-pulse" 

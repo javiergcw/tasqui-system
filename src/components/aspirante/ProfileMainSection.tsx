@@ -7,6 +7,7 @@ import { FormacionAcademica } from './FormacionAcademica';
 import { ExperienciaLaboral } from './ExperienciaLaboral';
 import { VacantesAplicadas } from './VacantesAplicadas';
 import { EntrevistasProgramadas } from './EntrevistasProgramadas';
+import { SkillsSection } from './SkillsSection';
 import { colors } from '@/lib/colors';
 
 export const ProfileMainSection: React.FC = () => {
@@ -24,6 +25,8 @@ export const ProfileMainSection: React.FC = () => {
         return <VacantesAplicadas />;
       case 'entrevistas-programadas':
         return <EntrevistasProgramadas />;
+      case 'skills':
+        return <SkillsSection />;
       default:
         return <DatosPersonales />;
     }
@@ -64,10 +67,10 @@ export const ProfileMainSection: React.FC = () => {
                       ? 'border border-dashed rounded-md' 
                       : 'text-slate-800'
                   }`}
-                  style={activeTab === 'datos-personales' ? { backgroundColor: colors.mainRed } : {}}
+                  style={activeTab === 'datos-personales' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'datos-personales') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -96,10 +99,10 @@ export const ProfileMainSection: React.FC = () => {
                       ? 'border border-dashed rounded-md' 
                       : 'text-slate-800'
                   }`}
-                  style={activeTab === 'formacion-academica' ? { backgroundColor: colors.mainRed } : {}}
+                  style={activeTab === 'formacion-academica' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'formacion-academica') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -129,10 +132,10 @@ export const ProfileMainSection: React.FC = () => {
                       ? 'border border-dashed rounded-md' 
                       : 'text-slate-800'
                   }`}
-                  style={activeTab === 'experiencia-laboral' ? { backgroundColor: colors.mainRed } : {}}
+                  style={activeTab === 'experiencia-laboral' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'experiencia-laboral') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -161,10 +164,10 @@ export const ProfileMainSection: React.FC = () => {
                       ? 'border border-dashed rounded-md' 
                       : 'text-slate-800'
                   }`}
-                  style={activeTab === 'vacantes-aplicadas' ? { backgroundColor: colors.mainRed } : {}}
+                  style={activeTab === 'vacantes-aplicadas' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'vacantes-aplicadas') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}
@@ -186,6 +189,38 @@ export const ProfileMainSection: React.FC = () => {
 
                 <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
+                {/* Skills */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'skills' 
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
+                  }`}
+                  style={activeTab === 'skills' ? { backgroundColor: colors.mainGreen } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'skills') {
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'skills') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
+                  onClick={() => setActiveTab('skills')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'skills' ? 'text-white' : 'text-slate-800'}`}>
+                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                    </svg>
+                    Skills & Technologies
+                  </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
                 {/* Entrevistas Programadas */}
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
@@ -193,10 +228,10 @@ export const ProfileMainSection: React.FC = () => {
                       ? 'border border-dashed rounded-md' 
                       : 'text-slate-800'
                   }`}
-                  style={activeTab === 'entrevistas-programadas' ? { backgroundColor: colors.mainRed } : {}}
+                  style={activeTab === 'entrevistas-programadas' ? { backgroundColor: colors.mainGreen } : {}}
                   onMouseEnter={(e) => {
                     if (activeTab !== 'entrevistas-programadas') {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                       e.currentTarget.style.color = 'white';
                     }
                   }}

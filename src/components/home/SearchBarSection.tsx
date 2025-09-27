@@ -4,10 +4,16 @@ import { colors } from '@/lib/colors';
 
 export const SearchBarSection: React.FC = () => {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="bg-white rounded-2xl shadow-2xl p-6">
+    <div 
+      className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      style={{ backgroundColor: 'transparent' }}
+    >
+      <div 
+        className="rounded-2xl shadow-2xl p-6"
+        style={{ backgroundColor: '#ffffff' }}
+      >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Job Title */}
+        
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,11 +23,11 @@ export const SearchBarSection: React.FC = () => {
             <input
               type="text"
               placeholder="Job Title or Keyword"
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
+              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-700 bg-white"
             />
           </div>
 
-          {/* Location */}
+         
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,18 +38,18 @@ export const SearchBarSection: React.FC = () => {
             <input
               type="text"
               placeholder="Location"
-              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700"
+              className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-700 bg-white"
             />
           </div>
 
-          {/* Category */}
+      
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
-            <select className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-700 appearance-none bg-white">
+            <select className="w-full pl-12 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-700 appearance-none bg-white">
               <option>Category</option>
               <option>Technology</option>
               <option>Design</option>
@@ -53,15 +59,15 @@ export const SearchBarSection: React.FC = () => {
             </select>
           </div>
 
-          {/* Search Button */}
+       
           <button 
             className="px-8 py-4 rounded-lg font-semibold text-lg transition-colors duration-200 flex items-center justify-center gap-2 text-white"
-            style={{ backgroundColor: colors.mainRed }}
+            style={{ backgroundColor: colors.heroGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainRed;
+              e.currentTarget.style.backgroundColor = colors.heroGreen;
             }}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

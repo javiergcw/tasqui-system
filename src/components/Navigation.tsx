@@ -53,7 +53,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
                  : 'text-white hover:text-slate-100'
                }
              `}
-            style={activeItem === item.label ? { color: colors.mainRed } : {}}
+            style={activeItem === item.label ? { color: colors.mainGreen } : {}}
             onClick={() => setActiveItem(item.label)}
           >
             <span>{item.label}</span>
@@ -95,7 +95,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
                       backgroundColor: 'transparent'
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.mainRed;
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.backgroundColor = 'transparent';

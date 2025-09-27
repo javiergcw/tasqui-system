@@ -177,7 +177,7 @@ export const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
 
                       <button
                         onClick={() => removeUploadedFile(index)}
-                        className="text-red-400 hover:text-red-600 transition-colors duration-200"
+                        className="text-green-400 hover:text-green-600 transition-colors duration-200"
                         title={`Eliminar ${file.name}`}
                       >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -232,7 +232,7 @@ export const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
               guardar tus datos o ajustar tus preferencias en cualquier momento en los ajustes de solicitudes.
               Más información
             </p>
-            <a href="#" className="text-blue-600 hover:text-blue-800 mt-2 block">
+            <a href="#" className="text-green-600 hover:text-green-800 mt-2 block">
               Aviso de derechos laborales.
             </a>
           </div>
@@ -243,12 +243,12 @@ export const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
           <button
             onClick={onClose}
             className="px-8 py-3 text-white font-semibold transition-colors duration-200"
-            style={{ backgroundColor: colors.ctaBlue }}
+            style={{ backgroundColor: colors.ctaGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.primary[600];
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.ctaBlue;
+              e.currentTarget.style.backgroundColor = colors.ctaGreen;
             }}
           >
             Enviar solicitud

@@ -6,7 +6,7 @@ export const TopCompaniesSection: React.FC = () => {
   const companies = [
     {
       logo: (
-        <div className={`w-12 h-12 ${colors.mainRed.split(' ')[0]} rounded flex items-center justify-center`}>
+        <div className={`w-12 h-12 ${colors.mainGreen.split(' ')[0]} rounded flex items-center justify-center`}>
           <span className="text-2xl font-bold text-white">A</span>
         </div>
       ),

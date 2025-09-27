@@ -22,7 +22,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   return (
     <div 
       className={`${bgColor} rounded-lg p-6 text-white relative overflow-hidden`}
-      style={backgroundColor === 'blue' ? { backgroundColor: colors.ctaBlue } : { backgroundColor: colors.mainRed }}
+      style={backgroundColor === 'blue' ? { backgroundColor: colors.ctaGreen } : { backgroundColor: colors.mainGreen }}
     >
       {/* Background Image Overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
@@ -49,7 +49,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
               color: 'white'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = backgroundColor === 'red' ? colors.ctaBlue : colors.mainRed;
+              e.currentTarget.style.color = backgroundColor === 'red' ? colors.ctaGreen : colors.mainGreen;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.color = 'white';

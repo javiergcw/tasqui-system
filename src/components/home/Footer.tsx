@@ -6,7 +6,7 @@ export const Footer: React.FC = () => {
   return (
     <footer 
       className="text-white py-16 relative overflow-hidden"
-      style={{ backgroundColor: colors.footerBackground }}
+      style={{ backgroundColor: colors.ctaGreen }}
     >
       {/* Decorative dots pattern */}
       <div className="absolute top-0 right-0 w-32 h-full opacity-10">
@@ -39,7 +39,7 @@ export const Footer: React.FC = () => {
               <div 
                 className="w-8 h-8 bg-white rounded-full flex items-center justify-center transition-colors cursor-pointer"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                   const span = e.currentTarget.querySelector('span');
                   if (span) span.style.color = 'white';
                 }}
@@ -54,7 +54,7 @@ export const Footer: React.FC = () => {
               <div 
                 className="w-8 h-8 bg-white rounded-full flex items-center justify-center transition-colors cursor-pointer"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                   const svg = e.currentTarget.querySelector('svg');
                   if (svg) svg.style.color = 'white';
                 }}
@@ -71,7 +71,7 @@ export const Footer: React.FC = () => {
               <div 
                 className="w-8 h-8 bg-white rounded-full flex items-center justify-center transition-colors cursor-pointer"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                   const span = e.currentTarget.querySelector('span');
                   if (span) span.style.color = 'white';
                 }}
@@ -86,7 +86,7 @@ export const Footer: React.FC = () => {
               <div 
                 className="w-8 h-8 bg-white rounded-full flex items-center justify-center transition-colors cursor-pointer"
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.mainRed;
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
                   const span = e.currentTarget.querySelector('span');
                   if (span) span.style.color = 'white';
                 }}
@@ -109,38 +109,38 @@ export const Footer: React.FC = () => {
             </h6>
             <ul className="space-y-3">
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Browse Jobs
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Account
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Browse Categories
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Resume
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Job List
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.mainRed } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Sign Up
                 </a>
               </li>
@@ -155,38 +155,38 @@ export const Footer: React.FC = () => {
             </h6>
             <ul className="space-y-3">
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Home
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   About
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Pricing
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Privacy
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
-                  <span className="mr-2" style={{ color: colors.mainRed }}>»</span>
+                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                  <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Contact
                 </a>
               </li>
@@ -201,14 +201,14 @@ export const Footer: React.FC = () => {
             </h6>
             <div className="space-y-4">
               {/* Phone */}
-              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.mainRed; e.currentTarget.querySelector('p')!.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
+              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.hoverGreen; e.currentTarget.querySelector('p')!.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
                 <div className="flex items-center mb-1">
                   <svg 
                     className="w-4 h-4 mr-2" 
                     fill="none" 
-                    stroke={colors.mainRed} 
+                    stroke={colors.hoverGreen} 
                     viewBox="0 0 24 24"
-                    style={{ stroke: colors.mainRed }}
+                    style={{ stroke: colors.hoverGreen }}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
@@ -218,14 +218,14 @@ export const Footer: React.FC = () => {
               </div>
 
               {/* Email */}
-              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.mainRed; e.currentTarget.querySelector('p')!.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
+              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.hoverGreen; e.currentTarget.querySelector('p')!.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
                 <div className="flex items-center mb-1">
                   <svg 
                     className="w-4 h-4 mr-2" 
                     fill="none" 
-                    stroke={colors.mainRed} 
+                    stroke={colors.hoverGreen} 
                     viewBox="0 0 24 24"
-                    style={{ stroke: colors.mainRed }}
+                    style={{ stroke: colors.hoverGreen }}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
@@ -235,14 +235,14 @@ export const Footer: React.FC = () => {
               </div>
 
               {/* Address */}
-              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.mainRed; e.currentTarget.querySelector('p')!.style.color = colors.mainRed; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
+              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.hoverGreen; e.currentTarget.querySelector('p')!.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
                 <div className="flex items-center mb-1">
                   <svg 
                     className="w-4 h-4 mr-2" 
                     fill="none" 
-                    stroke={colors.mainRed} 
+                    stroke={colors.hoverGreen} 
                     viewBox="0 0 24 24"
-                    style={{ stroke: colors.mainRed }}
+                    style={{ stroke: colors.hoverGreen }}
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />

@@ -18,7 +18,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
   return (
     <div 
       className="bg-white border border-dashed rounded p-8 text-center"
-      style={{ borderColor: colors.mainRed }}
+      style={{ borderColor: colors.mainGreen }}
     >
       {/* Company Logo */}
       <div className="flex justify-center mb-4">
@@ -42,12 +42,12 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
       {/* Open Positions Button */}
       <button 
         className="text-white px-6 py-3 rounded font-semibold transition-colors duration-200 w-full"
-        style={{ backgroundColor: colors.mainRed }}
+        style={{ backgroundColor: colors.mainGreen }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = colors.ctaBlue;
+          e.currentTarget.style.backgroundColor = colors.hoverGreen;
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = colors.mainRed;
+          e.currentTarget.style.backgroundColor = colors.mainGreen;
         }}
       >
         {openPositions} Open Position{openPositions !== 1 ? 's' : ''}

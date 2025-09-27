@@ -93,7 +93,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
             style={{ 
               backgroundColor: '#ffffff',
               color: status === 'Active' 
-                ? colors.mainRed 
+                ? colors.mainGreen 
                 : status === 'Paused'
                 ? colors.orange[500]
                 : colors.gray[600]
@@ -110,16 +110,16 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
               className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
               style={{ 
                 backgroundColor: '#ffffff',
-                border: `2px dashed ${colors.ctaBlue}`,
-                color: colors.ctaBlue
+                border: `2px dashed ${colors.ctaGreen}`,
+                color: colors.ctaGreen
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.ctaBlue;
+                e.currentTarget.style.backgroundColor = colors.ctaGreen;
                 e.currentTarget.style.color = '#ffffff';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = colors.ctaBlue;
+                e.currentTarget.style.color = colors.ctaGreen;
               }}
               title="View Job"
             >
@@ -159,16 +159,16 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
               className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
               style={{ 
                 backgroundColor: '#ffffff',
-                border: `2px dashed ${status === 'Active' ? colors.orange[500] : colors.mainRed}`,
-                color: status === 'Active' ? colors.orange[500] : colors.mainRed
+                border: `2px dashed ${status === 'Active' ? colors.orange[500] : colors.mainGreen}`,
+                color: status === 'Active' ? colors.orange[500] : colors.mainGreen
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = status === 'Active' ? colors.orange[500] : colors.mainRed;
+                e.currentTarget.style.backgroundColor = status === 'Active' ? colors.orange[500] : colors.mainGreen;
                 e.currentTarget.style.color = '#ffffff';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = status === 'Active' ? colors.orange[500] : colors.mainRed;
+                e.currentTarget.style.color = status === 'Active' ? colors.orange[500] : colors.mainGreen;
               }}
               title={status === 'Active' ? 'Pause Job' : 'Activate Job'}
             >

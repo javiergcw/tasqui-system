@@ -26,7 +26,7 @@ export const EntrevistasProgramadas: React.FC = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-bold mb-6" style={{ color: colors.primary[600] }}>
+      <h2 className="text-xl font-bold mb-6" style={{ color: colors.mainGreen }}>
         Entrevistas Programadas
       </h2>
       <div className="space-y-4">
@@ -56,7 +56,7 @@ export const EntrevistasProgramadas: React.FC = () => {
               <div className="flex flex-col gap-2">
                 <button
                   className="px-4 py-2 text-white text-sm font-medium rounded-md transition-colors"
-                  style={{ backgroundColor: colors.mainRed }}
+                  style={{ backgroundColor: colors.mainGreen }}
                 >
                   Ver Detalles
                 </button>
