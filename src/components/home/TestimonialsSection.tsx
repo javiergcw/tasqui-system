@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { TestimonialCard } from '../TestimonialCard';
-import { colors, colorClasses } from '@/lib/colors';
+import { colors } from '@/lib/colors';
 
 export const TestimonialsSection: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colors, colorClasses } from '@/lib/colors';
+import { colors } from '@/lib/colors';
 
 interface TestimonialCardProps {
   quote: string;

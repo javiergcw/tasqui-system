@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
 export const AdminProfileHeroSection: React.FC = () => {
@@ -20,12 +21,12 @@ export const AdminProfileHeroSection: React.FC = () => {
           </h1>
           
           <nav className="flex justify-center items-center space-x-2 text-white/80">
-            <a 
+            <Link 
               href="/" 
               className="hover:text-white transition-colors duration-200"
             >
               Home
-            </a>
+            </Link>
             <span className="text-white/60">&gt;</span>
             <span className="text-white">Admin Profile</span>
           </nav>

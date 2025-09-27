@@ -918,7 +918,14 @@ const TicketsTab: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [selectedTicket, setSelectedTicket] = useState<{
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    created_at: string;
+    assigned_admin: string | null;
+  } | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: ''
@@ -939,13 +946,27 @@ const TicketsTab: React.FC = () => {
     setFormData({ title: '', description: '' });
   };
 
-  const handleEditTicket = (ticket: any) => {
+  const handleEditTicket = (ticket: {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    created_at: string;
+    assigned_admin: string | null;
+  }) => {
     setSelectedTicket(ticket);
     setFormData({ title: ticket.title, description: ticket.description });
     setIsEditModalOpen(true);
   };
 
-  const handleViewTicket = (ticket: any) => {
+  const handleViewTicket = (ticket: {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    created_at: string;
+    assigned_admin: string | null;
+  }) => {
     setSelectedTicket(ticket);
     setIsDetailModalOpen(true);
   };
@@ -967,14 +988,16 @@ const TicketsTab: React.FC = () => {
 
   const handleSubmitEdit = (e: React.FormEvent) => {
     e.preventDefault();
-    setTickets(tickets.map(ticket =>
-      ticket.id === selectedTicket.id
-        ? { ...ticket, title: formData.title, description: formData.description }
-        : ticket
-    ));
-    setIsEditModalOpen(false);
-    setSelectedTicket(null);
-    setFormData({ title: '', description: '' });
+    if (selectedTicket) {
+      setTickets(tickets.map(ticket => 
+        ticket.id === selectedTicket.id 
+          ? { ...ticket, title: formData.title, description: formData.description }
+          : ticket
+      ));
+      setIsEditModalOpen(false);
+      setSelectedTicket(null);
+      setFormData({ title: '', description: '' });
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -1130,7 +1153,7 @@ const TicketsTab: React.FC = () => {
       )}
 
       {/* Edit Ticket Modal */}
-      {isEditModalOpen && (
+      {isEditModalOpen && selectedTicket && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Editar Solicitud</h3>

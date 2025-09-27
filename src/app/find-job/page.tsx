@@ -1,5 +1,5 @@
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobsHeroSection, SearchWithCategoriesSection, JobsInterestedSection, JobNotificationsSection } from '@/components';
-import { colorClasses,colors } from '@/lib/colors';
+import { colorClasses } from '@/lib/colors';
 
 export default function FindJobPage() {
   return (

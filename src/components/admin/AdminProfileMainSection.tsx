@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
 
 export const AdminProfileMainSection: React.FC = () => {
@@ -414,7 +413,6 @@ const AdminDataForm: React.FC = () => {
 
 // Dashboard Tab Component
 const DashboardTab: React.FC = () => {
-  const router = useRouter();
 
   // Mock data
   const stats = [
@@ -554,7 +552,16 @@ const TicketsTab: React.FC = () => {
   ]);
 
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [selectedTicket, setSelectedTicket] = useState<{
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    created_at: string;
+    company: string;
+    priority: string;
+    assigned_admin: string | null;
+  } | null>(null);
 
   const columns = [
     { id: 'OPEN', title: 'Abierto', color: 'bg-yellow-100 border-yellow-300' },
@@ -566,7 +573,16 @@ const TicketsTab: React.FC = () => {
     return tickets.filter(ticket => ticket.status === status);
   };
 
-  const handleViewTicket = (ticket: any) => {
+  const handleViewTicket = (ticket: {
+    id: string;
+    title: string;
+    description: string;
+    status: string;
+    created_at: string;
+    company: string;
+    priority: string;
+    assigned_admin: string | null;
+  }) => {
     setSelectedTicket(ticket);
     setIsDetailModalOpen(true);
   };
@@ -781,7 +797,7 @@ const TicketsTab: React.FC = () => {
 
 // Employees Tab Component
 const EmployeesTab: React.FC = () => {
-  const [employees, setEmployees] = useState([
+  const [employees] = useState([
     {
       id: '1',
       name: 'Juan Pérez',
@@ -968,10 +984,12 @@ const EmployeesTab: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
-                        <img
+                        <Image
                           className="h-10 w-10 rounded-full"
                           src={employee.avatar}
                           alt={employee.name}
+                          width={40}
+                          height={40}
                         />
                       </div>
                       <div className="ml-4">

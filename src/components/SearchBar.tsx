@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { colorClasses, colors } from '@/lib/colors';
+import { colors } from '@/lib/colors';
 
 export const SearchBar: React.FC = () => {
   return (
