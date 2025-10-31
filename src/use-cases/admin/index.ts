@@ -2,4 +2,5 @@
 
 export { default as adminProfileUseCase } from './profile.use-case';
 export { default as getTicketsUseCase } from './get-tickets.use-case';
+export { default as createJobUseCase } from './create-job.use-case';
 

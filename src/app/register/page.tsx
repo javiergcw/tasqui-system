@@ -7,10 +7,19 @@ import { RegisterHeroSection } from '@/components/auth/RegisterHeroSection';
 import { RoleSelector } from '@/components/auth/RoleSelector';
 import { CompanyRegisterForm } from '@/components/auth/CompanyRegisterForm';
 import { EmployeeRegisterForm } from '@/components/auth/EmployeeRegisterForm';
+import { Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
+import { employeeRegisterUseCase, companyRegisterUseCase } from '@/use-cases';
+import type { EmployeeRegisterRequest, CompanyRegisterRequest } from '@/models';
 
 export default function RegisterPage() {
   const [selectedRole, setSelectedRole] = useState<'company' | 'employee' | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
 
   const handleRoleSelect = (role: 'company' | 'employee') => {
     setSelectedRole(role);
@@ -18,6 +27,104 @@ export default function RegisterPage() {
 
   const handleBackToRoleSelection = () => {
     setSelectedRole(null);
+  };
+
+  const handleEmployeeSubmit = async (formData: any) => {
+    setIsLoading(true);
+    
+    try {
+      // Mapear los datos del formulario al formato de la API
+      const requestData: EmployeeRegisterRequest = {
+        email: formData.email,
+        password: formData.password,
+        role: 'EMPLOYEE',
+        employee_first_name: formData.first_name,
+        employee_last_name: formData.last_name,
+        employee_headline: formData.headline,
+        employee_location: formData.location,
+        employee_bio: formData.bio,
+        employee_country: formData.country,
+        employee_region: formData.region,
+        employee_city: formData.city,
+        employee_zip_code: formData.zip_code,
+        employee_primary_language: formData.primary_language,
+        employee_linkedin_url: formData.linkedin_url,
+      };
+
+      await employeeRegisterUseCase.execute(requestData);
+      
+      setToast({
+        show: true,
+        message: 'Registro exitoso! Bienvenido a Tasqui Jobs',
+        type: 'success'
+      });
+      
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+    } catch (error: any) {
+      setToast({
+        show: true,
+        message: error.message || 'Error al registrar empleado',
+        type: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCompanySubmit = async (formData: any) => {
+    setIsLoading(true);
+    
+    try {
+      const getMaxOpenJobs = (plan: string): number => {
+        switch (plan) {
+          case 'basic':
+            return 10;
+          case 'premium':
+            return 50;
+          case 'enterprise':
+            return 999;
+          default:
+            return 10;
+        }
+      };
+
+      // Mapear los datos del formulario al formato de la API
+      const requestData: CompanyRegisterRequest = {
+        email: formData.email,
+        password: formData.password,
+        role: 'COMPANY' as const,
+        company_legal_name: formData.legal_name,
+        company_contact_name: formData.contact_name,
+        company_contact_email: formData.contact_email,
+        company_contact_phone: formData.contact_phone,
+        company_billing_plan: formData.billing_plan,
+        company_max_open_jobs: getMaxOpenJobs(formData.billing_plan),
+      };
+
+      await companyRegisterUseCase.execute(requestData);
+      
+      setToast({
+        show: true,
+        message: 'Registro exitoso! Bienvenido a Tasqui Jobs',
+        type: 'success'
+      });
+      
+      // Redirigir después de 2 segundos
+      setTimeout(() => {
+        window.location.href = '/login';
+      }, 2000);
+    } catch (error: any) {
+      setToast({
+        show: true,
+        message: error.message || 'Error al registrar empresa',
+        type: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -43,7 +150,7 @@ export default function RegisterPage() {
                 Volver a selección de rol
               </button>
             </div>
-            <CompanyRegisterForm />
+            <CompanyRegisterForm onSubmit={handleCompanySubmit} isLoading={isLoading} />
           </div>
         ) : (
           <div>
@@ -59,13 +166,19 @@ export default function RegisterPage() {
                 Volver a selección de rol
               </button>
             </div>
-            <EmployeeRegisterForm />
+            <EmployeeRegisterForm onSubmit={handleEmployeeSubmit} isLoading={isLoading} />
           </div>
         )}
       </main>
       <Footer />
       <CopyrightSection />
       <ScrollToTopButton />
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 }

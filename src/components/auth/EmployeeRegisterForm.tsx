@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
-import { Toast } from '@/components';
-import { employeeRegisterUseCase } from '@/use-cases';
-import type { EmployeeRegisterRequest } from '@/models';
 
-export const EmployeeRegisterForm: React.FC = () => {
+interface EmployeeRegisterFormProps {
+  onSubmit: (formData: any) => void;
+  isLoading?: boolean;
+}
+
+export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSubmit, isLoading = false }) => {
   const [formData, setFormData] = useState({
     // User data
     email: '',
@@ -31,11 +33,7 @@ export const EmployeeRegisterForm: React.FC = () => {
     github_url: '',
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('success');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -47,7 +45,7 @@ export const EmployeeRegisterForm: React.FC = () => {
     if (error) setError(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -57,58 +55,11 @@ export const EmployeeRegisterForm: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      // Mapear los datos del formulario al formato de la API
-      const requestData: EmployeeRegisterRequest = {
-        email: formData.email,
-        password: formData.password,
-        role: 'EMPLOYEE',
-        employee_first_name: formData.first_name,
-        employee_last_name: formData.last_name,
-        employee_headline: formData.headline,
-        employee_location: formData.location,
-        employee_bio: formData.bio,
-        employee_country: formData.country,
-        employee_region: formData.region,
-        employee_city: formData.city,
-        employee_zip_code: formData.zip_code,
-        employee_primary_language: formData.primary_language,
-        employee_linkedin_url: formData.linkedin_url,
-      };
-
-      await employeeRegisterUseCase.execute(requestData);
-      
-      // Éxito - mostrar toast y redirigir
-      setToastMessage('Registro exitoso! Bienvenido a Tasqui Jobs');
-      setToastType('success');
-      setShowToast(true);
-      
-      // Redirigir después de 2 segundos
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 2000);
-    } catch (err: any) {
-      console.error('Error registering:', err);
-      setError(err.message || 'Error al registrar empleado');
-      setToastMessage(err.message || 'Error al registrar empleado');
-      setToastType('error');
-      setShowToast(true);
-    } finally {
-      setIsLoading(false);
-    }
+    // Llamar al handler de la página
+    onSubmit(formData);
   };
 
   return (
-    <>
-      <Toast
-        message={toastMessage}
-        type={toastType}
-        isVisible={showToast}
-        onClose={() => setShowToast(false)}
-        duration={3000}
-      />
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl w-full space-y-8">
         {/* Header */}
@@ -507,6 +458,5 @@ export const EmployeeRegisterForm: React.FC = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };

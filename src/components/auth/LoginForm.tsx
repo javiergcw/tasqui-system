@@ -2,78 +2,27 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
-import { Toast } from '@/components';
-import { loginUseCase } from '@/use-cases';
-import type { LoginRequest } from '@/models';
 
-export const LoginForm: React.FC = () => {
+interface LoginFormProps {
+  onSubmit: (formData: { email: string; password: string }) => void;
+  isLoading?: boolean;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, isLoading = false }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('success');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    setIsLoading(true);
-
-    try {
-      const requestData: LoginRequest = {
-        email,
-        password,
-      };
-
-      const response = await loginUseCase.execute(requestData);
-      
-      if (response.success) {
-        // Mostrar toast de éxito
-        setToastMessage('Login exitoso! Bienvenido de vuelta');
-        setToastType('success');
-        setShowToast(true);
-
-        // Redirigir según el rol
-        const user = response.data.user;
-        setTimeout(() => {
-          switch (user.role) {
-            case 'ADMIN':
-              window.location.href = '/admin/my-jobs';
-              break;
-            case 'COMPANY':
-              window.location.href = '/company/my-jobs';
-              break;
-            case 'EMPLOYEE':
-              window.location.href = '/employee/profile';
-              break;
-            default:
-              window.location.href = '/';
-          }
-        }, 1000);
-      }
-    } catch (err: any) {
-      console.error('Error in login:', err);
-      setError(err.message || 'Error al iniciar sesión');
-      setToastMessage(err.message || 'Error al iniciar sesión');
-      setToastType('error');
-      setShowToast(true);
-    } finally {
-      setIsLoading(false);
-    }
+    // Llamar al handler de la página
+    onSubmit({ email, password });
   };
 
   return (
-    <>
-      <Toast
-        message={toastMessage}
-        type={toastType}
-        isVisible={showToast}
-        onClose={() => setShowToast(false)}
-        duration={3000}
-      />
-      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           {/* Form Container */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
@@ -199,6 +148,5 @@ export const LoginForm: React.FC = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };

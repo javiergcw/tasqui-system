@@ -4,17 +4,19 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
 import type { CompanyProfile } from '@/models';
-import { createTicketUseCase } from '@/use-cases';
-import { Toast } from '@/components';
 
 interface EmployerProfileMainSectionProps {
   profile?: CompanyProfile | null;
   isLoading?: boolean;
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<any>;
+  isCreatingTicket?: boolean;
 }
 
 export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProps> = ({ 
   profile, 
-  isLoading = false 
+  isLoading = false,
+  onCreateTicket,
+  isCreatingTicket = false
 }) => {
   const [activeTab, setActiveTab] = useState('company-data');
 
@@ -27,7 +29,7 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
       case 'kanban':
         return <KanbanTab />;
       case 'tickets':
-        return <TicketsTab />;
+        return <TicketsTab onCreateTicket={onCreateTicket} isCreatingTicket={isCreatingTicket} />;
       default:
         return <CompanyDataForm profile={profile} isLoading={isLoading} />;
     }
@@ -43,19 +45,27 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
               {/* Perfil de la empresa */}
               <div className="text-center mb-8">
                 <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                    alt="Company Logo"
-                    width={150}
-                    height={150}
-                    className="w-full h-full object-cover rounded-full"
-                  />
+                  {profile ? (
+                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                      <span className="text-white text-4xl font-bold">
+                        {profile.legal_name?.charAt(0) || 'C'}
+                      </span>
+                    </div>
+                  ) : (
+                    <Image
+                      src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+                      alt="Company Logo"
+                      width={150}
+                      height={150}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  )}
                 </div>
                 <h3 className={`text-xl font-bold ${colorClasses.text.gray900} mb-2`}>
-                  TechCorp Solutions
+                  {isLoading ? 'Cargando...' : profile ? profile.legal_name || 'Empresa' : 'Empresa'}
                 </h3>
                 <p className={colorClasses.text.gray600}>
-                  Technology Company
+                  {profile?.contact_email || 'Email de contacto'}
                 </p>
               </div>
 
@@ -942,7 +952,12 @@ const KanbanTab: React.FC = () => {
 };
 
 // Tickets Tab Component
-const TicketsTab: React.FC = () => {
+interface TicketsTabProps {
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<any>;
+  isCreatingTicket?: boolean;
+}
+
+const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicket = false }) => {
   const [tickets, setTickets] = useState([
     {
       id: '1',
@@ -981,12 +996,6 @@ const TicketsTab: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
-    show: false,
-    message: '',
-    type: 'success'
-  });
   const [selectedTicket, setSelectedTicket] = useState<{
     id: string;
     title: string;
@@ -1042,39 +1051,25 @@ const TicketsTab: React.FC = () => {
 
   const handleSubmitCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     
-    try {
-      const newTicket = await createTicketUseCase.execute({
-        title: formData.title,
-        description: formData.description
-      });
-      
-      setTickets([...tickets, {
-        id: newTicket.id,
-        title: newTicket.title,
-        description: newTicket.description,
-        status: newTicket.status,
-        created_at: newTicket.created_at,
-        assigned_admin: null
-      }]);
-      
-      setIsCreateModalOpen(false);
-      setFormData({ title: '', description: '' });
-      setToast({
-        show: true,
-        message: 'Ticket creado exitosamente',
-        type: 'success'
-      });
-    } catch (error: any) {
-      setToast({
-        show: true,
-        message: error.message || 'Error al crear el ticket',
-        type: 'error'
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    if (!onCreateTicket) return;
+    
+    const newTicket = await onCreateTicket({
+      title: formData.title,
+      description: formData.description
+    });
+    
+    setTickets([...tickets, {
+      id: newTicket.id,
+      title: newTicket.title,
+      description: newTicket.description,
+      status: newTicket.status,
+      created_at: newTicket.created_at,
+      assigned_admin: null
+    }]);
+    
+    setIsCreateModalOpen(false);
+    setFormData({ title: '', description: '' });
   };
 
   const handleSubmitEdit = (e: React.FormEvent) => {
@@ -1226,11 +1221,11 @@ const TicketsTab: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isCreatingTicket}
                   className="px-4 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: colors.mainGreen }}
                   onMouseEnter={(e) => {
-                    if (!isLoading) {
+                    if (!isCreatingTicket) {
                       e.currentTarget.style.backgroundColor = colors.hoverGreen;
                     }
                   }}
@@ -1238,7 +1233,7 @@ const TicketsTab: React.FC = () => {
                     e.currentTarget.style.backgroundColor = colors.mainGreen;
                   }}
                 >
-                  {isLoading ? 'Creando...' : 'Crear Solicitud'}
+                  {isCreatingTicket ? 'Creando...' : 'Crear Solicitud'}
                 </button>
               </div>
             </form>
@@ -1388,13 +1383,6 @@ const TicketsTab: React.FC = () => {
         </div>
       )}
 
-      {/* Toast */}
-      <Toast
-        message={toast.message}
-        type={toast.type}
-        isVisible={toast.show}
-        onClose={() => setToast({ ...toast, show: false })}
-      />
     </div>
   );
 };

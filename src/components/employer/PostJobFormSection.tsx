@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { colors } from '@/lib/colors';
 import { JobSkillsSelector } from './JobSkillsSelector';
 
-export function PostJobFormSection() {
+interface PostJobFormSectionProps {
+  onSubmit?: (formData: any) => void;
+}
+
+export function PostJobFormSection({ onSubmit }: PostJobFormSectionProps) {
   const [formData, setFormData] = useState({
     jobTitle: '',
     companyName: '',
@@ -18,7 +22,8 @@ export function PostJobFormSection() {
     experience: '',
     jobDescription: '',
     requiredSkillCategory: '',
-    requiredSkillSubCategory: ''
+    requiredSkillSubCategory: '',
+    ticketId: ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -46,7 +51,11 @@ export function PostJobFormSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
+    if (onSubmit) {
+      onSubmit(formData);
+    } else {
+      console.log('Form submitted:', formData);
+    }
   };
 
   return (
@@ -58,6 +67,21 @@ export function PostJobFormSection() {
           </h2>
           
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Ticket ID (Oculto para admin) */}
+            <div style={{ display: 'none' }}>
+              <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
+                Ticket ID
+              </label>
+              <input
+                type="text"
+                name="ticketId"
+                value={formData.ticketId}
+                onChange={handleInputChange}
+                placeholder="Ticket ID"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+              />
+            </div>
+
             {/* Two Column Layout */}
             <div className="grid md:grid-cols-2 gap-8">
               {/* Left Column */}

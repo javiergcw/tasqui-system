@@ -18,6 +18,22 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
   isLoadingTickets = false
 }) => {
   const [activeTab, setActiveTab] = useState('admin-data');
+  
+  // Obtener email del usuario desde localStorage
+  const getUserEmail = () => {
+    if (typeof window !== 'undefined') {
+      const user = localStorage.getItem('user');
+      if (user) {
+        try {
+          const userData = JSON.parse(user);
+          return userData.email || 'System Administrator';
+        } catch (e) {
+          return 'System Administrator';
+        }
+      }
+    }
+    return 'System Administrator';
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -44,19 +60,27 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
               {/* Perfil del admin */}
               <div className="text-center mb-8">
                 <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
-                    alt="Admin Avatar"
-                    width={150}
-                    height={150}
-                    className="w-full h-full object-cover rounded-full"
-                  />
+                  {profile ? (
+                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                      <span className="text-white text-4xl font-bold">
+                        {profile.display_name?.charAt(0) || 'A'}
+                      </span>
+                    </div>
+                  ) : (
+                    <Image
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+                      alt="Admin Avatar"
+                      width={150}
+                      height={150}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  )}
                 </div>
                 <h3 className={`text-xl font-bold ${colorClasses.text.gray900} mb-2`}>
-                  Admin User
+                  {isLoading ? 'Cargando...' : profile ? profile.display_name || 'Admin' : 'Admin'}
                 </h3>
                 <p className={colorClasses.text.gray600}>
-                  System Administrator
+                  {getUserEmail()}
                 </p>
               </div>
 

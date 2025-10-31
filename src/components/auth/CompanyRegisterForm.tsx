@@ -2,11 +2,13 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
-import { Toast } from '@/components';
-import { companyRegisterUseCase } from '@/use-cases';
-import type { CompanyRegisterRequest } from '@/models';
 
-export const CompanyRegisterForm: React.FC = () => {
+interface CompanyRegisterFormProps {
+  onSubmit: (formData: any) => void;
+  isLoading?: boolean;
+}
+
+export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubmit, isLoading = false }) => {
   const [formData, setFormData] = useState({
     // User data
     email: '',
@@ -21,11 +23,7 @@ export const CompanyRegisterForm: React.FC = () => {
     billing_plan: 'basic', // default
   });
 
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState('');
-  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('success');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -50,7 +48,7 @@ export const CompanyRegisterForm: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -60,53 +58,11 @@ export const CompanyRegisterForm: React.FC = () => {
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      // Mapear los datos del formulario al formato de la API
-      const requestData: CompanyRegisterRequest = {
-        email: formData.email,
-        password: formData.password,
-        role: 'COMPANY',
-        company_legal_name: formData.legal_name,
-        company_contact_name: formData.contact_name,
-        company_contact_email: formData.contact_email,
-        company_contact_phone: formData.contact_phone,
-        company_billing_plan: formData.billing_plan,
-        company_max_open_jobs: getMaxOpenJobs(formData.billing_plan),
-      };
-
-      await companyRegisterUseCase.execute(requestData);
-      
-      // Éxito - mostrar toast y redirigir
-      setToastMessage('Registro exitoso! Bienvenido a Tasqui Jobs');
-      setToastType('success');
-      setShowToast(true);
-      
-      // Redirigir después de 2 segundos
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 2000);
-    } catch (err: any) {
-      console.error('Error registering:', err);
-      setError(err.message || 'Error al registrar empresa');
-      setToastMessage(err.message || 'Error al registrar empresa');
-      setToastType('error');
-      setShowToast(true);
-    } finally {
-      setIsLoading(false);
-    }
+    // Llamar al handler de la página
+    onSubmit(formData);
   };
 
   return (
-    <>
-      <Toast
-        message={toastMessage}
-        type={toastType}
-        isVisible={showToast}
-        onClose={() => setShowToast(false)}
-        duration={3000}
-      />
       <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl w-full space-y-8">
           {/* Header */}
@@ -316,6 +272,5 @@ export const CompanyRegisterForm: React.FC = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };

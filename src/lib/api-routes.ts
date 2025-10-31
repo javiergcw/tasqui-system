@@ -33,6 +33,7 @@ export const API_ROUTES = {
   admin: {
     profile: '/api/v1/admin/profile',
     tickets: '/api/v1/admin/tickets',
+    jobs: '/api/v1/admin/jobs',
   },
   
   // Jobs (pendiente)
