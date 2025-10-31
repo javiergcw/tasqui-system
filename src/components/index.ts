@@ -104,3 +104,6 @@ export { FormacionAcademica } from './aspirante/FormacionAcademica';
 export { ExperienciaLaboral } from './aspirante/ExperienciaLaboral';
 export { VacantesAplicadas } from './aspirante/VacantesAplicadas';
 export { EntrevistasProgramadas } from './aspirante/EntrevistasProgramadas';
+
+// Exportar componentes UI
+export { Toast } from './ui/Toast';

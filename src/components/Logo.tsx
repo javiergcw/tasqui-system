@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface LogoProps {
   className?: string;
@@ -7,7 +8,7 @@ interface LogoProps {
 
 export const Logo: React.FC<LogoProps> = ({ className = '', showText = true }) => {
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
+    <Link href="/" className={`flex items-center space-x-3 ${className}`}>
       {/* Icono del logo - similar al de la imagen */}
       <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
         <svg 
@@ -46,6 +47,6 @@ export const Logo: React.FC<LogoProps> = ({ className = '', showText = true }) =
           Jovie
         </span>
       )}
-    </div>
+    </Link>
   );
 };

@@ -2,22 +2,35 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { colorClasses, colors } from '@/lib/colors';
+import type { AdminProfile, AdminTicket } from '@/models';
 
-export const AdminProfileMainSection: React.FC = () => {
+interface AdminProfileMainSectionProps {
+  profile?: AdminProfile | null;
+  isLoading?: boolean;
+  tickets?: AdminTicket[];
+  isLoadingTickets?: boolean;
+}
+
+export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = ({ 
+  profile, 
+  isLoading = false,
+  tickets,
+  isLoadingTickets = false
+}) => {
   const [activeTab, setActiveTab] = useState('admin-data');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'admin-data':
-        return <AdminDataForm />;
+        return <AdminDataForm profile={profile} isLoading={isLoading} />;
       case 'dashboard':
         return <DashboardTab />;
       case 'tickets':
-        return <TicketsTab />;
+        return <TicketsTab tickets={tickets} isLoading={isLoadingTickets} />;
       case 'employees':
         return <EmployeesTab />;
       default:
-        return <AdminDataForm />;
+        return <AdminDataForm profile={profile} isLoading={isLoading} />;
     }
   };
 
@@ -187,18 +200,41 @@ export const AdminProfileMainSection: React.FC = () => {
 };
 
 // Admin Data Form Component
-const AdminDataForm: React.FC = () => {
+interface AdminDataFormProps {
+  profile?: AdminProfile | null;
+  isLoading?: boolean;
+}
+
+const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = false }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    adminName: 'Admin User',
-    role: 'System Administrator',
-    department: 'IT Support',
-    employeeId: 'ADM001',
-    email: 'admin@company.com',
-    phone: '+1 (555) 123-4567',
-    joinDate: '2020-01-15',
-    permissions: 'Full Access'
+    adminName: '',
+    role: '',
+    department: '',
+    employeeId: '',
+    email: '',
+    phone: '',
+    joinDate: '',
+    permissions: '',
+    scopeNotes: ''
   });
+
+  // Cargar datos del perfil cuando estén disponibles
+  React.useEffect(() => {
+    if (profile) {
+      setFormData({
+        adminName: profile.display_name || '',
+        role: 'System Administrator', // No disponible en el backend
+        department: 'IT Support', // No disponible en el backend
+        employeeId: 'N/A', // No disponible en el backend
+        email: 'N/A', // No disponible en el backend
+        phone: 'N/A', // No disponible en el backend
+        joinDate: profile.created_at || '',
+        permissions: profile.can_publish_direct ? 'Full Access' : 'Limited Access',
+        scopeNotes: profile.scope_notes || ''
+      });
+    }
+  }, [profile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -213,6 +249,17 @@ const AdminDataForm: React.FC = () => {
     setIsEditing(false);
     // TODO: Implementar lógica de guardado
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Loading admin information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -382,6 +429,24 @@ const AdminDataForm: React.FC = () => {
           </div>
         </div>
 
+        {/* Divider */}
+        <div className="border-t border-dashed border-gray-300 my-8"></div>
+
+        {/* Scope Notes */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Scope Notes
+          </label>
+          <textarea
+            name="scopeNotes"
+            value={formData.scopeNotes}
+            onChange={handleInputChange}
+            disabled={!isEditing}
+            rows={4}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+          />
+        </div>
+
         {isEditing && (
           <div className="flex justify-end space-x-4 pt-6">
             <button
@@ -507,61 +572,14 @@ const DashboardTab: React.FC = () => {
 };
 
 // Tickets Tab Component (Admin version with management capabilities)
-const TicketsTab: React.FC = () => {
-  const [tickets, setTickets] = useState([
-    {
-      id: '1',
-      title: 'Problema con la plataforma',
-      description: 'No puedo acceder a mi cuenta de empresa',
-      status: 'OPEN',
-      created_at: '2024-01-20',
-      company: 'TechCorp Solutions',
-      priority: 'High',
-      assigned_admin: null
-    },
-    {
-      id: '2',
-      title: 'Solicitud de nueva funcionalidad',
-      description: 'Me gustaría agregar filtros avanzados en la búsqueda',
-      status: 'IN_PROGRESS',
-      created_at: '2024-01-19',
-      company: 'FinanceCo',
-      priority: 'Medium',
-      assigned_admin: 'Admin User'
-    },
-    {
-      id: '3',
-      title: 'Error en el sistema de pagos',
-      description: 'El sistema no procesa correctamente los pagos',
-      status: 'CLOSED',
-      created_at: '2024-01-18',
-      company: 'StartupXYZ',
-      priority: 'High',
-      assigned_admin: 'Admin User'
-    },
-    {
-      id: '4',
-      title: 'Consulta sobre facturación',
-      description: 'Necesito ayuda con la configuración de facturación',
-      status: 'OPEN',
-      created_at: '2024-01-17',
-      company: 'DevCorp',
-      priority: 'Low',
-      assigned_admin: null
-    }
-  ]);
+interface TicketsTabProps {
+  tickets?: AdminTicket[];
+  isLoading?: boolean;
+}
 
+const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false }) => {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<{
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    created_at: string;
-    company: string;
-    priority: string;
-    assigned_admin: string | null;
-  } | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<AdminTicket | null>(null);
 
   const columns = [
     { id: 'OPEN', title: 'Abierto', color: 'bg-yellow-100 border-yellow-300' },
@@ -573,24 +591,14 @@ const TicketsTab: React.FC = () => {
     return tickets.filter(ticket => ticket.status === status);
   };
 
-  const handleViewTicket = (ticket: {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    created_at: string;
-    company: string;
-    priority: string;
-    assigned_admin: string | null;
-  }) => {
+  const handleViewTicket = (ticket: AdminTicket) => {
     setSelectedTicket(ticket);
     setIsDetailModalOpen(true);
   };
 
   const handleStatusChange = (ticketId: string, newStatus: string) => {
-    setTickets(tickets.map(ticket => 
-      ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket
-    ));
+    // TODO: Implementar actualización de estado en backend
+    console.log('Cambiar estado del ticket', ticketId, 'a', newStatus);
   };
 
   const handleDragStart = (e: React.DragEvent, ticketId: string) => {
@@ -599,21 +607,16 @@ const TicketsTab: React.FC = () => {
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    e.currentTarget.classList.add('bg-opacity-50');
   };
 
   const handleDragLeave = (e: React.DragEvent) => {
-    e.currentTarget.classList.remove('bg-opacity-50');
+    // Do nothing
   };
 
   const handleDrop = (e: React.DragEvent, newStatus: string) => {
     e.preventDefault();
-    e.currentTarget.classList.remove('bg-opacity-50');
     const ticketId = e.dataTransfer.getData('ticketId');
-    
-    setTickets(tickets.map(ticket => 
-      ticket.id === ticketId ? { ...ticket, status: newStatus } : ticket
-    ));
+    handleStatusChange(ticketId, newStatus);
   };
 
   const getStatusColor = (status: string) => {
@@ -629,18 +632,16 @@ const TicketsTab: React.FC = () => {
     }
   };
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'High':
-        return 'bg-red-100 text-red-800';
-      case 'Medium':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'Low':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Loading tickets...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -680,28 +681,16 @@ const TicketsTab: React.FC = () => {
                   >
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
-                      <div className="flex flex-col space-y-1">
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
-                          {ticket.status}
-                        </span>
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(ticket.priority)}`}>
-                          {ticket.priority}
-                        </span>
-                      </div>
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
+                        {ticket.status}
+                      </span>
                     </div>
 
-                    <p className="text-xs md:text-sm text-gray-600 mb-2">{ticket.company}</p>
                     <p className="text-xs md:text-sm text-gray-600 mb-3 line-clamp-3">{ticket.description}</p>
 
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">{ticket.created_at}</span>
+                      <span className="text-xs text-gray-500">{new Date(ticket.created_at).toLocaleDateString()}</span>
                     </div>
-
-                    {ticket.assigned_admin && (
-                      <div className="mt-2 text-xs text-gray-500">
-                        Asignado a: {ticket.assigned_admin}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -739,7 +728,7 @@ const TicketsTab: React.FC = () => {
                     <select
                       value={selectedTicket.status}
                       onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-gray-900"
                     >
                       <option value="OPEN">Abierto</option>
                       <option value="IN_PROGRESS">En Progreso</option>
@@ -747,22 +736,20 @@ const TicketsTab: React.FC = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Empresa</label>
-                    <p className="text-sm text-gray-900">{selectedTicket.company}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Company ID</label>
+                    <p className="text-sm text-gray-900 font-mono">{selectedTicket.company_id}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Prioridad</label>
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getPriorityColor(selectedTicket.priority)}`}>
-                      {selectedTicket.priority}
-                    </span>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">User ID</label>
+                    <p className="text-sm text-gray-900 font-mono">{selectedTicket.requested_by_user_id}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Creación</label>
-                    <p className="text-sm text-gray-900">{selectedTicket.created_at}</p>
+                    <p className="text-sm text-gray-900">{new Date(selectedTicket.created_at).toLocaleDateString()}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Asignado a</label>
-                    <p className="text-sm text-gray-900">{selectedTicket.assigned_admin || 'Sin asignar'}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Última Actualización</label>
+                    <p className="text-sm text-gray-900">{new Date(selectedTicket.updated_at).toLocaleDateString()}</p>
                   </div>
                 </div>
               </div>

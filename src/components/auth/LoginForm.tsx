@@ -2,28 +2,94 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
+import { Toast } from '@/components';
+import { loginUseCase } from '@/use-cases';
+import type { LoginRequest } from '@/models';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastType, setToastType] = useState<'success' | 'error' | 'info' | 'warning'>('success');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí iría la lógica de autenticación
-    console.log('Login attempt:', { email, password });
+    setError(null);
+
+    setIsLoading(true);
+
+    try {
+      const requestData: LoginRequest = {
+        email,
+        password,
+      };
+
+      const response = await loginUseCase.execute(requestData);
+      
+      if (response.success) {
+        // Mostrar toast de éxito
+        setToastMessage('Login exitoso! Bienvenido de vuelta');
+        setToastType('success');
+        setShowToast(true);
+
+        // Redirigir según el rol
+        const user = response.data.user;
+        setTimeout(() => {
+          switch (user.role) {
+            case 'ADMIN':
+              window.location.href = '/admin/my-jobs';
+              break;
+            case 'COMPANY':
+              window.location.href = '/company/my-jobs';
+              break;
+            case 'EMPLOYEE':
+              window.location.href = '/employee/profile';
+              break;
+            default:
+              window.location.href = '/';
+          }
+        }, 1000);
+      }
+    } catch (err: any) {
+      console.error('Error in login:', err);
+      setError(err.message || 'Error al iniciar sesión');
+      setToastMessage(err.message || 'Error al iniciar sesión');
+      setToastType('error');
+      setShowToast(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        {/* Form Container */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">Iniciar Sesión</h2>
-            <p className="text-gray-600">Accede a tu cuenta</p>
-          </div>
+    <>
+      <Toast
+        message={toastMessage}
+        type={toastType}
+        isVisible={showToast}
+        onClose={() => setShowToast(false)}
+        duration={3000}
+      />
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          {/* Form Container */}
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Iniciar Sesión</h2>
+              <p className="text-gray-600">Accede a tu cuenta</p>
+            </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Error Message */}
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm font-medium">{error}</p>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-2">
@@ -63,16 +129,21 @@ export const LoginForm: React.FC = () => {
             {/* Sign In Button */}
             <button
               type="submit"
-              className="w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors duration-200"
+              disabled={isLoading}
+              className="w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: colors.mainGreen }}
-                onMouseEnter={(e) => {
+              onMouseEnter={(e) => {
+                if (!isLoading) {
                   e.currentTarget.style.backgroundColor = colors.hoverGreen;
-                }}
+                }
+              }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.mainGreen;
+                if (!isLoading) {
+                  e.currentTarget.style.backgroundColor = colors.mainGreen;
+                }
               }}
             >
-              Sign In
+              {isLoading ? 'Iniciando sesión...' : 'Sign In'}
             </button>
           </form>
 
@@ -128,5 +199,6 @@ export const LoginForm: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };

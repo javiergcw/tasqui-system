@@ -7,6 +7,11 @@ export const APP_CONFIG = {
   version: '1.0.0',
 } as const;
 
+export const API_CONFIG = {
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://api2tasquiback.makerstech.co',
+  apiVersion: 'v1',
+} as const;
+
 export const JOB_TYPES = [
   { value: 'full-time', label: 'Tiempo Completo' },
   { value: 'part-time', label: 'Medio Tiempo' },

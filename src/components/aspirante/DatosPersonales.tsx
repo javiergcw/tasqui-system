@@ -2,8 +2,13 @@
 import React from 'react';
 import { colorClasses } from '@/lib/colors';
 import { colors } from '@/lib/colors';
+import type { EmployeeProfile } from '@/models';
 
-export const DatosPersonales: React.FC = () => {
+interface DatosPersonalesProps {
+  profile?: EmployeeProfile | null;
+}
+
+export const DatosPersonales: React.FC<DatosPersonalesProps> = ({ profile }) => {
   return (
     <>
       {/* Información básica */}
@@ -19,6 +24,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Your Name"
+              value={profile ? `${profile.first_name} ${profile.last_name}` : ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -27,37 +34,13 @@ export const DatosPersonales: React.FC = () => {
           </div>
           <div>
             <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
-              Your Email
-            </label>
-            <input
-              type="email"
-              placeholder="Your Email"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
-              style={{ 
-                '--tw-ring-color': colors.mainGreen 
-              } as React.CSSProperties}
-            />
-          </div>
-          <div>
-            <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
-              Your Phone
-            </label>
-            <input
-              type="tel"
-              placeholder="Your Phone"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
-              style={{ 
-                '--tw-ring-color': colors.mainGreen 
-              } as React.CSSProperties}
-            />
-          </div>
-          <div>
-            <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
-              Job Title
+              Headline
             </label>
             <input
               type="text"
-              placeholder="Job Title"
+              placeholder="Headline"
+              value={profile?.headline || ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -109,6 +92,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Your Country"
+              value={profile?.country || ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -122,6 +107,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Your City"
+              value={profile?.city || ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -135,6 +122,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="City Zip"
+              value={profile?.zip_code || ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -148,6 +137,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Your Region"
+              value={profile?.region || ''}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -199,6 +190,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Your Age"
+              defaultValue="N/A"
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -212,6 +205,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Work Experience"
+              defaultValue="N/A"
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -225,6 +220,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Language"
+              value={profile?.primary_language || 'N/A'}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -238,6 +235,25 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="text"
               placeholder="Skills"
+              defaultValue="N/A"
+              readOnly
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
+              style={{ 
+                '--tw-ring-color': colors.mainGreen 
+              } as React.CSSProperties}
+            />
+          </div>
+        </div>
+        <div className="mt-6">
+          <div>
+            <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
+              Bio
+            </label>
+            <textarea
+              placeholder="Your Bio"
+              rows={4}
+              value={profile?.bio || 'N/A'}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -289,6 +305,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="url"
               placeholder="www.facebook.com/user"
+              defaultValue="N/A"
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -302,6 +320,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="url"
               placeholder="www.twitter.com/user"
+              defaultValue="N/A"
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -315,6 +335,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="url"
               placeholder="www.Linkedin.com/user"
+              value={profile?.linkedin_url || 'N/A'}
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
@@ -328,6 +350,8 @@ export const DatosPersonales: React.FC = () => {
             <input
               type="url"
               placeholder="www.Github.com/user"
+              defaultValue="N/A"
+              readOnly
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 

@@ -3,14 +3,25 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
+import type { CompanyProfile } from '@/models';
+import { createTicketUseCase } from '@/use-cases';
+import { Toast } from '@/components';
 
-export const EmployerProfileMainSection: React.FC = () => {
+interface EmployerProfileMainSectionProps {
+  profile?: CompanyProfile | null;
+  isLoading?: boolean;
+}
+
+export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProps> = ({ 
+  profile, 
+  isLoading = false 
+}) => {
   const [activeTab, setActiveTab] = useState('company-data');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'company-data':
-        return <CompanyDataForm />;
+        return <CompanyDataForm profile={profile} isLoading={isLoading} />;
       case 'dashboard':
         return <DashboardTab />;
       case 'kanban':
@@ -18,7 +29,7 @@ export const EmployerProfileMainSection: React.FC = () => {
       case 'tickets':
         return <TicketsTab />;
       default:
-        return <CompanyDataForm />;
+        return <CompanyDataForm profile={profile} isLoading={isLoading} />;
     }
   };
 
@@ -188,19 +199,43 @@ export const EmployerProfileMainSection: React.FC = () => {
 };
 
 // Company Data Form Component
-const CompanyDataForm: React.FC = () => {
+interface CompanyDataFormProps {
+  profile?: CompanyProfile | null;
+  isLoading?: boolean;
+}
+
+const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = false }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    companyName: 'TechCorp Solutions',
-    industry: 'Technology',
-    companySize: '50-100 employees',
-    foundedYear: '2015',
-    website: 'https://techcorp.com',
-    description: 'Leading technology company specializing in innovative solutions for modern businesses.',
-    address: '123 Business Street, Tech City, TC 12345',
-    phone: '+1 (555) 123-4567',
-    email: 'contact@techcorp.com'
+    companyName: '',
+    contactName: '',
+    industry: '',
+    companySize: '',
+    foundedYear: '',
+    website: '',
+    description: '',
+    address: '',
+    phone: '',
+    email: ''
   });
+
+  // Cargar datos del perfil cuando estén disponibles
+  React.useEffect(() => {
+    if (profile) {
+      setFormData({
+        companyName: profile.legal_name || '',
+        contactName: profile.contact_name || '',
+        industry: 'N/A', // No disponible en el backend
+        companySize: 'N/A', // No disponible en el backend
+        foundedYear: 'N/A', // No disponible en el backend
+        website: 'N/A', // No disponible en el backend
+        description: 'N/A', // No disponible en el backend
+        address: 'N/A', // No disponible en el backend
+        phone: profile.contact_phone || '',
+        email: profile.contact_email || ''
+      });
+    }
+  }, [profile]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -215,6 +250,17 @@ const CompanyDataForm: React.FC = () => {
     setIsEditing(false);
     // TODO: Implementar lógica de guardado
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Loading company information...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -248,6 +294,23 @@ const CompanyDataForm: React.FC = () => {
               type="text"
               name="companyName"
               value={formData.companyName}
+              onChange={handleInputChange}
+              disabled={!isEditing}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              style={{
+                '--tw-ring-color': colors.mainGreen
+              } as React.CSSProperties}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Contact Name
+            </label>
+            <input
+              type="text"
+              name="contactName"
+              value={formData.contactName}
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
@@ -918,6 +981,12 @@ const TicketsTab: React.FC = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
   const [selectedTicket, setSelectedTicket] = useState<{
     id: string;
     title: string;
@@ -971,19 +1040,41 @@ const TicketsTab: React.FC = () => {
     setIsDetailModalOpen(true);
   };
 
-  const handleSubmitCreate = (e: React.FormEvent) => {
+  const handleSubmitCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newTicket = {
-      id: (tickets.length + 1).toString(),
-      title: formData.title,
-      description: formData.description,
-      status: 'OPEN',
-      created_at: new Date().toISOString().split('T')[0],
-      assigned_admin: null
-    };
-    setTickets([...tickets, newTicket]);
-    setIsCreateModalOpen(false);
-    setFormData({ title: '', description: '' });
+    setIsLoading(true);
+    
+    try {
+      const newTicket = await createTicketUseCase.execute({
+        title: formData.title,
+        description: formData.description
+      });
+      
+      setTickets([...tickets, {
+        id: newTicket.id,
+        title: newTicket.title,
+        description: newTicket.description,
+        status: newTicket.status,
+        created_at: newTicket.created_at,
+        assigned_admin: null
+      }]);
+      
+      setIsCreateModalOpen(false);
+      setFormData({ title: '', description: '' });
+      setToast({
+        show: true,
+        message: 'Ticket creado exitosamente',
+        type: 'success'
+      });
+    } catch (error: any) {
+      setToast({
+        show: true,
+        message: error.message || 'Error al crear el ticket',
+        type: 'error'
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSubmitEdit = (e: React.FormEvent) => {
@@ -1109,7 +1200,7 @@ const TicketsTab: React.FC = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   required
                 />
               </div>
@@ -1121,7 +1212,7 @@ const TicketsTab: React.FC = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   required
                 />
               </div>
@@ -1135,16 +1226,19 @@ const TicketsTab: React.FC = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-white rounded-lg"
+                  disabled={isLoading}
+                  className="px-4 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: colors.mainGreen }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    if (!isLoading) {
+                      e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = colors.mainGreen;
                   }}
                 >
-                  Crear Solicitud
+                  {isLoading ? 'Creando...' : 'Crear Solicitud'}
                 </button>
               </div>
             </form>
@@ -1166,7 +1260,7 @@ const TicketsTab: React.FC = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   required
                 />
               </div>
@@ -1178,7 +1272,7 @@ const TicketsTab: React.FC = () => {
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   required
                 />
               </div>
@@ -1293,6 +1387,14 @@ const TicketsTab: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Toast */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 };

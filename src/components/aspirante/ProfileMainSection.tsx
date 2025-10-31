@@ -9,14 +9,23 @@ import { VacantesAplicadas } from './VacantesAplicadas';
 import { EntrevistasProgramadas } from './EntrevistasProgramadas';
 import { SkillsSection } from './SkillsSection';
 import { colors } from '@/lib/colors';
+import type { EmployeeProfile } from '@/models';
 
-export const ProfileMainSection: React.FC = () => {
+interface ProfileMainSectionProps {
+  profile?: EmployeeProfile | null;
+  isLoading?: boolean;
+}
+
+export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({ 
+  profile, 
+  isLoading = false 
+}) => {
   const [activeTab, setActiveTab] = useState('datos-personales');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'datos-personales':
-        return <DatosPersonales />;
+        return <DatosPersonales profile={profile} />;
       case 'formacion-academica':
         return <FormacionAcademica />;
       case 'experiencia-laboral':
@@ -28,7 +37,7 @@ export const ProfileMainSection: React.FC = () => {
       case 'skills':
         return <SkillsSection />;
       default:
-        return <DatosPersonales />;
+        return <DatosPersonales profile={profile} />;
     }
   };
 
@@ -40,21 +49,29 @@ export const ProfileMainSection: React.FC = () => {
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-lg">
               {/* Perfil del usuario */}
-              <div className="text-center mb-8">
+              <div className="text-center mb-8 pt-6">
                 <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
-                  <Image
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-                    alt="John Smith"
-                    width={150}
-                    height={150}
-                    className="w-full h-full object-cover rounded-full"
-                  />
+                  {profile ? (
+                    <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                      <span className="text-white text-4xl font-bold">
+                        {profile.first_name?.charAt(0)}{profile.last_name?.charAt(0)}
+                      </span>
+                    </div>
+                  ) : (
+                    <Image
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+                      alt="User"
+                      width={150}
+                      height={150}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  )}
                 </div>
                 <h3 className={`text-xl font-bold ${colorClasses.text.gray900} mb-2`}>
-                  John Smith
+                  {isLoading ? 'Cargando...' : profile ? `${profile.first_name} ${profile.last_name}` : 'Usuario'}
                 </h3>
                 <p className={colorClasses.text.gray600}>
-                  Web Developer
+                  {profile?.headline || 'Profesional'}
                 </p>
               </div>
 
