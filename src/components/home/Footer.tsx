@@ -1,5 +1,6 @@
 "use client";
 import React from 'react';
+import Link from 'next/link';
 import { colors, colorClasses } from '@/lib/colors';
 
 export const Footer: React.FC = () => {
@@ -130,40 +131,40 @@ export const Footer: React.FC = () => {
             </h6>
             <ul className="space-y-3">
               <li>
-                <a href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Buscar Empleos
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/employee/profile" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/employee/profile" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Mi Perfil
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Categorías
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/employee/profile" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/employee/profile" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Mi CV
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/find-job" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Lista de Empleos
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/register" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/register" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} style={{ '--hover-color': colors.hoverGreen } as React.CSSProperties} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Registrarse
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -176,22 +177,22 @@ export const Footer: React.FC = () => {
             </h6>
             <ul className="space-y-3">
               <li>
-                <a href="/" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Inicio
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/partners" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/partners" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Nosotros
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/blogs" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <Link href="/blogs" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Blog
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>

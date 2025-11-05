@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
 export const HeroSection: React.FC = () => {
@@ -25,19 +26,32 @@ export const HeroSection: React.FC = () => {
           <div className="text-white space-y-8">
             <div className="space-y-4">
               <p className="text-lg text-slate-300 font-medium">
-                Find Jobs, Employment & Career Opportunities
+                Encuentra Empleos, Oportunidades Profesionales y Desarrolla tu Talento
               </p>
               <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                <span className="block">Job Board For Hiring</span>
-                <span className="block text-white">Creative Designers</span>
+                <span className="block">Formamos Profesionales</span>
+                <span className="block text-white">de Alto Desempeño</span>
               </h1>
               <p className="text-xl text-slate-300 max-w-2xl">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Conectamos talento con oportunidades de empleo mientras desarrollamos habilidades profesionales. Plataforma de formación en línea con inclusión social y cultural para impulsar tu carrera.
               </p>
             </div>
             
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
+              <Link 
+                href="/login"
+                className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200 text-center"
+                style={{ backgroundColor: colors.heroGreen }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.heroGreen;
+                }}
+              >
+                Sube tu CV
+              </Link>
               <button 
                 className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200"
                 style={{ backgroundColor: colors.heroGreen }}
@@ -48,19 +62,7 @@ export const HeroSection: React.FC = () => {
                   e.currentTarget.style.backgroundColor = colors.heroGreen;
                 }}
               >
-                Upload your CV
-              </button>
-              <button 
-                className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200"
-                style={{ backgroundColor: colors.heroGreen }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.heroGreen;
-                }}
-              >
-                Contact Us
+                Contáctanos
               </button>
             </div>
           </div>
@@ -71,7 +73,7 @@ export const HeroSection: React.FC = () => {
               <div className="w-96 h-96 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl">
                 <Image 
                   src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80"
-                  alt="Professional woman"
+                  alt="Profesional formándose y desarrollando su carrera"
                   width={687}
                   height={687}
                   className="w-full h-full object-cover"

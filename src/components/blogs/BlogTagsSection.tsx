@@ -4,15 +4,15 @@ import { colors } from '@/lib/colors';
 
 export const BlogTagsSection: React.FC = () => {
   const tags = [
-    "Business",
-    "Resume", 
-    "Development"
+    "Negocios",
+    "Hoja de Vida", 
+    "Desarrollo"
   ];
 
   return (
     <div className="bg-gray-50 p-4 rounded-lg">
       <div className="flex items-center gap-4">
-        <span className="text-lg font-bold text-slate-800">Tags:</span>
+        <span className="text-lg font-bold text-slate-800">Etiquetas:</span>
         <div className="flex flex-wrap gap-2">
           {tags.map((tag, index) => (
             <span

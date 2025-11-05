@@ -6,42 +6,42 @@ export const TopCompaniesSection: React.FC = () => {
   const companies = [
     {
       logo: (
-        <div className={`w-12 h-12 ${colors.mainGreen.split(' ')[0]} rounded flex items-center justify-center`}>
-          <span className="text-2xl font-bold text-white">A</span>
+        <div className="w-12 h-12 rounded flex items-center justify-center" style={{ backgroundColor: colors.mainGreen }}>
+          <span className="text-2xl font-bold text-white">B</span>
         </div>
       ),
-      companyName: "Trophy & Sans",
-      location: "Green Lanes, London",
+      companyName: "Bancolombia",
+      location: "Bogotá, Colombia",
       openPositions: 25
     },
     {
       logo: (
         <div className={`w-12 h-12 ${colorClasses.gradient.purpleOrange} rounded flex items-center justify-center`}>
-          <span className="text-2xl font-bold text-white">R</span>
+          <span className="text-2xl font-bold text-white">E</span>
         </div>
       ),
-      companyName: "Trout Design",
-      location: "Park Avenue, Mumbai",
+      companyName: "Éxito S.A.",
+      location: "Medellín, Colombia",
       openPositions: 35
     },
     {
       logo: (
         <div className="w-12 h-12 rounded flex items-center justify-center" style={{ backgroundColor: colors.orange[500] }}>
-          <span className="text-2xl font-bold text-white">L</span>
+          <span className="text-2xl font-bold text-white">A</span>
         </div>
       ),
-      companyName: "Resland LTD",
-      location: "Betas Quence, London",
+      companyName: "Avianca",
+      location: "Bogotá, Colombia",
       openPositions: 20
     },
     {
       logo: (
         <div className={`w-12 h-12 ${colorClasses.gradient.greenBlue} rounded flex items-center justify-center`}>
-          <span className="text-2xl font-bold text-white">*</span>
+          <span className="text-2xl font-bold text-white">S</span>
         </div>
       ),
-      companyName: "Lawn Hopper",
-      location: "Wellesley Rd, London",
+      companyName: "Sura",
+      location: "Medellín, Colombia",
       openPositions: 45
     }
   ];
@@ -51,10 +51,10 @@ export const TopCompaniesSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h3 className="text-4xl font-bold text-slate-800 mb-6">
-            Top Companies
+            Empresas Destacadas
           </h3>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.
+            Conoce las empresas líderes que confían en Tasqui para encontrar el mejor talento. Estas organizaciones están buscando profesionales comprometidos y apasionados para formar parte de sus equipos.
           </p>
         </div>
         

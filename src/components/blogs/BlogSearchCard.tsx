@@ -16,7 +16,7 @@ export const BlogSearchCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainGreen }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Search</h3>
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Buscar</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       <form onSubmit={handleSearch} className="relative">
@@ -24,7 +24,7 @@ export const BlogSearchCard: React.FC = () => {
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search blogs..."
+          placeholder="Buscar artículos..."
           className={`w-full px-4 py-2 ${colorClasses.border.gray200} rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600`}
         />
         <button 

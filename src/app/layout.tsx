@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Jovie",
+  title: "Tasqui",
   description: "Plataforma de empleos y oportunidades laborales",
 };
 

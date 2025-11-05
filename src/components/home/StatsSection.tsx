@@ -13,7 +13,7 @@ export const StatsSection: React.FC = () => {
         </svg>
       ),
       number: "1225",
-      label: "Job Posted"
+      label: "Vacantes Publicadas"
     },
     {
       icon: (
@@ -23,7 +23,7 @@ export const StatsSection: React.FC = () => {
         </svg>
       ),
       number: "145",
-      label: "Job Filed"
+      label: "Vacantes Llenadas"
     },
     {
       icon: (
@@ -32,7 +32,7 @@ export const StatsSection: React.FC = () => {
         </svg>
       ),
       number: "170",
-      label: "Company"
+      label: "Empresas"
     },
     {
       icon: (
@@ -41,7 +41,7 @@ export const StatsSection: React.FC = () => {
         </svg>
       ),
       number: "125",
-      label: "Members"
+      label: "Usuarios Activos"
     }
   ];
 

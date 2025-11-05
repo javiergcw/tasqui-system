@@ -1,48 +1,137 @@
 'use client';
 import React from 'react';
 import { colors } from '@/lib/colors';
+import { SvgIconComponent } from '@mui/icons-material';
 
 interface FeatureCardProps {
   title: string;
   description: string;
+  icon: SvgIconComponent;
 }
 
-export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description }) => {
+export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon: Icon }) => {
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.backgroundColor = colors.mainGreen;
+    card.style.borderColor = colors.mainGreen;
+    
+    // Cambiar colores de los círculos del icono
+    const outerCircle = card.querySelector('[data-circle="outer"]') as HTMLElement;
+    const middleCircle = card.querySelector('[data-circle="middle"]') as HTMLElement;
+    const innerCircle = card.querySelector('[data-circle="inner"]') as HTMLElement;
+    const iconElement = card.querySelector('[data-icon]') as HTMLElement;
+    const smallCircle = card.querySelector('[data-circle="small"]') as HTMLElement;
+    const smallCircleDot = card.querySelector('[data-circle="small-dot"]') as HTMLElement;
+    
+    if (outerCircle) {
+      outerCircle.style.backgroundColor = colors.sidebarGreen;
+      outerCircle.style.borderColor = colors.sidebarGreen;
+      outerCircle.style.transform = 'scale(1.05)';
+    }
+    if (middleCircle) {
+      middleCircle.style.backgroundColor = colors.heroGreen;
+      middleCircle.style.borderColor = colors.heroGreen;
+      middleCircle.style.transform = 'scale(1.05)';
+    }
+    if (innerCircle) {
+      innerCircle.style.backgroundColor = colors.hoverGreen;
+      innerCircle.style.borderColor = colors.hoverGreen;
+    }
+    if (iconElement) {
+      iconElement.style.color = '#ffffff';
+      iconElement.style.transform = 'scale(1.1)';
+    }
+    if (smallCircle) {
+      smallCircle.style.backgroundColor = colors.hoverGreen;
+      smallCircle.style.borderColor = colors.hoverGreen;
+    }
+    if (smallCircleDot) {
+      smallCircleDot.style.backgroundColor = '#ffffff';
+    }
+  };
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    card.style.backgroundColor = '';
+    card.style.borderColor = colors.mainGreen;
+    
+    // Restaurar colores originales de los círculos
+    const outerCircle = card.querySelector('[data-circle="outer"]') as HTMLElement;
+    const middleCircle = card.querySelector('[data-circle="middle"]') as HTMLElement;
+    const innerCircle = card.querySelector('[data-circle="inner"]') as HTMLElement;
+    const iconElement = card.querySelector('[data-icon]') as HTMLElement;
+    const smallCircle = card.querySelector('[data-circle="small"]') as HTMLElement;
+    const smallCircleDot = card.querySelector('[data-circle="small-dot"]') as HTMLElement;
+    
+    if (outerCircle) {
+      outerCircle.style.backgroundColor = '';
+      outerCircle.style.borderColor = colors.lightGreen;
+      outerCircle.style.transform = 'scale(1)';
+    }
+    if (middleCircle) {
+      middleCircle.style.backgroundColor = '';
+      middleCircle.style.borderColor = colors.lightGreen;
+      middleCircle.style.transform = 'scale(1)';
+    }
+    if (innerCircle) {
+      innerCircle.style.backgroundColor = '';
+      innerCircle.style.borderColor = colors.mainGreen;
+    }
+    if (iconElement) {
+      iconElement.style.color = colors.ctaGreen;
+      iconElement.style.transform = 'scale(1)';
+    }
+    if (smallCircle) {
+      smallCircle.style.backgroundColor = '';
+      smallCircle.style.borderColor = colors.mainGreen;
+    }
+    if (smallCircleDot) {
+      smallCircleDot.style.backgroundColor = colors.ctaGreen;
+    }
+  };
+
   return (
     <div 
-      className="text-center p-8 border border-dashed rounded-lg hover:text-white transition-all duration-300 cursor-pointer group"
+      className="text-center p-8 border border-dashed rounded-lg hover:text-white transition-all duration-300 cursor-pointer group transform hover:scale-[1.02] hover:shadow-xl"
       style={{ borderColor: colors.mainGreen }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.mainGreen;
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = '';
-      }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div 
-        className="w-20 h-20 border border-dashed group-hover:bg-green-200 group-hover:border-green-200 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300"
-        style={{ borderColor: colors.lightGreen }}
+        data-circle="outer"
+        className="w-20 h-20 border border-dashed rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300"
+        style={{ 
+          borderColor: colors.lightGreen,
+        }}
       >
         <div 
-          className="w-12 h-12 border border-dashed group-hover:bg-green-300 group-hover:border-green-300 rounded-full flex items-center justify-center relative"
+          data-circle="middle"
+          className="w-12 h-12 border border-dashed rounded-full flex items-center justify-center relative transition-all duration-300"
           style={{ borderColor: colors.lightGreen }}
         >
           <div 
-            className="w-6 h-6 border border-dashed group-hover:bg-green-400 group-hover:border-green-400 rounded-full flex items-center justify-center"
+            data-circle="inner"
+            className="flex items-center justify-center transition-all duration-300"
             style={{ borderColor: colors.mainGreen }}
           >
-            <div 
-              className="w-3 h-3 group-hover:bg-green-500 rounded-full"
-              style={{ backgroundColor: colors.mainGreen }}
-            ></div>
+            <Icon 
+              data-icon
+              className="transition-all duration-300"
+              style={{ 
+                fontSize: '2rem',
+                color: colors.ctaGreen,
+              }}
+            />
           </div>
           <div 
-            className="absolute -bottom-1 -right-1 w-4 h-4 border border-dashed group-hover:bg-green-400 group-hover:border-green-400 rounded-full flex items-center justify-center"
+            data-circle="small"
+            className="absolute -bottom-1 -right-1 w-4 h-4 border border-dashed rounded-full flex items-center justify-center transition-all duration-300"
             style={{ borderColor: colors.mainGreen }}
           >
             <div 
-              className="w-2 h-2 group-hover:bg-green-500 rounded-full"
-              style={{ backgroundColor: colors.mainGreen }}
+              data-circle="small-dot"
+              className="w-2 h-2 rounded-full transition-all duration-300"
+              style={{ backgroundColor: colors.ctaGreen }}
             ></div>
           </div>
         </div>

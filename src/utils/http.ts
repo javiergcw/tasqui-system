@@ -8,7 +8,7 @@ export interface HttpConfig {
   timeout?: number;
 }
 
-export interface HttpResponse<T = any> {
+export interface HttpResponse<T = unknown> {
   data: T;
   status: number;
   statusText: string;
@@ -18,7 +18,7 @@ export interface HttpResponse<T = any> {
 export interface HttpError {
   message: string;
   status?: number;
-  data?: any;
+  data?: unknown;
 }
 
 class HttpService {
@@ -88,20 +88,20 @@ class HttpService {
         statusText: response.statusText,
         headers: response.headers,
       };
-    } catch (error: any) {
-      if (error.name === 'AbortError') {
+    } catch (error: unknown) {
+      if (error instanceof Error && error.name === 'AbortError') {
         throw {
           message: 'Request timeout',
           status: 408,
         } as HttpError;
       }
 
-      if (error.status) {
+      if (error && typeof error === 'object' && 'status' in error) {
         throw error;
       }
 
       throw {
-        message: error.message || 'Network error occurred',
+        message: error instanceof Error ? error.message : 'Network error occurred',
         status: 0,
       } as HttpError;
     }
@@ -116,7 +116,7 @@ class HttpService {
 
   async post<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestInit = {}
   ): Promise<HttpResponse<T>> {
     return this.request<T>(endpoint, {
@@ -128,7 +128,7 @@ class HttpService {
 
   async put<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestInit = {}
   ): Promise<HttpResponse<T>> {
     return this.request<T>(endpoint, {
@@ -140,7 +140,7 @@ class HttpService {
 
   async patch<T>(
     endpoint: string,
-    data?: any,
+    data?: unknown,
     options: RequestInit = {}
   ): Promise<HttpResponse<T>> {
     return this.request<T>(endpoint, {

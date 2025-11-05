@@ -9,23 +9,23 @@ export const TestimonialsSection: React.FC = () => {
 
   const testimonials = [
     {
-      quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-      clientName: "Adam Smith",
-      clientRole: "Web Developer"
+      quote: "Tasqui ha transformado completamente nuestra forma de encontrar talento. La plataforma es intuitiva y hemos encontrado candidatos excepcionales que se ajustan perfectamente a nuestra cultura empresarial. La calidad de los profesionales es impresionante.",
+      clientName: "María González",
+      clientRole: "Directora de Recursos Humanos"
     },
     {
-      quote: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do mod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's.",
-      clientName: "John Doe",
-      clientRole: "Graphics Designer"
+      quote: "Como profesional independiente, encontrar oportunidades laborales de calidad era un desafío. Con Tasqui, he conectado con empresas que valoran mi experiencia y habilidades. La plataforma me ha abierto puertas que nunca imaginé.",
+      clientName: "Carlos Rodríguez",
+      clientRole: "Diseñador Gráfico"
     },
     {
-      quote: "Exceptional service and support throughout the entire process. The team was professional, responsive, and delivered exactly what we needed. Highly recommend their services to anyone looking for quality work.",
-      clientName: "Sarah Johnson",
-      clientRole: "Marketing Manager"
+      quote: "El servicio y soporte excepcional durante todo el proceso. El equipo fue profesional, respondió rápidamente y entregó exactamente lo que necesitábamos. Recomiendo ampliamente sus servicios a cualquiera que busque trabajo de calidad.",
+      clientName: "Ana Martínez",
+      clientRole: "Gerente de Marketing"
     },
     {
-      quote: "Outstanding results that exceeded our expectations. The attention to detail and creative approach made all the difference. We couldn't be happier with the final outcome.",
-      clientName: "Michael Brown",
+      quote: "Resultados sobresalientes que superaron nuestras expectativas. La atención al detalle y el enfoque creativo marcaron la diferencia. No podríamos estar más contentos con el resultado final. Tasqui es sin duda la mejor plataforma de empleo.",
+      clientName: "Diego López",
       clientRole: "CEO"
     }
   ];
@@ -76,15 +76,15 @@ export const TestimonialsSection: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-8 md:mb-16">
           <h2 className="text-2xl md:text-4xl font-bold text-slate-800 mb-4 md:mb-6">
-            What Client&apos;s Say About Us
+            Lo Que Dicen Nuestros Clientes
           </h2>
           <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida.
+            Descubre las experiencias de empresas y profesionales que han encontrado éxito con Tasqui. Nuestra comunidad comparte sus historias de crecimiento y conexión laboral.
           </p>
         </div>
 
         {/* Testimonial Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-16 md:mb-32 items-stretch h-auto md:h-[320px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8 mb-8 md:mb-12 items-stretch h-auto md:h-[320px]">
           {currentTestimonials.map((testimonial, index) => (
             <div
               key={`${currentIndex}-${index}`}
@@ -102,7 +102,7 @@ export const TestimonialsSection: React.FC = () => {
         </div>
 
         {/* Navigation Controls */}
-        <div className="flex justify-center gap-4 md:gap-6 mt-8 md:mt-20">
+        <div className="flex justify-center gap-4 md:gap-6 mt-4 md:mt-6">
           <button
             className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center transition-colors duration-200"
             style={{ backgroundColor: colors.mainGreen, color: 'white' }}

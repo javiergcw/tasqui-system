@@ -3,13 +3,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 import { getUser, logout } from '@/utils/auth';
+import type { LoginUser } from '@/models/auth/login.model';
 
 interface ActionButtonsProps {
   className?: string;
 }
 
 export const ActionButtons: React.FC<ActionButtonsProps> = ({ className = '' }) => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<LoginUser | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 

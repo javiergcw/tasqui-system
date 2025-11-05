@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
@@ -13,6 +14,7 @@ import { employeeRegisterUseCase, companyRegisterUseCase } from '@/use-cases';
 import type { EmployeeRegisterRequest, CompanyRegisterRequest } from '@/models';
 
 export default function RegisterPage() {
+  const searchParams = useSearchParams();
   const [selectedRole, setSelectedRole] = useState<'company' | 'employee' | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
@@ -20,6 +22,13 @@ export default function RegisterPage() {
     message: '',
     type: 'success'
   });
+
+  useEffect(() => {
+    const role = searchParams.get('role');
+    if (role === 'employee' || role === 'company') {
+      setSelectedRole(role);
+    }
+  }, [searchParams]);
 
   const handleRoleSelect = (role: 'company' | 'employee') => {
     setSelectedRole(role);
@@ -63,10 +72,10 @@ export default function RegisterPage() {
       setTimeout(() => {
         window.location.href = '/login';
       }, 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setToast({
         show: true,
-        message: error.message || 'Error al registrar empleado',
+        message: error instanceof Error ? error.message : 'Error al registrar empleado',
         type: 'error'
       });
     } finally {
@@ -116,10 +125,10 @@ export default function RegisterPage() {
       setTimeout(() => {
         window.location.href = '/login';
       }, 2000);
-    } catch (error: any) {
+    } catch (error: unknown) {
       setToast({
         show: true,
-        message: error.message || 'Error al registrar empresa',
+        message: error instanceof Error ? error.message : 'Error al registrar empresa',
         type: 'error'
       });
     } finally {

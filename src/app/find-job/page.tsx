@@ -1,4 +1,4 @@
-import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobsHeroSection, SearchWithCategoriesSection, JobsInterestedSection, JobNotificationsSection } from '@/components';
+import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobsHeroSection, JobsInterestedSection, JobNotificationsSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 
 export default function FindJobPage() {
@@ -10,7 +10,7 @@ export default function FindJobPage() {
       <JobsHeroSection />
 
       {/* Search Bar with Popular Jobs Category Section */}
-      <SearchWithCategoriesSection />
+    {/*   <SearchWithCategoriesSection /> */}
 
       {/* Jobs You May Be Interested In Section */}
       <JobsInterestedSection />

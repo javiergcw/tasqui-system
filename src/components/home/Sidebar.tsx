@@ -6,6 +6,7 @@ import { Navigation } from '../Navigation';
 import { ActionButtons } from '../ActionButtons';
 import { colorClasses, colors } from '@/lib/colors';
 import { getUser, logout } from '@/utils/auth';
+import type { LoginUser } from '@/models/auth/login.model';
 
 interface SidebarProps {
   className?: string;
@@ -13,7 +14,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ className = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<LoginUser | null>(null);
 
   useEffect(() => {
     const currentUser = getUser();

@@ -13,7 +13,13 @@ export default function AdminPostJobPage() {
     type: 'success'
   });
 
-  const handleSubmit = async (formData: any) => {
+  const handleSubmit = async (formData: {
+    jobTitle: string;
+    jobDescription: string;
+    location: string;
+    salary: string;
+    ticketId?: string;
+  }) => {
     setIsLoading(true);
     
     try {
@@ -58,14 +64,12 @@ export default function AdminPostJobPage() {
         message: 'Trabajo creado exitosamente',
         type: 'success'
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       setToast({
         show: true,
-        message: error.message || 'Error al crear el trabajo',
+        message: error instanceof Error ? error.message : 'Error al crear el trabajo',
         type: 'error'
       });
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -4,6 +4,7 @@ import loginService from '@/services/auth/login.service';
 import type {
   LoginRequest,
   LoginResponse,
+  LoginUser,
 } from '@/models/auth/login.model';
 
 // Clase para manejar el almacenamiento de tokens y datos de usuario
@@ -24,13 +25,13 @@ class AuthStorage {
     return null;
   }
 
-  setUser(user: any): void {
+  setUser(user: LoginUser): void {
     if (typeof window !== 'undefined') {
       localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     }
   }
 
-  getUser(): any | null {
+  getUser(): LoginUser | null {
     if (typeof window !== 'undefined') {
       const user = localStorage.getItem(this.USER_KEY);
       return user ? JSON.parse(user) : null;

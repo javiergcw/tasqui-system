@@ -93,7 +93,7 @@ export const JobCard: React.FC<JobCardProps> = ({
             e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
-          Browse Job
+          Ver Trabajo
         </button>
       </div>
     </div>

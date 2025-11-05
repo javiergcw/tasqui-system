@@ -4,20 +4,20 @@ import { colors } from '@/lib/colors';
 
 export const KeywordsCard: React.FC = () => {
   const keywords = [
-    "Web Design",
-    "Data Science", 
+    "Diseño Web",
+    "Ciencia de Datos", 
     "SEO",
-    "Content Writer",
-    "Finance",
-    "Business",
-    "Education",
-    "Graphics",
+    "Redactor de Contenidos",
+    "Finanzas",
+    "Negocios",
+    "Educación",
+    "Gráficos",
     "Video"
   ];
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-      <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Keywords</h3>
+      <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Palabras Clave</h3>
       <div className="flex flex-wrap gap-2">
         {keywords.map((keyword, index) => (
           <span

@@ -12,7 +12,7 @@ export function MyJobsHeroSection() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            My Jobs
+            Mis Trabajos Publicados
           </h1>
           
           {/* Breadcrumb */}
@@ -21,10 +21,10 @@ export function MyJobsHeroSection() {
               href="/" 
               className="hover:text-white transition-colors duration-200"
             >
-              Home
+              Inicio
             </Link>
             <span className="text-gray-400">&gt;</span>
-            <span className="text-white">My Jobs</span>
+            <span className="text-white">Mis Trabajos</span>
           </nav>
         </div>
       </div>

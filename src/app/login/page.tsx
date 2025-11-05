@@ -54,10 +54,10 @@ export default function LoginPage() {
           }
         }, 1000);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       setToast({
         show: true,
-        message: error.message || 'Error al iniciar sesión',
+        message: error instanceof Error ? error.message : 'Error al iniciar sesión',
         type: 'error'
       });
     } finally {

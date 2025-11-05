@@ -3,8 +3,19 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
+interface CompanyFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  legal_name: string;
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  billing_plan: string;
+}
+
 interface CompanyRegisterFormProps {
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: CompanyFormData) => void;
   isLoading?: boolean;
 }
 

@@ -7,42 +7,42 @@ export const JobsInterestedSection: React.FC = () => {
   const jobs = [
     {
       id: 1,
-      jobTitle: "Post-Room Operate",
-      companyName: "Via Tourt Design LTD",
-      location: "Wellesley Rd, London",
-      category: "Accountancy",
+      jobTitle: "Operador de Sala de Correo",
+      companyName: "Tourt Design S.A.",
+      location: "Bogotá, Colombia",
+      category: "Contabilidad",
       jobType: "Freelance",
-      postedTime: "1 Hr Ago",
-      contractType: "Full Time"
+      postedTime: "hace 1 hora",
+      contractType: "Tiempo Completo"
     },
     {
       id: 2,
-      jobTitle: "Data Entry",
-      companyName: "Via Techno Inc.",
-      location: "Street 40/A, London",
-      category: "Data Entry",
+      jobTitle: "Digitador de Datos",
+      companyName: "Techno Inc.",
+      location: "Medellín, Colombia",
+      category: "Digitación",
       jobType: "Freelance",
-      postedTime: "3 Hr Ago",
+      postedTime: "hace 3 horas",
       contractType: null
     },
     {
       id: 3,
-      jobTitle: "Graphic Designer",
-      companyName: "Via Devon Design",
-      location: "West Sight, USA",
-      category: "Graphics",
+      jobTitle: "Diseñador Gráfico",
+      companyName: "Devon Design",
+      location: "Cali, Colombia",
+      category: "Diseño Gráfico",
       jobType: "Freelance",
-      postedTime: "4 Hr Ago",
+      postedTime: "hace 4 horas",
       contractType: null
     },
     {
       id: 4,
-      jobTitle: "Web Developer",
-      companyName: "Via MegaNews",
-      location: "San Francisco, California",
-      category: "Development",
+      jobTitle: "Desarrollador Web",
+      companyName: "MegaNews S.A.",
+      location: "Barranquilla, Colombia",
+      category: "Desarrollo",
       jobType: "Freelance",
-      postedTime: "5 Hr Ago",
+      postedTime: "hace 5 horas",
       contractType: null
     }
   ];
@@ -52,10 +52,10 @@ export const JobsInterestedSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className={`text-4xl font-bold ${colorClasses.text.slate800} mb-4`}>
-            Jobs You May Be Interested In
+            Trabajos Que Te Pueden Interesar
           </h2>
           <p className={`text-lg ${colorClasses.text.gray600} max-w-3xl mx-auto`}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
+            Descubre oportunidades laborales personalizadas basadas en tu perfil. Encuentra trabajos que se ajusten a tus habilidades y experiencia profesional en Tasqui.
           </p>
         </div>
         

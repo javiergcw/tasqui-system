@@ -6,23 +6,33 @@ export const JobsSection: React.FC = () => {
   const jobs = [
     {
       id: "1",
-      companyInitial: "V",
-      jobTitle: "Web Designer, Graphic Designer, UI/UX Designer",
-      jobCategory: "Graphics Designer",
-      salary: "$35000-$38000",
-      location: "Wellesley Rd, London",
-      postedTime: "9 days ago",
-      jobType: "Full Time"
+      companyInitial: "T",
+      jobTitle: "Diseñador Web, Diseñador Gráfico, Diseñador UI/UX",
+      jobCategory: "Diseñador Gráfico",
+      salary: "$2.500.000-$3.000.000",
+      location: "Bogotá, Colombia",
+      postedTime: "hace 9 días",
+      jobType: "Tiempo Completo"
     },
     {
       id: "2",
-      companyInitial: "T",
-      jobTitle: "Website Developer & Software Developer",
-      jobCategory: "Web Developer",
-      salary: "$3000-$8000",
-      location: "Garden Road, UK",
-      postedTime: "5 days ago",
-      jobType: "Full Time"
+      companyInitial: "V",
+      jobTitle: "Desarrollador Web y Desarrollador de Software",
+      jobCategory: "Desarrollador Web",
+      salary: "$3.500.000-$5.000.000",
+      location: "Medellín, Colombia",
+      postedTime: "hace 5 días",
+      jobType: "Tiempo Completo"
+    },
+    {
+      id: "3",
+      companyInitial: "E",
+      jobTitle: "Contador Público",
+      jobCategory: "Contabilidad",
+      salary: "$2.000.000-$2.800.000",
+      location: "Cali, Colombia",
+      postedTime: "hace 2 días",
+      jobType: "Tiempo Completo"
     }
   ];
 
@@ -34,10 +44,10 @@ export const JobsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-16">
           <h3 className="text-2xl md:text-4xl font-bold text-slate-800 mb-4 md:mb-6">
-            Jobs You May Be Interested In
+            Trabajos Que Te Pueden Interesar
           </h3>
           <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            Descubre las mejores oportunidades laborales disponibles en Tasqui. Conectamos profesionales calificados con empresas que buscan talento comprometido y con experiencia.
           </p>
         </div>
         

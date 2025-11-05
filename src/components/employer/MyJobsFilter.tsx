@@ -37,68 +37,68 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
       <div className="flex flex-col sm:flex-row gap-4">
           {/* Status Filter */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Estado</label>
             <select
               value={filters.status}
               onChange={(e) => handleFilterChange('status', e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
             >
-              <option value="">All Status</option>
-              <option value="active">Active</option>
-              <option value="paused">Paused</option>
-              <option value="closed">Closed</option>
+              <option value="">Todos los Estados</option>
+              <option value="active">Activo</option>
+              <option value="paused">Pausado</option>
+              <option value="closed">Cerrado</option>
             </select>
           </div>
 
           {/* City Filter */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">City</label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Ciudad</label>
             <select
               value={filters.city}
               onChange={(e) => handleFilterChange('city', e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
             >
-              <option value="">All Cities</option>
-              <option value="london">London</option>
-              <option value="manchester">Manchester</option>
-              <option value="birmingham">Birmingham</option>
-              <option value="leeds">Leeds</option>
-              <option value="glasgow">Glasgow</option>
-              <option value="edinburgh">Edinburgh</option>
+              <option value="">Todas las Ciudades</option>
+              <option value="bogota">Bogotá</option>
+              <option value="medellin">Medellín</option>
+              <option value="cali">Cali</option>
+              <option value="barranquilla">Barranquilla</option>
+              <option value="cartagena">Cartagena</option>
+              <option value="pereira">Pereira</option>
             </select>
           </div>
 
           {/* Modality Filter */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">Modality</label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Modalidad</label>
             <select
               value={filters.modality}
               onChange={(e) => handleFilterChange('modality', e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
             >
-              <option value="">All Types</option>
-              <option value="full-time">Full Time</option>
-              <option value="part-time">Part Time</option>
-              <option value="contract">Contract</option>
+              <option value="">Todos los Tipos</option>
+              <option value="full-time">Tiempo Completo</option>
+              <option value="part-time">Medio Tiempo</option>
+              <option value="contract">Contrato</option>
               <option value="freelance">Freelance</option>
-              <option value="internship">Internship</option>
+              <option value="internship">Pasantía</option>
             </select>
           </div>
 
           {/* Date Filter */}
           <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1">Date Posted</label>
+            <label className="text-sm font-medium text-gray-700 mb-1">Fecha de Publicación</label>
             <select
               value={filters.date}
               onChange={(e) => handleFilterChange('date', e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent text-gray-900 text-sm"
             >
-              <option value="">All Dates</option>
-              <option value="today">Today</option>
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="3months">Last 3 Months</option>
-              <option value="year">This Year</option>
+              <option value="">Todas las Fechas</option>
+              <option value="today">Hoy</option>
+              <option value="week">Esta Semana</option>
+              <option value="month">Este Mes</option>
+              <option value="3months">Últimos 3 Meses</option>
+              <option value="year">Este Año</option>
             </select>
           </div>
 
@@ -108,7 +108,7 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
               onClick={clearFilters}
               className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors duration-200"
             >
-              Clear All
+              Limpiar Todo
             </button>
           </div>
         </div>
@@ -117,10 +117,10 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
       {(filters.status || filters.city || filters.modality || filters.date) && (
         <div className="mt-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-sm text-gray-600">Active filters:</span>
+            <span className="text-sm text-gray-600">Filtros activos:</span>
             {filters.status && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                Status: {filters.status}
+                Estado: {filters.status === 'active' ? 'Activo' : filters.status === 'paused' ? 'Pausado' : 'Cerrado'}
                 <button
                   onClick={() => handleFilterChange('status', '')}
                   className="ml-1 hover:text-red-600"
@@ -131,7 +131,7 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
             )}
             {filters.city && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                City: {filters.city}
+                Ciudad: {filters.city}
                 <button
                   onClick={() => handleFilterChange('city', '')}
                   className="ml-1 hover:text-blue-600"
@@ -142,7 +142,7 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
             )}
             {filters.modality && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                Type: {filters.modality}
+                Tipo: {filters.modality === 'full-time' ? 'Tiempo Completo' : filters.modality === 'part-time' ? 'Medio Tiempo' : filters.modality === 'contract' ? 'Contrato' : filters.modality === 'freelance' ? 'Freelance' : 'Pasantía'}
                 <button
                   onClick={() => handleFilterChange('modality', '')}
                   className="ml-1 hover:text-green-600"
@@ -153,7 +153,7 @@ export const MyJobsFilter: React.FC<MyJobsFilterProps> = ({ onFilterChange }) =>
             )}
             {filters.date && (
               <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                Date: {filters.date}
+                Fecha: {filters.date === 'today' ? 'Hoy' : filters.date === 'week' ? 'Esta Semana' : filters.date === 'month' ? 'Este Mes' : filters.date === '3months' ? 'Últimos 3 Meses' : 'Este Año'}
                 <button
                   onClick={() => handleFilterChange('date', '')}
                   className="ml-1 hover:text-yellow-600"

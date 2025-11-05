@@ -17,6 +17,19 @@ interface MyJobCardProps {
   onChangeStatus: (jobId: string, currentStatus: string) => void;
 }
 
+const getStatusLabel = (status: 'Active' | 'Paused' | 'Closed'): string => {
+  switch (status) {
+    case 'Active':
+      return 'Activo';
+    case 'Paused':
+      return 'Pausado';
+    case 'Closed':
+      return 'Cerrado';
+    default:
+      return status;
+  }
+};
+
 export const MyJobCard: React.FC<MyJobCardProps> = ({
   id,
   companyInitial,
@@ -99,7 +112,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
                 : colors.gray[600]
             }}
           >
-            {status}
+            {getStatusLabel(status)}
           </span>
           
           {/* Action Buttons */}
@@ -121,7 +134,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
                 e.currentTarget.style.backgroundColor = '#ffffff';
                 e.currentTarget.style.color = colors.ctaGreen;
               }}
-              title="View Job"
+              title="Ver Trabajo"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -146,7 +159,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
                 e.currentTarget.style.backgroundColor = '#ffffff';
                 e.currentTarget.style.color = colors.gray[600];
               }}
-              title="Edit Job"
+              title="Editar Trabajo"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -170,7 +183,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
                 e.currentTarget.style.backgroundColor = '#ffffff';
                 e.currentTarget.style.color = status === 'Active' ? colors.orange[500] : colors.mainGreen;
               }}
-              title={status === 'Active' ? 'Pause Job' : 'Activate Job'}
+              title={status === 'Active' ? 'Pausar Trabajo' : 'Activar Trabajo'}
             >
               {status === 'Active' ? (
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

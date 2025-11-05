@@ -52,10 +52,10 @@ export default function EmployerProfilePage() {
       });
 
       return newTicket;
-    } catch (error: any) {
+    } catch (error: unknown) {
       setToast({
         show: true,
-        message: error.message || 'Error al crear el ticket',
+        message: error instanceof Error ? error.message : 'Error al crear el ticket',
         type: 'error'
       });
       throw error;

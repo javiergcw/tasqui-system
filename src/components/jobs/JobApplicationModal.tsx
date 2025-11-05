@@ -5,13 +5,17 @@ import { colors } from '@/lib/colors';
 interface JobApplicationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: () => void;
   companyName: string;
+  jobId: string;
 }
 
 export const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
   isOpen,
   onClose,
-  companyName
+  onSubmit,
+  companyName,
+  jobId
 }) => {
   const [followCompany, setFollowCompany] = useState(true);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -242,7 +246,15 @@ export const JobApplicationModal: React.FC<JobApplicationModalProps> = ({
         <div className="flex justify-end p-6 border-t border-gray-200">
           <button
             onClick={onClose}
-            className="px-8 py-3 text-white font-semibold transition-colors duration-200"
+            className="px-6 py-3 mr-3 text-gray-700 font-semibold transition-colors duration-200 border border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={() => {
+              onSubmit();
+            }}
+            className="px-8 py-3 text-white font-semibold transition-colors duration-200 rounded-lg"
             style={{ backgroundColor: colors.ctaGreen }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = colors.hoverGreen;

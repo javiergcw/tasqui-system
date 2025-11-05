@@ -22,10 +22,10 @@ export const JobNotificationsSection: React.FC = () => {
           {/* Text Content */}
           <div className="text-center lg:text-left">
             <h2 className={`text-3xl lg:text-4xl font-bold ${colorClasses.sidebar.text} mb-4`}>
-              Get New Job Notifications
+              Recibe Notificaciones de Nuevos Trabajos
             </h2>
             <p className={`text-lg ${colorClasses.sidebar.text}/90`}>
-              Subscribe & get all related jobs notification
+              Suscríbete y recibe todas las notificaciones de trabajos relacionados
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export const JobNotificationsSection: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Ingresa tu correo electrónico"
                 className="px-4 py-3 rounded-lg text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 min-w-[280px] bg-white"
                 required
               />
@@ -53,7 +53,7 @@ export const JobNotificationsSection: React.FC = () => {
                   e.currentTarget.style.backgroundColor = colors.dark[800];
                 }}
               >
-                Subscribe
+                Suscribirse
               </button>
             </form>
           </div>

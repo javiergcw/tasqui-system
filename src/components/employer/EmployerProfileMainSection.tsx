@@ -8,7 +8,7 @@ import type { CompanyProfile } from '@/models';
 interface EmployerProfileMainSectionProps {
   profile?: CompanyProfile | null;
   isLoading?: boolean;
-  onCreateTicket?: (formData: { title: string; description: string }) => Promise<any>;
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<unknown>;
   isCreatingTicket?: boolean;
 }
 
@@ -953,7 +953,7 @@ const KanbanTab: React.FC = () => {
 
 // Tickets Tab Component
 interface TicketsTabProps {
-  onCreateTicket?: (formData: { title: string; description: string }) => Promise<any>;
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<unknown>;
   isCreatingTicket?: boolean;
 }
 

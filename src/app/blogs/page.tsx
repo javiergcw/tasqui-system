@@ -6,10 +6,10 @@ export default function BlogsPage() {
     <div className={`min-h-screen ${colorClasses.background.gray50} dark:from-gray-900 dark:to-gray-800`}>
       <Sidebar />
       
-      {/* Hero Section */}
+      {/* Sección Hero */}
       <BlogsHeroSection />
       
-      {/* Blogs Section */}
+      {/* Sección de Blogs */}
       <BlogsSection />
       
       <Footer />

@@ -4,13 +4,13 @@ import { colors } from '@/lib/colors';
 
 export const BlogTagsCard: React.FC = () => {
   const tags = [
-    "Web Design",
-    "Job Tips", 
-    "UX Design",
-    "Tips & Tricks",
-    "Writing",
-    "Business",
-    "Resume"
+    "Diseño Web",
+    "Consejos Laborales", 
+    "Diseño UX",
+    "Tips y Trucos",
+    "Escritura",
+    "Negocios",
+    "Hoja de Vida"
   ];
 
   return (
@@ -19,7 +19,7 @@ export const BlogTagsCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainGreen }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className="text-xl font-bold text-slate-800">Tags</h3>
+        <h3 className="text-xl font-bold text-slate-800">Etiquetas</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       

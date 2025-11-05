@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { colors } from '@/lib/colors';
 
 interface CallToActionCardProps {
@@ -8,6 +9,7 @@ interface CallToActionCardProps {
   buttonText: string;
   icon: React.ReactNode;
   backgroundColor: 'red' | 'blue';
+  href?: string;
 }
 
 export const CallToActionCard: React.FC<CallToActionCardProps> = ({
@@ -15,14 +17,22 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
   description,
   buttonText,
   icon,
-  backgroundColor
+  backgroundColor,
+  href
 }) => {
-  const bgColor = backgroundColor === 'red' ? '' : '';
+  const router = useRouter();
+  
+  const handleClick = () => {
+    if (href) {
+      router.push(href);
+    }
+  };
   
   return (
     <div 
-      className={`${bgColor} rounded-lg p-6 text-white relative overflow-hidden`}
+      className={`rounded-lg p-6 text-white relative overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105`}
       style={backgroundColor === 'blue' ? { backgroundColor: colors.ctaGreen } : { backgroundColor: colors.mainGreen }}
+      onClick={handleClick}
     >
       {/* Background Image Overlay */}
       <div className="absolute inset-0 bg-black/20"></div>
@@ -42,9 +52,8 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
           <p className="text-base mb-4 opacity-90">
             {description}
           </p>
-          <a 
-            href="#" 
-            className="text-white text-base font-semibold transition-colors duration-200"
+          <div 
+            className="text-white text-base font-semibold transition-colors duration-200 inline-block"
             style={{
               color: 'white'
             }}
@@ -56,7 +65,7 @@ export const CallToActionCard: React.FC<CallToActionCardProps> = ({
             }}
           >
             {buttonText}
-          </a>
+          </div>
         </div>
       </div>
     </div>

@@ -50,7 +50,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
           e.currentTarget.style.backgroundColor = colors.mainGreen;
         }}
       >
-        {openPositions} Open Position{openPositions !== 1 ? 's' : ''}
+        {openPositions} {openPositions === 1 ? 'vacante disponible' : 'vacantes disponibles'}
       </button>
     </div>
   );

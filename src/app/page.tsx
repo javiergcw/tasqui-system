@@ -1,4 +1,4 @@
-import { Sidebar, HeroSection, SearchBarSection, FeaturesSection, CategorySection, JobsSection, TopCompaniesSection, StatsSection, TestimonialsSection, NewsSection, CallToActionSection, Footer, CopyrightSection, ScrollToTopButton } from '@/components';
+import { Sidebar, HeroSection, FeaturesSection, CategorySection, JobsSection, TopCompaniesSection, StatsSection, TestimonialsSection, NewsSection, CallToActionSection, Footer, CopyrightSection, ScrollToTopButton } from '@/components';
 
 export default function Home() {
   return (
@@ -7,9 +7,9 @@ export default function Home() {
       <div className="relative">
         <HeroSection />
       </div>
-      <div className="relative -mt-12 translate-y-12 z-30">
+{/*       <div className="relative -mt-12 translate-y-12 z-30">
         <SearchBarSection />
-      </div>
+      </div> */}
 
 
       <FeaturesSection />

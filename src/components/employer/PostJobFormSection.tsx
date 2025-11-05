@@ -4,8 +4,25 @@ import { useState } from 'react';
 import { colors } from '@/lib/colors';
 import { JobSkillsSelector } from './JobSkillsSelector';
 
+interface JobFormData {
+  jobTitle: string;
+  companyName: string;
+  companyWebsite: string;
+  jobType: string;
+  salary: string;
+  jobCategory: string;
+  companyEmail: string;
+  location: string;
+  jobTags: string;
+  experience: string;
+  jobDescription: string;
+  requiredSkillCategory: string;
+  requiredSkillSubCategory: string;
+  ticketId: string;
+}
+
 interface PostJobFormSectionProps {
-  onSubmit?: (formData: any) => void;
+  onSubmit?: (formData: JobFormData) => void;
 }
 
 export function PostJobFormSection({ onSubmit }: PostJobFormSectionProps) {

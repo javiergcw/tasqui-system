@@ -1,20 +1,24 @@
 'use client';
 import React from 'react';
 import { FeatureCard } from './FeatureCard';
+import { School, ConnectWithoutContact, TrendingUp } from '@mui/icons-material';
 
 export const FeaturesSection: React.FC = () => {
   const features = [
     {
-      title: "Advertise Job",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."
+      title: "Formación Profesional",
+      description: "Cursos especializados diseñados para desarrollar competencias clave y habilidades profesionales. Aprende a tu ritmo con programas adaptados a tus objetivos de carrera.",
+      icon: School
     },
     {
-      title: "Recruiter Profiles", 
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."
+      title: "Conectamos Talento con Empleo", 
+      description: "Encuentra oportunidades laborales que se alinean con tu perfil profesional. Conectamos candidatos calificados con empresas que buscan el mejor talento.",
+      icon: ConnectWithoutContact
     },
     {
-      title: "Find Your Dream Job",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore."
+      title: "Desarrollo de Alto Desempeño",
+      description: "Formamos profesionales con inclusión social y cultural. Plataforma virtual accesible 24/7 que impulsa tu crecimiento profesional y mejora tu calidad de vida.",
+      icon: TrendingUp
     }
   ];
 
@@ -23,11 +27,11 @@ export const FeaturesSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h3 className="text-4xl font-bold text-slate-800 mb-6">
-            Why You Choose Us Among<br />
-            Other Job Site?
+            ¿Por Qué Elegirnos Entre<br />
+            Otras Plataformas?
           </h3>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus
+            Somos una plataforma integral que combina formación profesional con oportunidades de empleo. Formamos profesionales de alto desempeño mientras conectamos talento con empresas que valoran el desarrollo continuo.
           </p>
         </div>
         
@@ -37,6 +41,7 @@ export const FeaturesSection: React.FC = () => {
               key={index}
               title={feature.title}
               description={feature.description}
+              icon={feature.icon}
             />
           ))}
         </div>

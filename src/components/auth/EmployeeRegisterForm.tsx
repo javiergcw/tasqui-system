@@ -3,8 +3,29 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
+interface EmployeeFormData {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  first_name: string;
+  last_name: string;
+  headline: string;
+  location: string;
+  bio: string;
+  country: string;
+  region: string;
+  city: string;
+  zip_code: string;
+  birth_date: string;
+  primary_language: string;
+  facebook_url: string;
+  twitter_url: string;
+  linkedin_url: string;
+  github_url: string;
+}
+
 interface EmployeeRegisterFormProps {
-  onSubmit: (formData: any) => void;
+  onSubmit: (formData: EmployeeFormData) => void;
   isLoading?: boolean;
 }
 

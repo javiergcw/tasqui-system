@@ -4,12 +4,12 @@ import { colors, colorClasses } from '@/lib/colors';
 
 export const BlogCategoriesCard: React.FC = () => {
   const categories = [
-    { name: 'Career Tips', count: 5 },
-    { name: 'Job Search', count: 3 },
-    { name: 'Interview', count: 8 },
-    { name: 'Resume', count: 2 },
+    { name: 'Consejos de Carrera', count: 5 },
+    { name: 'Búsqueda de Trabajo', count: 3 },
+    { name: 'Entrevistas', count: 8 },
+    { name: 'Hoja de Vida', count: 2 },
     { name: 'Networking', count: 4 },
-    { name: 'Skills', count: 6 }
+    { name: 'Habilidades', count: 6 }
   ];
 
   return (
@@ -18,7 +18,7 @@ export const BlogCategoriesCard: React.FC = () => {
       <div className="absolute left-0 top-6 w-1 h-6" style={{ backgroundColor: colors.mainGreen }}></div>
 
       <div className="flex items-center mb-4">
-        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Categories</h3>
+        <h3 className={`text-xl font-bold ${colorClasses.text.slate800}`}>Categorías</h3>
       </div>
       <div className="border-b border-dashed border-gray-200 mb-4"></div>
       <div className="space-y-2">

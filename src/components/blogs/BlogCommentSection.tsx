@@ -22,7 +22,7 @@ export const BlogCommentSection: React.FC = () => {
     console.log('Comment submitted:', formData);
     // Reset form
     setFormData({ name: '', email: '', comment: '' });
-    alert('Comment submitted successfully!');
+    alert('¡Comentario enviado exitosamente!');
   };
 
   return (
@@ -32,7 +32,7 @@ export const BlogCommentSection: React.FC = () => {
 
       {/* Section Header */}
       <div className="flex items-center mb-6">
-        <h3 className="text-2xl font-bold text-slate-800">Leave a Reply</h3>
+        <h3 className="text-2xl font-bold text-slate-800">Deja un Comentario</h3>
       </div>
 
           {/* Comment Form */}
@@ -40,7 +40,7 @@ export const BlogCommentSection: React.FC = () => {
             {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-800 mb-2">
-                Name
+                Nombre
               </label>
               <input
                 type="text"
@@ -48,7 +48,7 @@ export const BlogCommentSection: React.FC = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                placeholder="Your Name"
+                placeholder="Tu Nombre"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                 style={{ backgroundColor: colors.primary[50] }}
                 required
@@ -58,7 +58,7 @@ export const BlogCommentSection: React.FC = () => {
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-slate-800 mb-2">
-                Email
+                Correo Electrónico
               </label>
               <input
                 type="email"
@@ -66,7 +66,7 @@ export const BlogCommentSection: React.FC = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Your Email"
+                placeholder="Tu Correo Electrónico"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
                 style={{ backgroundColor: colors.primary[50] }}
                 required
@@ -76,14 +76,14 @@ export const BlogCommentSection: React.FC = () => {
             {/* Comment Field */}
             <div>
               <label htmlFor="comment" className="block text-sm font-medium text-slate-800 mb-2">
-                Comment
+                Comentario
               </label>
               <textarea
                 id="comment"
                 name="comment"
                 value={formData.comment}
                 onChange={handleInputChange}
-                placeholder="Your Comment"
+                placeholder="Tu Comentario"
                 rows={6}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-vertical"
                 style={{ backgroundColor: colors.primary[50] }}
@@ -104,7 +104,7 @@ export const BlogCommentSection: React.FC = () => {
                   e.currentTarget.style.backgroundColor = colors.mainGreen;
                 }}
               >
-                Post a Comment
+                Publicar Comentario
               </button>
             </div>
           </form>

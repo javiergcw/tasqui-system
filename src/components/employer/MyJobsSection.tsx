@@ -28,112 +28,112 @@ export const MyJobsSection: React.FC = () => {
     {
       id: "1",
       companyInitial: "V",
-      jobTitle: "Web Designer, Graphic Designer, UI/UX Designer",
-      jobCategory: "Graphics Designer",
-      salary: "$35000-$38000",
-      location: "Wellesley Rd, London",
-      postedTime: "9 days ago",
-      jobType: "Full Time",
+      jobTitle: "Diseñador Web, Diseñador Gráfico, Diseñador UI/UX",
+      jobCategory: "Diseñador Gráfico",
+      salary: "$2.500.000-$3.000.000",
+      location: "Bogotá, Colombia",
+      postedTime: "hace 9 días",
+      jobType: "Tiempo Completo",
       status: "Active" as const,
-      city: "london",
+      city: "bogota",
       modality: "full-time",
       postedDate: new Date('2024-01-15')
     },
     {
       id: "2",
       companyInitial: "T",
-      jobTitle: "Website Developer & Software Developer",
-      jobCategory: "Web Developer",
-      salary: "$3000-$8000",
-      location: "Garden Road, UK",
-      postedTime: "5 days ago",
-      jobType: "Full Time",
+      jobTitle: "Desarrollador Web y Desarrollador de Software",
+      jobCategory: "Desarrollador Web",
+      salary: "$3.500.000-$5.000.000",
+      location: "Medellín, Colombia",
+      postedTime: "hace 5 días",
+      jobType: "Tiempo Completo",
       status: "Paused" as const,
-      city: "manchester",
+      city: "medellin",
       modality: "full-time",
       postedDate: new Date('2024-01-20')
     },
     {
       id: "3",
       companyInitial: "A",
-      jobTitle: "Marketing Specialist",
+      jobTitle: "Especialista en Marketing",
       jobCategory: "Marketing",
-      salary: "$25000-$30000",
-      location: "Birmingham, UK",
-      postedTime: "2 days ago",
-      jobType: "Part Time",
+      salary: "$2.000.000-$2.800.000",
+      location: "Cali, Colombia",
+      postedTime: "hace 2 días",
+      jobType: "Medio Tiempo",
       status: "Active" as const,
-      city: "birmingham",
+      city: "cali",
       modality: "part-time",
       postedDate: new Date('2024-01-23')
     },
     {
       id: "4",
       companyInitial: "B",
-      jobTitle: "Data Analyst",
-      jobCategory: "Data Science",
-      salary: "$40000-$45000",
-      location: "Leeds, UK",
-      postedTime: "1 week ago",
-      jobType: "Contract",
+      jobTitle: "Analista de Datos",
+      jobCategory: "Ciencia de Datos",
+      salary: "$3.800.000-$4.500.000",
+      location: "Barranquilla, Colombia",
+      postedTime: "hace 1 semana",
+      jobType: "Contrato",
       status: "Closed" as const,
-      city: "leeds",
+      city: "barranquilla",
       modality: "contract",
       postedDate: new Date('2024-01-16')
     },
     {
       id: "5",
       companyInitial: "C",
-      jobTitle: "Frontend Developer",
-      jobCategory: "Web Developer",
-      salary: "$45000-$50000",
-      location: "Manchester, UK",
-      postedTime: "3 days ago",
-      jobType: "Full Time",
+      jobTitle: "Desarrollador Frontend",
+      jobCategory: "Desarrollador Web",
+      salary: "$4.500.000-$5.000.000",
+      location: "Medellín, Colombia",
+      postedTime: "hace 3 días",
+      jobType: "Tiempo Completo",
       status: "Active" as const,
-      city: "manchester",
+      city: "medellin",
       modality: "full-time",
       postedDate: new Date('2024-01-21')
     },
     {
       id: "6",
       companyInitial: "D",
-      jobTitle: "Backend Developer",
-      jobCategory: "Web Developer",
-      salary: "$50000-$55000",
-      location: "Birmingham, UK",
-      postedTime: "1 day ago",
-      jobType: "Full Time",
+      jobTitle: "Desarrollador Backend",
+      jobCategory: "Desarrollador Web",
+      salary: "$5.000.000-$5.500.000",
+      location: "Cali, Colombia",
+      postedTime: "hace 1 día",
+      jobType: "Tiempo Completo",
       status: "Active" as const,
-      city: "birmingham",
+      city: "cali",
       modality: "full-time",
       postedDate: new Date('2024-01-24')
     },
     {
       id: "7",
       companyInitial: "E",
-      jobTitle: "UI/UX Designer",
-      jobCategory: "Graphics Designer",
-      salary: "$30000-$35000",
-      location: "Leeds, UK",
-      postedTime: "4 days ago",
-      jobType: "Part Time",
+      jobTitle: "Diseñador UI/UX",
+      jobCategory: "Diseñador Gráfico",
+      salary: "$2.800.000-$3.200.000",
+      location: "Barranquilla, Colombia",
+      postedTime: "hace 4 días",
+      jobType: "Medio Tiempo",
       status: "Paused" as const,
-      city: "leeds",
+      city: "barranquilla",
       modality: "part-time",
       postedDate: new Date('2024-01-20')
     },
     {
       id: "8",
       companyInitial: "F",
-      jobTitle: "Project Manager",
-      jobCategory: "Management",
-      salary: "$60000-$65000",
-      location: "London, UK",
-      postedTime: "6 days ago",
-      jobType: "Full Time",
+      jobTitle: "Gerente de Proyectos",
+      jobCategory: "Gestión",
+      salary: "$6.000.000-$6.500.000",
+      location: "Bogotá, Colombia",
+      postedTime: "hace 6 días",
+      jobType: "Tiempo Completo",
       status: "Active" as const,
-      city: "london",
+      city: "bogota",
       modality: "full-time",
       postedDate: new Date('2024-01-18')
     }
@@ -225,10 +225,10 @@ export const MyJobsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-16">
           <h3 className="text-2xl md:text-4xl font-bold text-slate-800 mb-4 md:mb-6">
-            My Posted Jobs
+            Mis Trabajos Publicados
           </h3>
           <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Manage and track all your posted job listings. View applications, edit details, or change job status.
+            Gestiona y rastrea todas tus publicaciones de trabajos. Visualiza aplicaciones, edita detalles o cambia el estado de los trabajos.
           </p>
         </div>
         
@@ -257,8 +257,8 @@ export const MyJobsSection: React.FC = () => {
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <div className="text-gray-500 text-lg mb-2">No jobs found</div>
-              <div className="text-gray-400 text-sm">Try adjusting your filters to see more results</div>
+              <div className="text-gray-500 text-lg mb-2">No se encontraron trabajos</div>
+              <div className="text-gray-400 text-sm">Intenta ajustar tus filtros para ver más resultados</div>
             </div>
           )}
         </div>

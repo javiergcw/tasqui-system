@@ -12,7 +12,7 @@ export const ShareInCard: React.FC = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-      <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Share In</h3>
+      <h3 className="text-lg font-bold text-slate-800 mb-4 text-center">Compartir en</h3>
       <div className="flex gap-3 justify-center">
         {socialIcons.map((social, index) => (
           <button
@@ -32,7 +32,7 @@ export const ShareInCard: React.FC = () => {
               e.currentTarget.style.borderColor = colors.gray[300];
               e.currentTarget.style.color = colors.gray[600];
             }}
-            title={`Share on ${social.name}`}
+            title={`Compartir en ${social.name}`}
           >
             {social.icon}
           </button>
