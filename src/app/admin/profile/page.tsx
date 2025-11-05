@@ -42,6 +42,16 @@ export default function AdminProfilePage() {
     fetchData();
   }, []);
 
+  const handleProfileUpdate = async (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => {
+    try {
+      const updatedProfile = await adminProfileUseCase.update(data);
+      setProfile(updatedProfile);
+    } catch (error) {
+      console.error('Error updating admin profile:', error);
+      throw error;
+    }
+  };
+
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
@@ -52,6 +62,7 @@ export default function AdminProfilePage() {
           isLoading={isLoading}
           tickets={tickets}
           isLoadingTickets={isLoadingTickets}
+          onProfileUpdate={handleProfileUpdate}
         />
 
       <Footer />

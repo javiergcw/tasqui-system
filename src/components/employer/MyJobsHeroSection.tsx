@@ -6,10 +6,11 @@ export function MyJobsHeroSection() {
     <section 
       className="relative py-20 px-4"
       style={{
-        background: `linear-gradient(135deg, ${colors.dark[800]} 0%, ${colors.dark[900]} 100%)`
+        background: `linear-gradient(135deg, ${colors.ctaGreen} 0%, ${colors.heroGreen} 50%, ${colors.ctaGreen} 100%)`
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Mis Trabajos Publicados

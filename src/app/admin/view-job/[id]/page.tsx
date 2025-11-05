@@ -1,4 +1,4 @@
-import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, EmployerJobDetailHeroSection, EmployerJobDetailMainSection } from '@/components';
+import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminJobDetailHeroSection, AdminJobDetailMainSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 
 interface AdminViewJobPageProps {
@@ -16,10 +16,10 @@ export default function AdminViewJobPage({ params }: AdminViewJobPageProps) {
       <Sidebar />
       
       {/* Hero Section */}
-      <EmployerJobDetailHeroSection />
+      <AdminJobDetailHeroSection />
       
       {/* Main Content Section */}
-      <EmployerJobDetailMainSection />
+      <AdminJobDetailMainSection />
       
       <Footer />
       <CopyrightSection />

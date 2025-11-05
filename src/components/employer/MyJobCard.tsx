@@ -13,8 +13,8 @@ interface MyJobCardProps {
   jobType: string;
   status: 'Active' | 'Paused' | 'Closed';
   onView: (jobId: string) => void;
-  onEdit: (jobId: string) => void;
-  onChangeStatus: (jobId: string, currentStatus: string) => void;
+  onEdit?: (jobId: string) => void;
+  onChangeStatus?: (jobId: string, currentStatus: string) => void;
 }
 
 const getStatusLabel = (status: 'Active' | 'Paused' | 'Closed'): string => {
@@ -48,8 +48,8 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
     <div
       className="p-6 transition-all duration-300"
       style={{
-        backgroundColor: colors.primary[50], // Light pink background
-        border: `1px dashed ${colors.primary[200]}`, // Dashed border
+        backgroundColor: colors.lighterGreen, // Light green background
+        border: `1px dashed ${colors.mainGreen}`, // Dashed border
         borderRadius: '0.5rem', // Slightly rounded corners
       }}
     >
@@ -59,7 +59,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
           className="flex-shrink-0 w-16 h-16 flex items-center justify-center"
           style={{
             backgroundColor: '#ffffff', // White background for logo area
-            border: `2px dashed ${colors.primary[200]}`, // Dashed border for logo area
+            border: `2px dashed ${colors.mainGreen}`, // Dashed border for logo area
             borderRadius: '0.25rem', // Slightly rounded corners for logo area
           }}
         >
@@ -142,59 +142,63 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
               </svg>
             </button>
             
-            {/* Edit Button */}
-            <button
-              onClick={() => onEdit(id)}
-              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-              style={{ 
-                backgroundColor: '#ffffff',
-                border: `2px dashed ${colors.gray[600]}`,
-                color: colors.gray[600]
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.gray[600];
-                e.currentTarget.style.color = '#ffffff';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = colors.gray[600];
-              }}
-              title="Editar Trabajo"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-              </svg>
-            </button>
+            {/* Edit Button - Solo si onEdit está definido */}
+            {onEdit && (
+              <button
+                onClick={() => onEdit(id)}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                style={{ 
+                  backgroundColor: '#ffffff',
+                  border: `2px dashed ${colors.gray[600]}`,
+                  color: colors.gray[600]
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.gray[600];
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ffffff';
+                  e.currentTarget.style.color = colors.gray[600];
+                }}
+                title="Editar Trabajo"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+            )}
             
-            {/* Change Status Button */}
-            <button
-              onClick={() => onChangeStatus(id, status)}
-              className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-              style={{ 
-                backgroundColor: '#ffffff',
-                border: `2px dashed ${status === 'Active' ? colors.orange[500] : colors.mainGreen}`,
-                color: status === 'Active' ? colors.orange[500] : colors.mainGreen
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = status === 'Active' ? colors.orange[500] : colors.mainGreen;
-                e.currentTarget.style.color = '#ffffff';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.color = status === 'Active' ? colors.orange[500] : colors.mainGreen;
-              }}
-              title={status === 'Active' ? 'Pausar Trabajo' : 'Activar Trabajo'}
-            >
-              {status === 'Active' ? (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              ) : (
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              )}
-            </button>
+            {/* Change Status Button - Solo si onChangeStatus está definido */}
+            {onChangeStatus && (
+              <button
+                onClick={() => onChangeStatus(id, status)}
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                style={{ 
+                  backgroundColor: '#ffffff',
+                  border: `2px dashed ${status === 'Active' ? colors.orange[500] : colors.mainGreen}`,
+                  color: status === 'Active' ? colors.orange[500] : colors.mainGreen
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = status === 'Active' ? colors.orange[500] : colors.mainGreen;
+                  e.currentTarget.style.color = '#ffffff';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#ffffff';
+                  e.currentTarget.style.color = status === 'Active' ? colors.orange[500] : colors.mainGreen;
+                }}
+                title={status === 'Active' ? 'Pausar Trabajo' : 'Activar Trabajo'}
+              >
+                {status === 'Active' ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                )}
+              </button>
+            )}
           </div>
           
           <div className="flex items-center gap-1 text-gray-500 text-sm">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, PostJobHeroSection, PostJobFormSection, Toast } from '@/components';
+import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminPostJobHeroSection, AdminPostJobFormSection, Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import { createJobUseCase } from '@/use-cases';
 
@@ -78,10 +78,10 @@ export default function AdminPostJobPage() {
       <Sidebar />
       
       {/* Hero Section */}
-      <PostJobHeroSection />
+      <AdminPostJobHeroSection />
 
       {/* Job Form Section */}
-      <PostJobFormSection onSubmit={handleSubmit} />
+      <AdminPostJobFormSection onSubmit={handleSubmit} />
 
       <Footer />
       <CopyrightSection />

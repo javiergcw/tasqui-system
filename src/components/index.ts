@@ -62,6 +62,36 @@ export { BlogCommentSection } from './blogs/BlogCommentSection';
 // Exportar componentes de la página companies
 export { CompaniesHeroSection } from './companies/CompaniesHeroSection';
 
+// Exportar componentes de la página admin
+export { AdminProfileHeroSection } from './admin/AdminProfileHeroSection';
+export { AdminProfileMainSection } from './admin/AdminProfileMainSection';
+export { AdminMyJobsSection } from './admin/AdminMyJobsSection';
+export { AdminJobDetailHeroSection } from './admin/AdminJobDetailHeroSection';
+export { AdminEditJobHeroSection } from './admin/AdminEditJobHeroSection';
+export { AdminEditJobFormSection } from './admin/AdminEditJobFormSection';
+export { AdminJobDetailMainSection } from './admin/AdminJobDetailMainSection';
+export { AdminJobDetailContent } from './admin/AdminJobDetailContent';
+export { AdminJobDetailHeader } from './admin/AdminJobDetailHeader';
+export { AdminJobDetailSidebar } from './admin/AdminJobDetailSidebar';
+export { AdminPostedByCard } from './admin/AdminPostedByCard';
+export { AdminLocationCard } from './admin/AdminLocationCard';
+export { AdminKeywordsCard } from './admin/AdminKeywordsCard';
+export { AdminShareInCard } from './admin/AdminShareInCard';
+export { AdminApplicantsHeroSection } from './admin/AdminApplicantsHeroSection';
+export { AdminApplicantsSection } from './admin/AdminApplicantsSection';
+export { AdminApplicantsFilter } from './admin/AdminApplicantsFilter';
+export { AdminApplicantDetailHeroSection } from './admin/AdminApplicantDetailHeroSection';
+export { AdminApplicantDetailMainSection } from './admin/AdminApplicantDetailMainSection';
+export { AdminApplicantInfoCard } from './admin/AdminApplicantInfoCard';
+export { AdminAboutMeCard } from './admin/AdminAboutMeCard';
+export { AdminEducationCard } from './admin/AdminEducationCard';
+export { AdminExperienceCard } from './admin/AdminExperienceCard';
+export { AdminSkillsCard } from './admin/AdminSkillsCard';
+export { AdminActionButtonsCard } from './admin/AdminActionButtonsCard';
+export { AdminPostJobHeroSection } from './admin/AdminPostJobHeroSection';
+export { AdminPostJobFormSection } from './admin/AdminPostJobFormSection';
+export { AdminJobSkillsSelector } from './admin/AdminJobSkillsSelector';
+
 // Exportar componentes de la página aspirante
 export { ProfileHeroSection } from './aspirante/ProfileHeroSection';
 export { ProfileMainSection } from './aspirante/ProfileMainSection';

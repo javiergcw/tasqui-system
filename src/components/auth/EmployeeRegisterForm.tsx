@@ -159,7 +159,7 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
             </div>
 
             {/* Personal Information Section */}
-            <div>
+            <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información Personal</h3>
               
               <div className="space-y-6">
@@ -201,12 +201,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
 
                 <div>
                   <label htmlFor="headline" className="block text-sm font-bold text-gray-700 mb-2">
-                    Título Profesional
+                    Título Profesional *
                   </label>
                   <input
                     id="headline"
                     name="headline"
                     type="text"
+                    required
                     value={formData.headline}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -216,12 +217,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
 
                 <div>
                   <label htmlFor="bio" className="block text-sm font-bold text-gray-700 mb-2">
-                    Biografía
+                    Biografía *
                   </label>
                   <textarea
                     id="bio"
                     name="bio"
                     rows={4}
+                    required
                     value={formData.bio}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -232,18 +234,19 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
             </div>
 
             {/* Location Information Section */}
-            <div>
+            <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información de Ubicación</h3>
               
               <div className="space-y-6">
                 <div>
                   <label htmlFor="location" className="block text-sm font-bold text-gray-700 mb-2">
-                    Ubicación General
+                    Ubicación General *
                   </label>
                   <input
                     id="location"
                     name="location"
                     type="text"
+                    required
                     value={formData.location}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -254,12 +257,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="country" className="block text-sm font-bold text-gray-700 mb-2">
-                      País
+                      País *
                     </label>
                     <input
                       id="country"
                       name="country"
                       type="text"
+                      required
                       value={formData.country}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -270,12 +274,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
 
                   <div>
                     <label htmlFor="region" className="block text-sm font-bold text-gray-700 mb-2">
-                      Región/Estado
+                      Región/Estado *
                     </label>
                     <input
                       id="region"
                       name="region"
                       type="text"
+                      required
                       value={formData.region}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -288,12 +293,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label htmlFor="city" className="block text-sm font-bold text-gray-700 mb-2">
-                      Ciudad
+                      Ciudad *
                     </label>
                     <input
                       id="city"
                       name="city"
                       type="text"
+                      required
                       value={formData.city}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -304,12 +310,13 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
 
                   <div>
                     <label htmlFor="zip_code" className="block text-sm font-bold text-gray-700 mb-2">
-                      Código Postal
+                      Código Postal *
                     </label>
                     <input
                       id="zip_code"
                       name="zip_code"
                       type="text"
+                      required
                       value={formData.zip_code}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
@@ -322,7 +329,7 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
             </div>
 
             {/* Additional Information Section */}
-            <div>
+            <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Información Adicional</h3>
               
               <div className="space-y-6">
@@ -367,8 +374,8 @@ export const EmployeeRegisterForm: React.FC<EmployeeRegisterFormProps> = ({ onSu
             </div>
 
             {/* Social Media Section */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Redes Sociales (Opcional)</h3>
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Redes Sociales</h3>
               
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

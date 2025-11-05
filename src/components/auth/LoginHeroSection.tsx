@@ -24,10 +24,10 @@ export const LoginHeroSection: React.FC = () => {
               href="/" 
               className="hover:text-white transition-colors duration-200"
             >
-              Home
+              Inicio
             </Link>
             <span className="text-white/60">&gt;</span>
-            <span className="text-white">Login</span>
+            <span className="text-white">Iniciar Sesión</span>
           </nav>
         </div>
       </div>

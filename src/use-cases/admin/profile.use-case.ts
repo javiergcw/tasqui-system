@@ -4,6 +4,8 @@ import adminProfileService from '@/services/admin/profile.service';
 import type {
   AdminProfile,
   AdminProfileResponse,
+  AdminProfileUpdateRequest,
+  AdminProfileUpdateResponse,
 } from '@/models/admin/profile.model';
 
 export class AdminProfileUseCase {
@@ -18,6 +20,21 @@ export class AdminProfileUseCase {
       return response.data.admin_profile;
     } catch (error) {
       console.error('Error in admin profile use case:', error);
+      throw error;
+    }
+  }
+
+  async update(data: AdminProfileUpdateRequest): Promise<AdminProfile> {
+    try {
+      const response: AdminProfileUpdateResponse = await adminProfileService.updateProfile(data);
+      
+      if (!response.success) {
+        throw new Error(response.message || 'Error al actualizar el perfil del administrador');
+      }
+
+      return response.data.admin_profile;
+    } catch (error) {
+      console.error('Error in admin profile update use case:', error);
       throw error;
     }
   }

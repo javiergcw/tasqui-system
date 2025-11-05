@@ -18,3 +18,17 @@ export interface AdminProfileResponse {
   };
 }
 
+export interface AdminProfileUpdateRequest {
+  display_name?: string;
+  scope_notes?: string;
+  can_publish_direct?: boolean;
+}
+
+export interface AdminProfileUpdateResponse {
+  success: boolean;
+  message: string;
+  data: {
+    admin_profile: AdminProfile;
+  };
+}
+

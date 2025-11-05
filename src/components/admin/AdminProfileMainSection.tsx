@@ -9,13 +9,15 @@ interface AdminProfileMainSectionProps {
   isLoading?: boolean;
   tickets?: AdminTicket[];
   isLoadingTickets?: boolean;
+  onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
 }
 
 export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = ({ 
   profile, 
   isLoading = false,
   tickets,
-  isLoadingTickets = false
+  isLoadingTickets = false,
+  onProfileUpdate
 }) => {
   const [activeTab, setActiveTab] = useState('admin-data');
   
@@ -26,19 +28,19 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       if (user) {
         try {
           const userData = JSON.parse(user);
-          return userData.email || 'System Administrator';
+          return userData.email || 'Administrador del Sistema';
         } catch (e) {
-          return 'System Administrator';
+          return 'Administrador del Sistema';
         }
       }
     }
-    return 'System Administrator';
+    return 'Administrador del Sistema';
   };
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'admin-data':
-        return <AdminDataForm profile={profile} isLoading={isLoading} />;
+        return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
       case 'dashboard':
         return <DashboardTab />;
       case 'tickets':
@@ -46,19 +48,19 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       case 'employees':
         return <EmployeesTab />;
       default:
-        return <AdminDataForm profile={profile} isLoading={isLoading} />;
+        return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
     }
   };
 
   return (
     <section className={`py-16 ${colorClasses.background.gray50}`}>
-      <div className="max-w-full mx-auto px-1 sm:px-2 lg:px-3">
-        <div className="grid lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-          {/* Columna izquierda - Perfil y navegación */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
+          {/* Perfil y navegación */}
+          <div className="w-full">
+            <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
               {/* Perfil del admin */}
-              <div className="text-center mb-8">
+              <div className="text-center mb-6">
                 <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
                   {profile ? (
                     <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
@@ -84,135 +86,128 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                 </p>
               </div>
 
-              {/* Menú de navegación */}
-              <nav className="w-full">
-                {/* Admin Data */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'admin-data'
-                    ? 'border border-dashed rounded-md'
-                    : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'admin-data' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'admin-data') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'admin-data') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('admin-data')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'admin-data' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+              {/* Menú de navegación horizontal */}
+              <nav className="w-full overflow-x-auto flex justify-center">
+                <div className="flex gap-1 sm:gap-2 md:gap-4 w-full sm:w-auto justify-center">
+                  {/* Admin Data */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'admin-data'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                      }`}
+                    style={activeTab === 'admin-data' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'admin-data') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'admin-data') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('admin-data')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                     </svg>
-                    Admin Data
-                  </div>
-                </div>
+                    <span>Datos del Administrador</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Dashboard */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'dashboard'
-                    ? 'border border-dashed rounded-md'
-                    : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'dashboard' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'dashboard') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'dashboard') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('dashboard')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Dashboard */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'dashboard'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                      }`}
+                    style={activeTab === 'dashboard' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'dashboard') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'dashboard') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('dashboard')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
-                    Dashboard
-                  </div>
-                </div>
+                    <span>Panel de Control</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Tickets */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'tickets'
-                    ? 'border border-dashed rounded-md'
-                    : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'tickets' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'tickets') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'tickets') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('tickets')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'tickets' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Tickets */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'tickets'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                      }`}
+                    style={activeTab === 'tickets' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'tickets') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'tickets') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('tickets')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Support Tickets
-                  </div>
-                </div>
+                    <span className="inline sm:hidden md:inline">Tickets de Soporte</span>
+                    <span className="hidden sm:inline md:hidden">Tickets</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Employees */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'employees'
-                    ? 'border border-dashed rounded-md'
-                    : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'employees' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'employees') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'employees') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('employees')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'employees' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {/* Employees */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'employees'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                      }`}
+                    style={activeTab === 'employees' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'employees') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'employees') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('employees')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                     </svg>
-                    Employees
-                  </div>
+                    <span>Empleados</span>
+                  </button>
                 </div>
               </nav>
             </div>
           </div>
 
-          {/* Columna derecha - Contenido dinámico */}
-          <div className="lg:col-span-3">
+          {/* Contenido dinámico */}
+          <div className="w-full">
             <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
               {renderTabContent()}
             </div>
@@ -227,35 +222,25 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
 interface AdminDataFormProps {
   profile?: AdminProfile | null;
   isLoading?: boolean;
+  onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
 }
 
-const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = false }) => {
+const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = false, onProfileUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
-    adminName: '',
-    role: '',
-    department: '',
-    employeeId: '',
-    email: '',
-    phone: '',
-    joinDate: '',
-    permissions: '',
-    scopeNotes: ''
+    displayName: '',
+    scopeNotes: '',
+    canPublishDirect: false
   });
 
   // Cargar datos del perfil cuando estén disponibles
   React.useEffect(() => {
     if (profile) {
       setFormData({
-        adminName: profile.display_name || '',
-        role: 'System Administrator', // No disponible en el backend
-        department: 'IT Support', // No disponible en el backend
-        employeeId: 'N/A', // No disponible en el backend
-        email: 'N/A', // No disponible en el backend
-        phone: 'N/A', // No disponible en el backend
-        joinDate: profile.created_at || '',
-        permissions: profile.can_publish_direct ? 'Full Access' : 'Limited Access',
-        scopeNotes: profile.scope_notes || ''
+        displayName: profile.display_name || '',
+        scopeNotes: profile.scope_notes || '',
+        canPublishDirect: profile.can_publish_direct || false
       });
     }
   }, [profile]);
@@ -268,10 +253,34 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsEditing(false);
-    // TODO: Implementar lógica de guardado
+    setIsSaving(true);
+    
+    try {
+      const updateData: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean } = {};
+      
+      if (formData.displayName !== profile?.display_name) {
+        updateData.display_name = formData.displayName;
+      }
+      if (formData.scopeNotes !== profile?.scope_notes) {
+        updateData.scope_notes = formData.scopeNotes;
+      }
+      if (formData.canPublishDirect !== profile?.can_publish_direct) {
+        updateData.can_publish_direct = formData.canPublishDirect;
+      }
+
+      if (onProfileUpdate) {
+        await onProfileUpdate(updateData);
+      }
+      
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error al actualizar el perfil:', error);
+      alert('Error al actualizar el perfil. Por favor, intenta nuevamente.');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (isLoading) {
@@ -279,7 +288,7 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="mt-4 text-gray-600">Loading admin information...</p>
+          <p className="mt-4 text-gray-600">Cargando información del administrador...</p>
         </div>
       </div>
     );
@@ -288,93 +297,69 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">Admin Information</h2>
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white"
-          style={{
-            backgroundColor: isEditing ? '#16a34a' : colors.mainGreen
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#15803d' : colors.hoverGreen;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainGreen;
-          }}
-        >
-          {isEditing ? 'Save Changes' : 'Edit Information'}
-        </button>
+        <h2 className="text-2xl font-bold text-gray-800">Información del Administrador</h2>
+        {!isEditing ? (
+          <button
+            onClick={() => setIsEditing(true)}
+            disabled={isSaving}
+            className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{
+              backgroundColor: colors.mainGreen
+            }}
+            onMouseEnter={(e) => {
+              if (!isSaving) {
+                e.currentTarget.style.backgroundColor = colors.hoverGreen;
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isSaving) {
+                e.currentTarget.style.backgroundColor = colors.mainGreen;
+              }
+            }}
+          >
+            Editar Información
+          </button>
+        ) : null}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
+        {/* Información Básica */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Admin Name
+              ID <span className="text-gray-400 text-xs">(solo lectura)</span>
             </label>
             <input
               type="text"
-              name="adminName"
-              value={formData.adminName}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
+              value={profile?.id || ''}
+              disabled
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Role
-            </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            >
-              <option value="System Administrator">System Administrator</option>
-              <option value="Support Manager">Support Manager</option>
-              <option value="Technical Lead">Technical Lead</option>
-              <option value="Super Admin">Super Admin</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Department
+              ID de Usuario <span className="text-gray-400 text-xs">(solo lectura)</span>
             </label>
             <input
               type="text"
-              name="department"
-              value={formData.department}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
+              value={profile?.user_id || ''}
+              disabled
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Employee ID
+              Nombre del Administrador
             </label>
             <input
               type="text"
-              name="employeeId"
-              value={formData.employeeId}
+              name="displayName"
+              value={formData.displayName}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
               style={{
                 '--tw-ring-color': colors.mainGreen
               } as React.CSSProperties}
@@ -383,73 +368,57 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Email
+              Permisos de Publicación Directa
+            </label>
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                name="canPublishDirect"
+                checked={formData.canPublishDirect}
+                onChange={(e) => setFormData(prev => ({ ...prev, canPublishDirect: e.target.checked }))}
+                disabled={!isEditing}
+                className="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-2 focus:ring-green-600 disabled:cursor-not-allowed"
+              />
+              <span className="text-sm text-gray-700">
+                {formData.canPublishDirect ? 'Acceso Completo' : 'Acceso Limitado'}
+              </span>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Fecha de Creación <span className="text-gray-400 text-xs">(solo lectura)</span>
             </label>
             <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
+              type="text"
+              value={profile?.created_at ? new Date(profile.created_at).toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              }) : ''}
+              disabled
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone
+              Última Actualización <span className="text-gray-400 text-xs">(solo lectura)</span>
             </label>
             <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
+              type="text"
+              value={profile?.updated_at ? new Date(profile.updated_at).toLocaleDateString('es-ES', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+              }) : ''}
+              disabled
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
             />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Join Date
-            </label>
-            <input
-              type="date"
-              name="joinDate"
-              value={formData.joinDate}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Permissions
-            </label>
-            <select
-              name="permissions"
-              value={formData.permissions}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            >
-              <option value="Full Access">Full Access</option>
-              <option value="Read Only">Read Only</option>
-              <option value="Limited Access">Limited Access</option>
-            </select>
           </div>
         </div>
 
@@ -459,7 +428,7 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
         {/* Scope Notes */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
-            Scope Notes
+            Notas de Alcance
           </label>
           <textarea
             name="scopeNotes"
@@ -467,7 +436,7 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
             onChange={handleInputChange}
             disabled={!isEditing}
             rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
           />
         </div>
 
@@ -475,23 +444,39 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
           <div className="flex justify-end space-x-4 pt-6">
             <button
               type="button"
-              onClick={() => setIsEditing(false)}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              onClick={() => {
+                setIsEditing(false);
+                // Restaurar valores originales
+                if (profile) {
+                  setFormData({
+                    displayName: profile.display_name || '',
+                    scopeNotes: profile.scope_notes || '',
+                    canPublishDirect: profile.can_publish_direct || false
+                  });
+                }
+              }}
+              disabled={isSaving}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2 text-white rounded-lg transition-colors duration-200"
+              disabled={isSaving}
+              className="px-6 py-2 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: colors.mainGreen }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                if (!isSaving) {
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.mainGreen;
+                if (!isSaving) {
+                  e.currentTarget.style.backgroundColor = colors.mainGreen;
+                }
               }}
             >
-              Save Changes
+              {isSaving ? 'Guardando...' : 'Guardar Cambios'}
             </button>
           </div>
         )}
@@ -505,10 +490,10 @@ const DashboardTab: React.FC = () => {
 
   // Mock data
   const stats = [
-    { title: 'Total Tickets', value: '156', color: 'bg-blue-50 border-blue-200', iconColor: 'text-blue-600' },
-    { title: 'Open Tickets', value: '23', color: 'bg-yellow-50 border-yellow-200', iconColor: 'text-yellow-600' },
-    { title: 'In Progress', value: '45', color: 'bg-orange-50 border-orange-200', iconColor: 'text-orange-600' },
-    { title: 'Resolved', value: '88', color: 'bg-green-50 border-green-200', iconColor: 'text-green-600' }
+    { title: 'Total de Tickets', value: '156', color: 'bg-blue-50 border-blue-200', iconColor: 'text-blue-600' },
+    { title: 'Tickets Abiertos', value: '23', color: 'bg-yellow-50 border-yellow-200', iconColor: 'text-yellow-600' },
+    { title: 'En Progreso', value: '45', color: 'bg-orange-50 border-orange-200', iconColor: 'text-orange-600' },
+    { title: 'Resueltos', value: '88', color: 'bg-green-50 border-green-200', iconColor: 'text-green-600' }
   ];
 
   const recentTickets = [
@@ -520,7 +505,7 @@ const DashboardTab: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800">Admin Dashboard</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Panel de Control del Administrador</h2>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -543,18 +528,18 @@ const DashboardTab: React.FC = () => {
 
       {/* Recent Tickets */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Recent Tickets</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets Recientes</h3>
         
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Company</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empresa</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioridad</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -582,8 +567,8 @@ const DashboardTab: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.created}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-green-600 hover:text-green-900 mr-3">View</button>
-                    <button className="text-green-600 hover:text-green-900">Assign</button>
+                    <button className="text-green-600 hover:text-green-900 mr-3">Ver</button>
+                    <button className="text-green-600 hover:text-green-900">Asignar</button>
                   </td>
                 </tr>
               ))}
@@ -661,7 +646,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="mt-4 text-gray-600">Loading tickets...</p>
+          <p className="mt-4 text-gray-600">Cargando tickets...</p>
         </div>
       </div>
     );
@@ -671,7 +656,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl md:text-2xl font-bold text-gray-800">Support Tickets Management</h2>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">Gestión de Tickets de Soporte</h2>
           <p className="text-sm text-gray-600 mt-1">Arrastra los tickets entre columnas para cambiar su estado</p>
         </div>
       </div>
@@ -760,11 +745,11 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Company ID</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Empresa</label>
                     <p className="text-sm text-gray-900 font-mono">{selectedTicket.company_id}</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">User ID</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Usuario</label>
                     <p className="text-sm text-gray-900 font-mono">{selectedTicket.requested_by_user_id}</p>
                   </div>
                   <div>
@@ -900,8 +885,10 @@ const EmployeesTab: React.FC = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Active':
+      case 'Activo':
         return 'bg-green-100 text-green-800';
       case 'Inactive':
+      case 'Inactivo':
         return 'bg-red-100 text-red-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -911,12 +898,16 @@ const EmployeesTab: React.FC = () => {
   const getDepartmentColor = (department: string) => {
     switch (department) {
       case 'Engineering':
+      case 'Ingeniería':
         return 'bg-blue-100 text-blue-800';
       case 'Design':
+      case 'Diseño':
         return 'bg-purple-100 text-purple-800';
       case 'Management':
+      case 'Gerencia':
         return 'bg-yellow-100 text-yellow-800';
       case 'Analytics':
+      case 'Analítica':
         return 'bg-green-100 text-green-800';
       default:
         return 'bg-gray-100 text-gray-800';
@@ -926,9 +917,9 @@ const EmployeesTab: React.FC = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Employees Management</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Gestión de Empleados</h2>
         <div className="text-sm text-gray-600">
-          Total: {employees.length} employees
+          Total: {employees.length} empleados
         </div>
       </div>
 
@@ -936,39 +927,39 @@ const EmployeesTab: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg p-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Buscar</label>
             <input
               type="text"
-              placeholder="Search by name, email, or position..."
+              placeholder="Buscar por nombre, correo o posición..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Estado</label>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="all">Todos los Estados</option>
+              <option value="active">Activo</option>
+              <option value="inactive">Inactivo</option>
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Department</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Departamento</label>
             <select
               value={departmentFilter}
               onChange={(e) => setDepartmentFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
             >
-              <option value="all">All Departments</option>
-              <option value="engineering">Engineering</option>
-              <option value="design">Design</option>
-              <option value="management">Management</option>
-              <option value="analytics">Analytics</option>
+              <option value="all">Todos los Departamentos</option>
+              <option value="engineering">Ingeniería</option>
+              <option value="design">Diseño</option>
+              <option value="management">Gerencia</option>
+              <option value="analytics">Analítica</option>
             </select>
           </div>
         </div>
@@ -980,13 +971,13 @@ const EmployeesTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Employee</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Position</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Join Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Login</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empleado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Posición</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Departamento</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha de Ingreso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Último Acceso</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -1025,9 +1016,9 @@ const EmployeesTab: React.FC = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{employee.lastLogin}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-green-600 hover:text-green-900">View</button>
-                      <button className="text-blue-600 hover:text-blue-900">Edit</button>
-                      <button className="text-red-600 hover:text-red-900">Deactivate</button>
+                      <button className="text-green-600 hover:text-green-900">Ver</button>
+                      <button className="text-blue-600 hover:text-blue-900">Editar</button>
+                      <button className="text-red-600 hover:text-red-900">Desactivar</button>
                     </div>
                   </td>
                 </tr>
@@ -1038,7 +1029,7 @@ const EmployeesTab: React.FC = () => {
 
         {filteredEmployees.length === 0 && (
           <div className="text-center py-8">
-            <div className="text-gray-500">No employees found matching your criteria.</div>
+            <div className="text-gray-500">No se encontraron empleados que coincidan con los criterios.</div>
           </div>
         )}
       </div>
@@ -1046,13 +1037,13 @@ const EmployeesTab: React.FC = () => {
       {/* Pagination */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-700">
-          Showing {filteredEmployees.length} of {employees.length} employees
+          Mostrando {filteredEmployees.length} de {employees.length} empleados
         </div>
         <div className="flex space-x-2">
-          <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Previous</button>
+          <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Anterior</button>
           <button className="px-3 py-1 text-sm bg-green-600 text-white rounded-lg">1</button>
           <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
-          <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Next</button>
+          <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Siguiente</button>
         </div>
       </div>
     </div>

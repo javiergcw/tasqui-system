@@ -1,0 +1,40 @@
+'use client';
+import React from 'react';
+import Link from 'next/link';
+import { colors } from '@/lib/colors';
+
+export const AdminPostJobHeroSection: React.FC = () => {
+  return (
+    <section 
+      className="relative py-20"
+      style={{ 
+        background: `linear-gradient(135deg, ${colors.ctaGreen} 0%, ${colors.heroGreen} 50%, ${colors.ctaGreen} 100%)`
+      }}
+    >
+      <div 
+        className="absolute inset-0"
+        style={{ backgroundColor: `${colors.ctaGreen}40` }}
+      ></div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+          Publicar Trabajo
+        </h1>
+        
+        {/* Breadcrumb Navigation */}
+        <div className="flex justify-center">
+          <nav className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
+            <Link
+              href="/"
+              className="text-white hover:text-green-300 transition-colors font-medium"
+            >
+              Inicio
+            </Link>
+            <span className="text-white/60">&gt;</span>
+            <span className="text-white font-medium">Publicar Trabajo</span>
+          </nav>
+        </div>
+      </div>
+    </section>
+  );
+};
+

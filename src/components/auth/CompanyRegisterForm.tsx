@@ -31,7 +31,7 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
     contact_name: '',
     contact_email: '',
     contact_phone: '',
-    billing_plan: 'basic', // default
+    billing_plan: '10', // default: 10 trabajos
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -44,19 +44,6 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
     }));
     // Limpiar error al cambiar inputs
     if (error) setError(null);
-  };
-
-  const getMaxOpenJobs = (plan: string): number => {
-    switch (plan) {
-      case 'basic':
-        return 10;
-      case 'premium':
-        return 50;
-      case 'enterprise':
-        return 999; // Ilimitado
-      default:
-        return 10;
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -226,20 +213,20 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
 
                   <div>
                     <label htmlFor="billing_plan" className="block text-sm font-bold text-gray-700 mb-2">
-                      Plan de Facturación
+                      ¿Cuántos trabajos quieres crear? *
                     </label>
-                    <select
+                    <input
                       id="billing_plan"
                       name="billing_plan"
+                      type="number"
+                      required
+                      min="1"
                       value={formData.billing_plan}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
                       style={{ color: '#000000' }}
-                    >
-                      <option value="basic">Básico (10 trabajos)</option>
-                      <option value="premium">Premium (50 trabajos)</option>
-                      <option value="enterprise">Enterprise (Ilimitado)</option>
-                    </select>
+                      placeholder="Ej: 10"
+                    />
                   </div>
                 </div>
               </div>

@@ -2,8 +2,8 @@
 import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
-import { ApplicantsHeroSection } from '@/components/employer/ApplicantsHeroSection';
-import { ApplicantsSection } from '@/components/employer/ApplicantsSection';
+import { AdminApplicantsHeroSection } from '@/components/admin/AdminApplicantsHeroSection';
+import { AdminApplicantsSection } from '@/components/admin/AdminApplicantsSection';
 import { colorClasses } from '@/lib/colors';
 
 export default function AdminApplicantsPage() {
@@ -11,8 +11,8 @@ export default function AdminApplicantsPage() {
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
       <main>
-        <ApplicantsHeroSection />
-        <ApplicantsSection />
+        <AdminApplicantsHeroSection />
+        <AdminApplicantsSection />
       </main>
       <Footer />
       <CopyrightSection />

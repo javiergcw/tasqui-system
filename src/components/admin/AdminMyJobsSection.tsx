@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { MyJobCard } from './MyJobCard';
-import { MyJobsFilter } from './MyJobsFilter';
+import { MyJobCard } from '../employer/MyJobCard';
+import { MyJobsFilter } from '../employer/MyJobsFilter';
 import { colorClasses, colors } from '@/lib/colors';
 
 interface FilterData {
@@ -13,7 +13,24 @@ interface FilterData {
   date: string;
 }
 
-export const MyJobsSection: React.FC = () => {
+type JobStatus = 'Active' | 'Paused' | 'Closed';
+
+interface Job {
+  id: string;
+  companyInitial: string;
+  jobTitle: string;
+  jobCategory: string;
+  salary: string;
+  location: string;
+  postedTime: string;
+  jobType: string;
+  status: JobStatus;
+  city: string;
+  modality: string;
+  postedDate: Date;
+}
+
+export const AdminMyJobsSection: React.FC = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<FilterData>({
@@ -24,7 +41,7 @@ export const MyJobsSection: React.FC = () => {
   });
   const jobsPerPage = 4;
   
-  const jobs = useMemo(() => [
+  const initialJobs: Job[] = [
     {
       id: "1",
       companyInitial: "V",
@@ -137,11 +154,43 @@ export const MyJobsSection: React.FC = () => {
       modality: "full-time",
       postedDate: new Date('2024-01-18')
     }
-  ], []);
+  ];
+
+  const [jobs, setJobs] = useState<Job[]>(initialJobs);
 
   const handleView = (jobId: string) => {
     console.log('View job:', jobId);
-    router.push(`/company/view-job/${jobId}`);
+    router.push(`/admin/view-job/${jobId}`);
+  };
+
+  const handleEdit = (jobId: string) => {
+    console.log('Edit job:', jobId);
+    router.push(`/admin/edit-job/${jobId}`);
+  };
+
+  const handleChangeStatus = (jobId: string, currentStatus: string) => {
+    setJobs(prevJobs => 
+      prevJobs.map(job => {
+        if (job.id === jobId) {
+          // Determinar el nuevo estado basado en el estado actual
+          let newStatus: JobStatus;
+          if (currentStatus === 'Active') {
+            newStatus = 'Paused';
+          } else if (currentStatus === 'Paused') {
+            newStatus = 'Active';
+          } else {
+            // Si está Closed, lo activamos
+            newStatus = 'Active';
+          }
+          
+          return {
+            ...job,
+            status: newStatus
+          };
+        }
+        return job;
+      })
+    );
   };
 
   const handleFilterChange = (newFilters: FilterData) => {
@@ -214,10 +263,10 @@ export const MyJobsSection: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-16">
           <h3 className="text-2xl md:text-4xl font-bold text-slate-800 mb-4 md:mb-6">
-            Mis Trabajos Publicados
+            Trabajos Administrados
           </h3>
           <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto px-4">
-            Gestiona y rastrea todas tus publicaciones de trabajos. Visualiza aplicaciones, edita detalles o cambia el estado de los trabajos.
+            Gestiona y supervisa todas las publicaciones de trabajos. Visualiza y administra los trabajos publicados en la plataforma.
           </p>
         </div>
         
@@ -240,6 +289,8 @@ export const MyJobsSection: React.FC = () => {
                 jobType={job.jobType}
                 status={job.status}
                 onView={handleView}
+                onEdit={handleEdit}
+                onChangeStatus={handleChangeStatus}
               />
             ))
           ) : (
@@ -371,3 +422,4 @@ export const MyJobsSection: React.FC = () => {
     </section>
   );
 };
+

@@ -69,7 +69,7 @@ export default function LoginPage() {
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
       <main>
-        <LoginHeroSection />
+ {/*        <LoginHeroSection /> */}
         <LoginForm onSubmit={handleSubmit} isLoading={isLoading} />
       </main>
       <Footer />

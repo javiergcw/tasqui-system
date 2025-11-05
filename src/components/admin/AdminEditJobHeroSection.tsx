@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
-export function EmployerJobDetailHeroSection() {
+export function AdminEditJobHeroSection() {
   return (
     <section 
       className="relative py-20 px-4"
@@ -13,7 +13,7 @@ export function EmployerJobDetailHeroSection() {
       <div className="relative max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Job Details
+            Editar Trabajo
           </h1>
           
           {/* Breadcrumb */}
@@ -22,20 +22,21 @@ export function EmployerJobDetailHeroSection() {
               href="/" 
               className="hover:text-white transition-colors duration-200"
             >
-              Home
+              Inicio
             </Link>
             <span className="text-gray-400">&gt;</span>
             <Link 
-              href="/employer/my-jobs" 
+              href="/admin/my-jobs" 
               className="hover:text-white transition-colors duration-200"
             >
-              My Jobs
+              Mis Trabajos
             </Link>
             <span className="text-gray-400">&gt;</span>
-            <span className="text-white">Job Details</span>
+            <span className="text-white">Editar Trabajo</span>
           </nav>
         </div>
       </div>
     </section>
   );
 }
+

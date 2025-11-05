@@ -36,7 +36,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
   };
 
   return (
-    <nav className={`flex items-center space-x-8 ${className}`}>
+    <nav className={`flex items-center space-x-6 ${className}`}>
       {items.map((item) => (
         <div 
           key={item.label} 
@@ -47,7 +47,7 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
           <a
             href={item.href}
              className={`
-               flex items-center space-x-1 px-3 py-2 text-base font-medium transition-colors duration-200
+               flex items-center space-x-1 px-3 py-2 text-base font-medium transition-colors duration-200 whitespace-nowrap
                ${activeItem === item.label 
                  ? '' 
                  : 'text-white hover:text-slate-100'

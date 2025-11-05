@@ -1,4 +1,4 @@
-import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, EmployerEditJobHeroSection, EmployerEditJobFormSection } from '@/components';
+import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminEditJobHeroSection, AdminEditJobFormSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 
 interface AdminEditJobPageProps {
@@ -16,10 +16,10 @@ export default function AdminEditJobPage({ params }: AdminEditJobPageProps) {
       <Sidebar />
       
       {/* Hero Section */}
-      <EmployerEditJobHeroSection />
+      <AdminEditJobHeroSection />
 
       {/* Job Form Section - Pre-populated with existing data */}
-      <EmployerEditJobFormSection />
+      <AdminEditJobFormSection />
 
       <Footer />
       <CopyrightSection />

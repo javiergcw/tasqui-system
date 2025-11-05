@@ -1,4 +1,4 @@
-import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, MyJobsHeroSection, MyJobsSection } from '@/components';
+import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, MyJobsHeroSection, AdminMyJobsSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 
 export default function AdminMyJobsPage() {
@@ -9,8 +9,8 @@ export default function AdminMyJobsPage() {
       {/* Hero Section */}
       <MyJobsHeroSection />
 
-      {/* My Jobs Section */}
-      <MyJobsSection />
+      {/* Admin My Jobs Section */}
+      <AdminMyJobsSection />
     
       <Footer />
       <CopyrightSection />

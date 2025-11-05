@@ -2,8 +2,8 @@
 import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
-import { ApplicantDetailHeroSection } from '@/components/employer/ApplicantDetailHeroSection';
-import { ApplicantDetailMainSection } from '@/components/employer/ApplicantDetailMainSection';
+import { AdminApplicantDetailHeroSection } from '@/components/admin/AdminApplicantDetailHeroSection';
+import { AdminApplicantDetailMainSection } from '@/components/admin/AdminApplicantDetailMainSection';
 import { colorClasses } from '@/lib/colors';
 
 interface AdminApplicantDetailPageProps {
@@ -17,8 +17,8 @@ export default function AdminApplicantDetailPage({ params }: AdminApplicantDetai
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
       <main>
-        <ApplicantDetailHeroSection />
-        <ApplicantDetailMainSection applicantId={params.id} />
+        <AdminApplicantDetailHeroSection />
+        <AdminApplicantDetailMainSection applicantId={params.id} />
       </main>
       <Footer />
       <CopyrightSection />

@@ -14,7 +14,7 @@ export const CompaniesHeroSection: React.FC = () => {
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className={`text-5xl md:text-6xl font-bold ${colorClasses.sidebar.text} mb-6`}>
-          Company
+          Empresas
         </h1>
 
         {/* Breadcrumb Navigation */}
@@ -24,10 +24,10 @@ export const CompaniesHeroSection: React.FC = () => {
               href="/"
               className={`${colorClasses.sidebar.text} hover:${colorClasses.text.blue300} transition-colors font-medium`}
             >
-              Home
+              Inicio
             </Link>
             <span className={`${colorClasses.sidebar.text}/60`}>&gt;</span>
-            <span className={`${colorClasses.sidebar.text} font-medium`}>Company</span>
+            <span className={`${colorClasses.sidebar.text} font-medium`}>Empresas</span>
           </nav>
         </div>
       </div>

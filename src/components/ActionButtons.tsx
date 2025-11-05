@@ -108,15 +108,15 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ className = '' }) 
       {/* Sign Up Link */}
       <Link
         href="/register"
-        className="text-white hover:text-slate-100 font-medium text-sm transition-colors duration-200"
+        className="text-white hover:text-slate-100 font-medium text-sm transition-colors duration-200 border border-white px-4 py-2 rounded-lg whitespace-nowrap"
       >
-        Sign Up
+        Registrarse
       </Link>
       
       {/* Sign In Button */}
       <Link href="/login">
         <button 
-          className="text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors duration-200"
+          className="text-white px-6 py-2 rounded-lg font-medium text-sm transition-colors duration-200 whitespace-nowrap"
           style={{ backgroundColor: colors.mainGreen }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = colors.hoverGreen;
@@ -125,7 +125,7 @@ export const ActionButtons: React.FC<ActionButtonsProps> = ({ className = '' }) 
             e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
-          Sign In
+          Iniciar Sesión
         </button>
       </Link>
     </div>
