@@ -87,20 +87,17 @@ export default function RegisterPage() {
     setIsLoading(true);
     
     try {
-      // Convertir el número de trabajos a número entero
-      const maxOpenJobs = parseInt(formData.billing_plan, 10) || 10;
-
       // Mapear los datos del formulario al formato de la API
       const requestData: CompanyRegisterRequest = {
         email: formData.email,
         password: formData.password,
         role: 'COMPANY' as const,
-        company_legal_name: formData.legal_name,
-        company_contact_name: formData.contact_name,
-        company_contact_email: formData.contact_email,
-        company_contact_phone: formData.contact_phone,
-        company_billing_plan: formData.billing_plan,
-        company_max_open_jobs: maxOpenJobs,
+        company_legal_name: formData.company_legal_name,
+        company_contact_name: formData.company_contact_name,
+        company_contact_email: formData.company_contact_email,
+        company_contact_phone: formData.company_contact_phone,
+        company_billing_plan: formData.company_billing_plan,
+        company_max_open_jobs: formData.company_max_open_jobs,
       };
 
       await companyRegisterUseCase.execute(requestData);

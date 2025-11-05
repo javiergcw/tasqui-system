@@ -7,11 +7,12 @@ interface CompanyFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  legal_name: string;
-  contact_name: string;
-  contact_email: string;
-  contact_phone: string;
-  billing_plan: string;
+  company_legal_name: string;
+  company_contact_name: string;
+  company_contact_email: string;
+  company_contact_phone: string;
+  company_billing_plan: string;
+  company_max_open_jobs: number;
 }
 
 interface CompanyRegisterFormProps {
@@ -27,11 +28,12 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
     confirmPassword: '',
     
     // Company profile data
-    legal_name: '',
-    contact_name: '',
-    contact_email: '',
-    contact_phone: '',
-    billing_plan: '10', // default: 10 trabajos
+    company_legal_name: '',
+    company_contact_name: '',
+    company_contact_email: '',
+    company_contact_phone: '',
+    company_billing_plan: 'free', // default: free
+    company_max_open_jobs: 10, // default: 10 trabajos
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -145,15 +147,15 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
               
               <div className="space-y-6">
                 <div>
-                  <label htmlFor="legal_name" className="block text-sm font-bold text-gray-700 mb-2">
+                  <label htmlFor="company_legal_name" className="block text-sm font-bold text-gray-700 mb-2">
                     Nombre Legal de la Empresa *
                   </label>
                   <input
-                    id="legal_name"
-                    name="legal_name"
+                    id="company_legal_name"
+                    name="company_legal_name"
                     type="text"
                     required
-                    value={formData.legal_name}
+                    value={formData.company_legal_name}
                     onChange={handleInputChange}
                     className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
                     placeholder="Nombre legal de la empresa"
@@ -162,14 +164,15 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="contact_name" className="block text-sm font-bold text-gray-700 mb-2">
-                      Nombre del Contacto
+                    <label htmlFor="company_contact_name" className="block text-sm font-bold text-gray-700 mb-2">
+                      Nombre del Contacto *
                     </label>
                     <input
-                      id="contact_name"
-                      name="contact_name"
+                      id="company_contact_name"
+                      name="company_contact_name"
                       type="text"
-                      value={formData.contact_name}
+                      required
+                      value={formData.company_contact_name}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
                       style={{ color: '#000000' }}
@@ -178,14 +181,15 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
                   </div>
 
                   <div>
-                    <label htmlFor="contact_email" className="block text-sm font-bold text-gray-700 mb-2">
-                      Email de Contacto
+                    <label htmlFor="company_contact_email" className="block text-sm font-bold text-gray-700 mb-2">
+                      Email de Contacto *
                     </label>
                     <input
-                      id="contact_email"
-                      name="contact_email"
+                      id="company_contact_email"
+                      name="company_contact_email"
                       type="email"
-                      value={formData.contact_email}
+                      required
+                      value={formData.company_contact_email}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
                       style={{ color: '#000000' }}
@@ -196,14 +200,15 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="contact_phone" className="block text-sm font-bold text-gray-700 mb-2">
-                      Teléfono de Contacto
+                    <label htmlFor="company_contact_phone" className="block text-sm font-bold text-gray-700 mb-2">
+                      Teléfono de Contacto *
                     </label>
                     <input
-                      id="contact_phone"
-                      name="contact_phone"
+                      id="company_contact_phone"
+                      name="company_contact_phone"
                       type="tel"
-                      value={formData.contact_phone}
+                      required
+                      value={formData.company_contact_phone}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
                       style={{ color: '#000000' }}
@@ -212,22 +217,48 @@ export const CompanyRegisterForm: React.FC<CompanyRegisterFormProps> = ({ onSubm
                   </div>
 
                   <div>
-                    <label htmlFor="billing_plan" className="block text-sm font-bold text-gray-700 mb-2">
-                      ¿Cuántos trabajos quieres crear? *
+                    <label htmlFor="company_billing_plan" className="block text-sm font-bold text-gray-700 mb-2">
+                      Plan de Facturación *
                     </label>
-                    <input
-                      id="billing_plan"
-                      name="billing_plan"
-                      type="number"
+                    <select
+                      id="company_billing_plan"
+                      name="company_billing_plan"
                       required
-                      min="1"
-                      value={formData.billing_plan}
+                      value={formData.company_billing_plan}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black"
                       style={{ color: '#000000' }}
-                      placeholder="Ej: 10"
-                    />
+                    >
+                      <option value="free">Gratis</option>
+                      <option value="basic">Básico</option>
+                      <option value="premium">Premium</option>
+                    </select>
                   </div>
+                </div>
+
+                <div>
+                  <label htmlFor="company_max_open_jobs" className="block text-sm font-bold text-gray-700 mb-2">
+                    Número Máximo de Trabajos Abiertos *
+                  </label>
+                  <input
+                    id="company_max_open_jobs"
+                    name="company_max_open_jobs"
+                    type="number"
+                    required
+                    min="1"
+                    value={formData.company_max_open_jobs}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10) || 0;
+                      setFormData(prev => ({
+                        ...prev,
+                        company_max_open_jobs: value
+                      }));
+                      if (error) setError(null);
+                    }}
+                    className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-green-600 focus:border-transparent transition-colors bg-white text-black placeholder-gray-500"
+                    style={{ color: '#000000' }}
+                    placeholder="Ej: 10"
+                  />
                 </div>
               </div>
             </div>
