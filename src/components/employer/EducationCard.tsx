@@ -19,7 +19,7 @@ export const EducationCard = () => {
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-xl font-bold text-gray-900 mb-4">Education</h3>
+      <h3 className="text-xl font-bold text-gray-900 mb-4">Educación</h3>
       <div className="space-y-4">
         {education.map((edu, index) => (
           <div key={index}>

@@ -6,7 +6,7 @@ import { colorClasses } from '@/lib/colors';
 export const EmployerPostedByCard: React.FC = () => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
-      <h3 className={`text-lg font-bold ${colorClasses.text.slate800} mb-4 text-center`}>Posted By</h3>
+      <h3 className={`text-lg font-bold ${colorClasses.text.slate800} mb-4 text-center`}>Publicado Por</h3>
       <div className="text-center">
         <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200">
           <Image 
@@ -18,7 +18,7 @@ export const EmployerPostedByCard: React.FC = () => {
           />
         </div>
         <h4 className={`text-lg font-bold ${colorClasses.text.slate800} mb-1`}>John Doe</h4>
-        <p className={`${colorClasses.text.gray600} text-sm`}>CEO of Tourt Design LTD</p>
+        <p className={`${colorClasses.text.gray600} text-sm`}>CEO de Tourt Design LTD</p>
       </div>
     </div>
   );

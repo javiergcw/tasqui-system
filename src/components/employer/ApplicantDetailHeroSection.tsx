@@ -15,9 +15,9 @@ export const ApplicantDetailHeroSection = () => {
             Detalle del Candidato
           </h1>
           <nav className="text-gray-300">
-            <Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link>
+            <Link href="/" className="text-gray-400 hover:text-white transition-colors">Inicio</Link>
             <span className="mx-2">›</span>
-            <Link href="/company/applicants" className="text-gray-400 hover:text-white transition-colors">Applicants</Link>
+            <Link href="/company/applicants" className="text-gray-400 hover:text-white transition-colors">Candidatos</Link>
             <span className="mx-2">›</span>
             <span className="text-white">Detalle del Candidato</span>
           </nav>

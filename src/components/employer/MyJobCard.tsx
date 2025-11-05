@@ -71,7 +71,7 @@ export const MyJobCard: React.FC<MyJobCardProps> = ({
           <h3 className={`text-xl font-bold ${colorClasses.text.slate800} mb-1`}>
             {jobTitle}
           </h3>
-          <p className={`${colorClasses.text.red500} font-medium mb-2`}>
+          <p className="font-medium mb-2" style={{ color: colors.sidebarGreen }}>
             {jobCategory}
           </p>
 

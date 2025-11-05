@@ -4,11 +4,16 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
 import type { CompanyProfile } from '@/models';
+import type { Ticket } from '@/models/company/ticket.model';
+
+interface LocalTicket extends Ticket {
+  assigned_admin: string | null;
+}
 
 interface EmployerProfileMainSectionProps {
   profile?: CompanyProfile | null;
   isLoading?: boolean;
-  onCreateTicket?: (formData: { title: string; description: string }) => Promise<unknown>;
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<Ticket>;
   isCreatingTicket?: boolean;
 }
 
@@ -37,13 +42,13 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
 
   return (
     <section className={`py-16 ${colorClasses.background.gray50}`}>
-      <div className="max-w-full mx-auto px-1 sm:px-2 lg:px-3">
-        <div className="grid lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-          {/* Columna izquierda - Perfil y navegación */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-4 md:gap-6 lg:gap-8">
+          {/* Perfil y navegación */}
+          <div className="w-full">
+            <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
               {/* Perfil de la empresa */}
-              <div className="text-center mb-8">
+              <div className="text-center mb-6">
                 <div className="w-24 h-24 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center overflow-hidden">
                   {profile ? (
                     <div className="w-full h-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
@@ -69,135 +74,129 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
                 </p>
               </div>
 
-              {/* Menú de navegación */}
-              <nav className="w-full">
-                {/* Company Data */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'company-data'
+              {/* Menú de navegación horizontal */}
+              <nav className="w-full overflow-x-auto flex justify-center">
+                <div className="flex gap-1 sm:gap-2 md:gap-4 w-full sm:w-auto justify-center">
+                  {/* Company Data */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'company-data'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'company-data' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'company-data') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'company-data') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('company-data')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'company-data' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                      }`}
+                    style={activeTab === 'company-data' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'company-data') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'company-data') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('company-data')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clipRule="evenodd" />
                     </svg>
-                    Company Data
-                  </div>
-                </div>
+                    <span>Datos de la Empresa</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Dashboard */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'dashboard'
+                  {/* Dashboard */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'dashboard'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'dashboard' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'dashboard') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'dashboard') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('dashboard')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      }`}
+                    style={activeTab === 'dashboard' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'dashboard') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'dashboard') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('dashboard')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                     </svg>
-                    Dashboard
-                  </div>
-                </div>
+                    <span>Panel de Control</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Kanban */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'kanban'
+                  {/* Kanban */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'kanban'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'kanban' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'kanban') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'kanban') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('kanban')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'kanban' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      }`}
+                    style={activeTab === 'kanban' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'kanban') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'kanban') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('kanban')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                     </svg>
-                    Applications
-                  </div>
-                </div>
+                    <span className="inline sm:hidden md:inline">Aplicaciones</span>
+                    <span className="hidden sm:inline md:hidden">Apps</span>
+                  </button>
 
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
-
-                {/* Tickets */}
-                <div
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${activeTab === 'tickets'
+                  {/* Tickets */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'tickets'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
-                    }`}
-                  style={activeTab === 'tickets' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'tickets') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'tickets') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('tickets')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'tickets' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      }`}
+                    style={activeTab === 'tickets' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'tickets') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'tickets') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('tickets')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Support Tickets
-                  </div>
+                    <span className="inline sm:hidden md:inline">Tickets de Soporte</span>
+                    <span className="hidden sm:inline md:hidden">Tickets</span>
+                  </button>
                 </div>
               </nav>
             </div>
           </div>
 
-          {/* Columna derecha - Contenido dinámico */}
-          <div className="lg:col-span-3">
+          {/* Contenido dinámico */}
+          <div className="w-full">
             <div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
               {renderTabContent()}
             </div>
@@ -217,32 +216,20 @@ interface CompanyDataFormProps {
 const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = false }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    companyName: '',
-    contactName: '',
-    industry: '',
-    companySize: '',
-    foundedYear: '',
-    website: '',
-    description: '',
-    address: '',
-    phone: '',
-    email: ''
+    legal_name: '',
+    contact_name: '',
+    contact_email: '',
+    contact_phone: ''
   });
 
   // Cargar datos del perfil cuando estén disponibles
   React.useEffect(() => {
     if (profile) {
       setFormData({
-        companyName: profile.legal_name || '',
-        contactName: profile.contact_name || '',
-        industry: 'N/A', // No disponible en el backend
-        companySize: 'N/A', // No disponible en el backend
-        foundedYear: 'N/A', // No disponible en el backend
-        website: 'N/A', // No disponible en el backend
-        description: 'N/A', // No disponible en el backend
-        address: 'N/A', // No disponible en el backend
-        phone: profile.contact_phone || '',
-        email: profile.contact_email || ''
+        legal_name: profile.legal_name || '',
+        contact_name: profile.contact_name || '',
+        contact_email: profile.contact_email || '',
+        contact_phone: profile.contact_phone || ''
       });
     }
   }, [profile]);
@@ -266,7 +253,7 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-          <p className="mt-4 text-gray-600">Loading company information...</p>
+          <p className="mt-4 text-gray-600">Cargando información de la empresa...</p>
         </div>
       </div>
     );
@@ -275,7 +262,7 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
   return (
     <div>
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800">Company Information</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Información de la Empresa</h2>
         <button
           onClick={() => setIsEditing(!isEditing)}
           className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white"
@@ -289,7 +276,7 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
             e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainGreen;
           }}
         >
-          {isEditing ? 'Save Changes' : 'Edit Information'}
+          {isEditing ? 'Guardar Cambios' : 'Editar Información'}
         </button>
       </div>
 
@@ -298,12 +285,12 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Company Name
+              Nombre de la Empresa
             </label>
             <input
               type="text"
-              name="companyName"
-              value={formData.companyName}
+              name="legal_name"
+              value={formData.legal_name}
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
@@ -315,12 +302,12 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contact Name
+              Nombre de Contacto
             </label>
             <input
               type="text"
-              name="contactName"
-              value={formData.contactName}
+              name="contact_name"
+              value={formData.contact_name}
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
@@ -332,133 +319,12 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Industry
-            </label>
-            <select
-              name="industry"
-              value={formData.industry}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            >
-              <option value="Technology">Technology</option>
-              <option value="Healthcare">Healthcare</option>
-              <option value="Finance">Finance</option>
-              <option value="Education">Education</option>
-              <option value="Manufacturing">Manufacturing</option>
-              <option value="Retail">Retail</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Company Size
-            </label>
-            <select
-              name="companySize"
-              value={formData.companySize}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            >
-              <option value="1-10 employees">1-10 employees</option>
-              <option value="11-50 employees">11-50 employees</option>
-              <option value="50-100 employees">50-100 employees</option>
-              <option value="100-500 employees">100-500 employees</option>
-              <option value="500+ employees">500+ employees</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Founded Year
-            </label>
-            <input
-              type="number"
-              name="foundedYear"
-              value={formData.foundedYear}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Website
-            </label>
-            <input
-              type="url"
-              name="website"
-              value={formData.website}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Contact Email
+              Correo Electrónico de Contacto
             </label>
             <input
               type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              disabled={!isEditing}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
-              style={{
-                '--tw-ring-color': colors.mainGreen
-              } as React.CSSProperties}
-            />
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-dashed border-gray-300 my-8"></div>
-
-        {/* Company Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Company Description
-          </label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            disabled={!isEditing}
-            rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-          />
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-dashed border-gray-300 my-8"></div>
-
-        {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Address
-            </label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
+              name="contact_email"
+              value={formData.contact_email}
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
@@ -470,12 +336,12 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Phone Number
+              Número de Teléfono
             </label>
             <input
               type="tel"
-              name="phone"
-              value={formData.phone}
+              name="contact_phone"
+              value={formData.contact_phone}
               onChange={handleInputChange}
               disabled={!isEditing}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
@@ -485,6 +351,50 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
             />
           </div>
         </div>
+
+        {/* Divider */}
+        <div className="border-t border-dashed border-gray-300 my-8"></div>
+
+        {/* Read-only Information */}
+        {profile && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Plan de Facturación
+              </label>
+              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                {profile.billing_plan || 'N/A'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Máximo de Trabajos Abiertos
+              </label>
+              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                {profile.max_open_jobs || 'N/A'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Fecha de Creación
+              </label>
+              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                {profile.created_at ? new Date(profile.created_at).toLocaleDateString('es-ES') : 'N/A'}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Última Actualización
+              </label>
+              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                {profile.updated_at ? new Date(profile.updated_at).toLocaleDateString('es-ES') : 'N/A'}
+              </div>
+            </div>
+          </div>
+        )}
 
         {isEditing && (
           <div className="flex justify-end space-x-4 pt-6">
@@ -493,7 +403,7 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
               onClick={() => setIsEditing(false)}
               className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
             >
-              Cancel
+              Cancelar
             </button>
             <button
               type="submit"
@@ -506,7 +416,7 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
                 e.currentTarget.style.backgroundColor = colors.mainGreen;
               }}
             >
-              Save Changes
+              Guardar Cambios
             </button>
           </div>
         )}
@@ -544,6 +454,14 @@ const DashboardTab: React.FC = () => {
     { id: '4', name: 'Emily Davis', job: 'UI/UX Designer', status: 'Pending', date: '2024-01-17' }
   ];
 
+  // Mock tickets data para el conteo
+  const tickets = [
+    { id: '1', status: 'OPEN' },
+    { id: '2', status: 'IN_PROGRESS' },
+    { id: '3', status: 'CLOSED' },
+    { id: '4', status: 'OPEN' }
+  ];
+
   const filteredJobs = jobs.filter(job =>
     selectedJob === 'all' || job.id === selectedJob
   );
@@ -555,7 +473,7 @@ const DashboardTab: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800">Company Dashboard</h2>
+      <h2 className="text-2xl font-bold text-gray-800">Panel de Control de la Empresa</h2>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -567,7 +485,7 @@ const DashboardTab: React.FC = () => {
               </svg>
             </div>
             <div className="ml-3 md:ml-4">
-              <p className="text-xs md:text-sm font-medium text-blue-600">Total Jobs</p>
+              <p className="text-xs md:text-sm font-medium text-blue-600">Total de Trabajos</p>
               <p className="text-lg md:text-2xl font-bold text-blue-900">{jobs.length}</p>
             </div>
           </div>
@@ -581,7 +499,7 @@ const DashboardTab: React.FC = () => {
               </svg>
             </div>
             <div className="ml-3 md:ml-4">
-              <p className="text-xs md:text-sm font-medium text-green-600">Total Applications</p>
+              <p className="text-xs md:text-sm font-medium text-green-600">Total de Aplicaciones</p>
               <p className="text-lg md:text-2xl font-bold text-green-900">{applications.length}</p>
             </div>
           </div>
@@ -591,13 +509,12 @@ const DashboardTab: React.FC = () => {
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <svg className="w-5 h-5 md:w-6 md:h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             </div>
             <div className="ml-3 md:ml-4">
-              <p className="text-xs md:text-sm font-medium text-yellow-600">Total Views</p>
-              <p className="text-lg md:text-2xl font-bold text-yellow-900">{jobs.reduce((sum, job) => sum + job.views, 0)}</p>
+              <p className="text-xs md:text-sm font-medium text-yellow-600">Total de Tickets</p>
+              <p className="text-lg md:text-2xl font-bold text-yellow-900">{tickets.length}</p>
             </div>
           </div>
         </div>
@@ -610,7 +527,7 @@ const DashboardTab: React.FC = () => {
               </svg>
             </div>
             <div className="ml-3 md:ml-4">
-              <p className="text-xs md:text-sm font-medium text-purple-600">Active Jobs</p>
+              <p className="text-xs md:text-sm font-medium text-purple-600">Trabajos Activos</p>
               <p className="text-lg md:text-2xl font-bold text-purple-900">{jobs.filter(job => job.status === 'Active').length}</p>
             </div>
           </div>
@@ -619,7 +536,7 @@ const DashboardTab: React.FC = () => {
 
       {/* Job Metrics */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">Job Metrics</h3>
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Métricas de Trabajos</h3>
 
         {/* Mobile Cards View */}
         <div className="block md:hidden space-y-4">
@@ -636,11 +553,11 @@ const DashboardTab: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-4 mb-3 text-sm">
                 <div>
-                  <span className="text-gray-500">Applications:</span>
+                  <span className="text-gray-500">Aplicaciones:</span>
                   <span className="ml-1 font-medium">{job.applications}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Views:</span>
+                  <span className="text-gray-500">Visualizaciones:</span>
                   <span className="ml-1 font-medium">{job.views}</span>
                 </div>
               </div>
@@ -649,16 +566,16 @@ const DashboardTab: React.FC = () => {
                   onClick={() => handleViewJob(job.id)}
                   className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                 >
-                  View
+                  Ver
                 </button>
                 <button
                   onClick={() => handleEditJob(job.id)}
                   className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                 >
-                  Edit
+                  Editar
                 </button>
                 <button className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200">
-                  {job.status === 'Active' ? 'Pause' : 'Activate'}
+                  {job.status === 'Active' ? 'Pausar' : 'Activar'}
                 </button>
               </div>
             </div>
@@ -670,11 +587,11 @@ const DashboardTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job Title</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Applications</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Views</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Título del Trabajo</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aplicaciones</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Visualizaciones</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -696,16 +613,16 @@ const DashboardTab: React.FC = () => {
                       onClick={() => handleViewJob(job.id)}
                       className="text-green-600 hover:text-green-900 mr-3"
                     >
-                      View
+                      Ver
                     </button>
                     <button
                       onClick={() => handleEditJob(job.id)}
                       className="text-green-600 hover:text-green-900 mr-3"
                     >
-                      Edit
+                      Editar
                     </button>
                     <button className="text-orange-600 hover:text-orange-900">
-                      {job.status === 'Active' ? 'Pause' : 'Activate'}
+                      {job.status === 'Active' ? 'Pausar' : 'Activar'}
                     </button>
                   </td>
                 </tr>
@@ -718,14 +635,14 @@ const DashboardTab: React.FC = () => {
       {/* Applications Section */}
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
         <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4 space-y-4 md:space-y-0">
-          <h3 className="text-lg font-semibold text-gray-800">Applications</h3>
+          <h3 className="text-lg font-semibold text-gray-800">Aplicaciones</h3>
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
             <select
               value={selectedJob}
               onChange={(e) => setSelectedJob(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md text-sm"
             >
-              <option value="all">All Jobs</option>
+              <option value="all">Todos los Trabajos</option>
               {jobs.map(job => (
                 <option key={job.id} value={job.id}>{job.title}</option>
               ))}
@@ -735,11 +652,11 @@ const DashboardTab: React.FC = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-md text-sm"
             >
-              <option value="all">All Status</option>
-              <option value="pending">Pending</option>
-              <option value="reviewed">Reviewed</option>
-              <option value="interviewed">Interviewed</option>
-              <option value="rejected">Rejected</option>
+              <option value="all">Todos los Estados</option>
+              <option value="pending">Pendiente</option>
+              <option value="reviewed">Revisado</option>
+              <option value="interviewed">Entrevistado</option>
+              <option value="rejected">Rechazado</option>
             </select>
           </div>
         </div>
@@ -760,23 +677,23 @@ const DashboardTab: React.FC = () => {
               </div>
               <div className="space-y-2 mb-3 text-sm">
                 <div>
-                  <span className="text-gray-500">Job:</span>
+                  <span className="text-gray-500">Trabajo:</span>
                   <span className="ml-1 font-medium">{app.job}</span>
                 </div>
                 <div>
-                  <span className="text-gray-500">Date:</span>
+                  <span className="text-gray-500">Fecha:</span>
                   <span className="ml-1 font-medium">{app.date}</span>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2">
                 <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
-                  View CV
+                  Ver CV
                 </button>
                 <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
-                  Schedule
+                  Programar
                 </button>
                 <button className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200">
-                  Reject
+                  Rechazar
                 </button>
               </div>
             </div>
@@ -788,11 +705,11 @@ const DashboardTab: React.FC = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Job</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trabajo</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -811,9 +728,9 @@ const DashboardTab: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{app.date}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-green-600 hover:text-green-900 mr-3">View CV</button>
-                    <button className="text-green-600 hover:text-green-900 mr-3">Schedule</button>
-                    <button className="text-green-600 hover:text-green-800">Reject</button>
+                    <button className="text-green-600 hover:text-green-900 mr-3">Ver CV</button>
+                    <button className="text-green-600 hover:text-green-900 mr-3">Programar</button>
+                    <button className="text-green-600 hover:text-green-800">Rechazar</button>
                   </td>
                 </tr>
               ))}
@@ -827,7 +744,7 @@ const DashboardTab: React.FC = () => {
 
 // Kanban Tab Component
 const KanbanTab: React.FC = () => {
-  const [applications, setApplications] = useState([
+  const [applications] = useState([
     { id: '1', name: 'John Smith', job: 'Frontend Developer', status: 'pending', date: '2024-01-20', email: 'john@email.com' },
     { id: '2', name: 'Sarah Johnson', job: 'Frontend Developer', status: 'reviewed', date: '2024-01-19', email: 'sarah@email.com' },
     { id: '3', name: 'Mike Wilson', job: 'Backend Developer', status: 'hired', date: '2024-01-18', email: 'mike@email.com' },
@@ -845,36 +762,54 @@ const KanbanTab: React.FC = () => {
     { id: '15', name: 'Fernando Castro', job: 'UI/UX Designer', status: 'hired', date: '2024-01-06', email: 'fernando@email.com' }
   ]);
 
+  const [selectedApplication, setSelectedApplication] = useState<typeof applications[0] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const columns = [
-    { id: 'pending', title: 'Pending', color: 'bg-yellow-100 border-yellow-300' },
-    { id: 'reviewed', title: 'Reviewed', color: 'bg-blue-100 border-blue-300' },
-    { id: 'hired', title: 'Hired', color: 'bg-green-100 border-green-300' }
+    { id: 'pending', title: 'Pendiente', color: 'bg-yellow-100 border-yellow-300' },
+    { id: 'reviewed', title: 'Revisado', color: 'bg-blue-100 border-blue-300' },
+    { id: 'hired', title: 'Contratado', color: 'bg-green-100 border-green-300' }
   ];
-
-  const handleDragStart = (e: React.DragEvent, applicationId: string) => {
-    e.dataTransfer.setData('applicationId', applicationId);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e: React.DragEvent, newStatus: string) => {
-    e.preventDefault();
-    const applicationId = e.dataTransfer.getData('applicationId');
-
-    setApplications(prev => prev.map(app =>
-      app.id === applicationId ? { ...app, status: newStatus } : app
-    ));
-  };
 
   const getApplicationsByStatus = (status: string) => {
     return applications.filter(app => app.status === status);
   };
 
+  const handleCardClick = (application: typeof applications[0]) => {
+    setSelectedApplication(application);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => setSelectedApplication(null), 300);
+  };
+
+  const getStatusLabel = (status: string) => {
+    const statusMap: Record<string, string> = {
+      'pending': 'Pendiente',
+      'reviewed': 'Revisado',
+      'hired': 'Contratado'
+    };
+    return statusMap[status] || status;
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'reviewed':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'hired':
+        return 'bg-green-100 text-green-800 border-green-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
   return (
     <div className="space-y-6">
-      <h2 className="text-xl md:text-2xl font-bold text-gray-800">Application Management</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-gray-800">Gestión de Aplicaciones</h2>
 
       {/* Kanban Board */}
       <div className="w-full overflow-x-auto">
@@ -883,8 +818,6 @@ const KanbanTab: React.FC = () => {
             <div
               key={column.id}
               className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, column.id)}
             >
               <div className="flex items-center justify-between mb-4 flex-shrink-0">
                 <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
@@ -897,9 +830,8 @@ const KanbanTab: React.FC = () => {
                 {getApplicationsByStatus(column.id).map(application => (
                   <div
                     key={application.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, application.id)}
-                    className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 cursor-move hover:shadow-md transition-shadow duration-200 flex-shrink-0"
+                    onClick={() => handleCardClick(application)}
+                    className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 cursor-pointer hover:shadow-md hover:scale-[1.02] transition-all duration-200 active:scale-[0.98]"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-gray-900 text-sm md:text-base">{application.name}</h4>
@@ -911,19 +843,6 @@ const KanbanTab: React.FC = () => {
 
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">{application.date}</span>
-                      <div className="flex space-x-1">
-                        <button className="p-1 text-green-600 hover:bg-green-100 rounded">
-                          <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                          </svg>
-                        </button>
-                        <button className="p-1 text-green-600 hover:bg-green-100 rounded">
-                          <svg className="w-2.5 h-2.5 md:w-3 md:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                        </button>
-                      </div>
                     </div>
                   </div>
                 ))}
@@ -940,55 +859,135 @@ const KanbanTab: React.FC = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <div>
-            <h4 className="text-sm font-medium text-blue-800 mb-1">How to use the Kanban board</h4>
+            <h4 className="text-sm font-medium text-blue-800 mb-1">Vista del tablero Kanban</h4>
             <p className="text-sm text-blue-700">
-              Drag and drop application cards between columns to change their status. Each column represents a different stage in the hiring process.
+              Este tablero muestra las aplicaciones organizadas por estado. Puedes ver todas las aplicaciones en cada etapa del proceso de contratación.
             </p>
           </div>
         </div>
       </div>
+
+      {/* Modal de Detalle con Estilo Apple */}
+      {isModalOpen && selectedApplication && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
+          <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-start mb-6">
+              <h3 className="text-xl font-semibold text-gray-800">Detalle de la Aplicación</h3>
+              <button
+                onClick={handleCloseModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="space-y-6">
+              {/* Application Info */}
+              <div className="bg-gray-50 rounded-lg p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Aplicación</label>
+                    <p className="text-sm text-gray-900 font-mono">#{selectedApplication.id}</p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedApplication.status)}`}>
+                      {getStatusLabel(selectedApplication.status)}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Aplicación</label>
+                    <p className="text-sm text-gray-900">
+                      {new Date(selectedApplication.date).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Posición</label>
+                    <p className="text-sm text-gray-900">{selectedApplication.job}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Application Content */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg">{selectedApplication.name}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Correo Electrónico</label>
+                <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg">{selectedApplication.email}</p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                <button
+                  onClick={handleCloseModal}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 // Tickets Tab Component
 interface TicketsTabProps {
-  onCreateTicket?: (formData: { title: string; description: string }) => Promise<unknown>;
+  onCreateTicket?: (formData: { title: string; description: string }) => Promise<Ticket>;
   isCreatingTicket?: boolean;
 }
 
 const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicket = false }) => {
-  const [tickets, setTickets] = useState([
+  const [tickets, setTickets] = useState<LocalTicket[]>([
     {
       id: '1',
+      user_id: 'user1',
       title: 'Problema con la plataforma',
       description: 'No puedo acceder a mi cuenta de empresa',
       status: 'OPEN',
       created_at: '2024-01-20',
+      updated_at: '2024-01-20',
       assigned_admin: null
     },
     {
       id: '2',
+      user_id: 'user2',
       title: 'Solicitud de nueva funcionalidad',
       description: 'Me gustaría agregar filtros avanzados en la búsqueda',
       status: 'IN_PROGRESS',
       created_at: '2024-01-19',
+      updated_at: '2024-01-19',
       assigned_admin: 'Admin User'
     },
     {
       id: '3',
+      user_id: 'user3',
       title: 'Error en el sistema de pagos',
       description: 'El sistema no procesa correctamente los pagos',
       status: 'CLOSED',
       created_at: '2024-01-18',
+      updated_at: '2024-01-18',
       assigned_admin: 'Admin User'
     },
     {
       id: '4',
+      user_id: 'user4',
       title: 'Consulta sobre facturación',
       description: 'Necesito ayuda con la configuración de facturación',
       status: 'OPEN',
       created_at: '2024-01-17',
+      updated_at: '2024-01-17',
       assigned_admin: null
     }
   ]);
@@ -996,14 +995,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<{
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    created_at: string;
-    assigned_admin: string | null;
-  } | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<LocalTicket | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: ''
@@ -1024,27 +1016,13 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
     setFormData({ title: '', description: '' });
   };
 
-  const handleEditTicket = (ticket: {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    created_at: string;
-    assigned_admin: string | null;
-  }) => {
+  const handleEditTicket = (ticket: LocalTicket) => {
     setSelectedTicket(ticket);
     setFormData({ title: ticket.title, description: ticket.description });
     setIsEditModalOpen(true);
   };
 
-  const handleViewTicket = (ticket: {
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    created_at: string;
-    assigned_admin: string | null;
-  }) => {
+  const handleViewTicket = (ticket: LocalTicket) => {
     setSelectedTicket(ticket);
     setIsDetailModalOpen(true);
   };
@@ -1060,11 +1038,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
     });
     
     setTickets([...tickets, {
-      id: newTicket.id,
-      title: newTicket.title,
-      description: newTicket.description,
-      status: newTicket.status,
-      created_at: newTicket.created_at,
+      ...newTicket,
       assigned_admin: null
     }]);
     
@@ -1102,7 +1076,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Support Tickets</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-gray-800">Tickets de Soporte</h2>
         <button
           onClick={handleCreateTicket}
           className="px-4 py-2 text-white rounded-lg font-medium transition-colors duration-200"

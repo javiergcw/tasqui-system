@@ -49,7 +49,7 @@ export const EmployerJobDetailHeader: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
             </svg>
             <span className="text-sm font-medium" style={{ color: colors.mainGreen }}>
-              Apply Before: June 01, 2024
+              Aplicar antes de: 01 de Junio, 2024
             </span>
           </div>
         </div>

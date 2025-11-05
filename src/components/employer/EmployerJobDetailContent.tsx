@@ -1,16 +1,23 @@
 'use client';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { colorClasses,colors } from '@/lib/colors';
 import { EmployerJobDetailHeader } from './EmployerJobDetailHeader';
 
 export const EmployerJobDetailContent: React.FC = () => {
+  const router = useRouter();
+
+  const handleViewApplications = () => {
+    router.push('/company/applicants');
+  };
+
   return (
     <div className="lg:col-span-2">
       <EmployerJobDetailHeader />
       <div className="bg-white p-4 md:p-6 lg:p-8 -mt-4 md:-mt-6 lg:-mt-8">
         {/* Description Section */}
         <div className="mb-8">
-          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Description</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Descripción</h3>
           <div className="space-y-4 text-gray-700 leading-relaxed">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.
@@ -23,17 +30,17 @@ export const EmployerJobDetailContent: React.FC = () => {
 
         {/* Requirements Section */}
         <div className="mb-8">
-          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Requirements</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Requisitos</h3>
           <p className="text-gray-700 leading-relaxed mb-4">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <ul className="space-y-3">
             {[
-              "Work experience",
-              "Skills (soft skills and/or technical skills)",
-              "Personal qualities and attributes.",
-              "Support software roll-outs to production.",
-              "Guide and mentor junior engineers. Serve as team lead if appropriate."
+              "Experiencia laboral",
+              "Habilidades (habilidades blandas y/o técnicas)",
+              "Cualidades y atributos personales.",
+              "Soporte en despliegues de software a producción.",
+              "Guiar y mentorizar ingenieros junior. Servir como líder de equipo si es apropiado."
             ].map((requirement, index) => (
               <li key={index} className="flex items-start gap-3">
                 <div className="flex-shrink-0 w-5 h-5 mt-0.5">
@@ -49,41 +56,41 @@ export const EmployerJobDetailContent: React.FC = () => {
 
         {/* Job Details Section */}
         <div>
-          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Job Details</h3>
+          <h3 className={`text-2xl font-bold ${colorClasses.text.slate800} mb-4`}>Detalles del Trabajo</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-16 lg:gap-x-24 max-w-2xl">
             <div className="space-y-4">
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Company: </span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Empresa: </span>
                 <span className={`${colorClasses.text.slate800} font-semibold`}>Tourt Design LTD</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Location: </span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Ubicación: </span>
                 <span className={`${colorClasses.text.slate800} font-semibold`}>Wellesley Rd, London</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Job Type: </span>
-                <span className={`${colorClasses.text.slate800} font-semibold`}>Full Time</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Tipo de Trabajo: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>Tiempo Completo</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Email: </span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Correo Electrónico: </span>
                 <span className={`${colorClasses.text.slate800} font-semibold`}>hello@company.com</span>
               </div>
             </div>
             <div className="space-y-4">
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Experience: </span>
-                <span className={`${colorClasses.text.slate800} font-semibold`}>2 Years</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Experiencia: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>2 Años</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Language: </span>
-                <span className={`${colorClasses.text.slate800} font-semibold`}>English</span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Idioma: </span>
+                <span className={`${colorClasses.text.slate800} font-semibold`}>Inglés</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Salary: </span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Salario: </span>
                 <span className={`${colorClasses.text.slate800} font-semibold`}>$10,000</span>
               </div>
               <div>
-                <span className={`${colorClasses.text.gray600} font-medium`}>Website: </span>
+                <span className={`${colorClasses.text.gray600} font-medium`}>Sitio Web: </span>
                 <span className={`${colorClasses.text.slate800} font-semibold`}>www.company.com</span>
               </div>
             </div>
@@ -93,21 +100,17 @@ export const EmployerJobDetailContent: React.FC = () => {
         {/* Employer Actions */}
         <div className="mt-8 flex gap-4">
           <button
+            onClick={handleViewApplications}
             className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg"
             style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.mainGreen;
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = colors.mainGreen;
             }}
           >
-            Edit Job
-          </button>
-          <button
-            className="py-4 px-8 bg-gray-500 hover:bg-gray-600 text-white font-semibold transition-colors duration-200 rounded"
-          >
-            View Applications
+            Ver Aplicaciones
           </button>
         </div>
       </div>
