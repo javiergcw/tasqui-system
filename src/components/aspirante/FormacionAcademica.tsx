@@ -49,12 +49,13 @@ export const FormacionAcademica: React.FC = () => {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className={`text-xl font-bold ${colorClasses.text.red500}`}>
+        <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
           Formación Académica
         </h2>
         <button
           onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className={`px-4 py-2 ${colors.mainGreen} font-medium rounded-md transition-colors`}
+          className="px-4 py-2 text-white font-medium rounded-md transition-colors"
+          style={{ backgroundColor: colors.mainGreen }}
         >
           {mostrarFormulario ? 'Cancelar' : '+ Agregar Formación'}
         </button>
@@ -127,13 +128,14 @@ export const FormacionAcademica: React.FC = () => {
           <div className="flex gap-4 mt-4">
             <button
               onClick={handleAgregarFormacion}
-              className={`px-6 py-2 ${colors.mainGreen} font-medium rounded-md transition-colors`}
+              className="px-6 py-2 text-white font-medium rounded-md transition-colors"
+              style={{ backgroundColor: colors.mainGreen }}
             >
               Guardar Formación
             </button>
             <button
               onClick={() => setMostrarFormulario(false)}
-              className={`px-6 py-2 ${colorClasses.text.gray600} font-medium border border-gray-300 rounded-md hover:${colorClasses.background.gray50} transition-colors`}
+              className="px-6 py-2 text-gray-600 font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
               Cancelar
             </button>

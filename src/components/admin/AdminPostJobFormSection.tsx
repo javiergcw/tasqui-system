@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { colors } from '@/lib/colors';
 import { AdminJobSkillsSelector } from './AdminJobSkillsSelector';
+import type { SkillCategory } from '@/models/master/skills-complete.model';
 
 interface SelectedSkill {
   categoryId: string;
@@ -27,9 +28,17 @@ interface JobFormData {
 
 interface AdminPostJobFormSectionProps {
   onSubmit?: (formData: JobFormData) => void;
+  skillsCategories?: SkillCategory[];
+  isLoadingSkills?: boolean;
+  skillsError?: string | null;
 }
 
-export function AdminPostJobFormSection({ onSubmit }: AdminPostJobFormSectionProps) {
+export function AdminPostJobFormSection({ 
+  onSubmit,
+  skillsCategories = [],
+  isLoadingSkills = false,
+  skillsError = null
+}: AdminPostJobFormSectionProps) {
   const [formData, setFormData] = useState<JobFormData>({
     jobTitle: '',
     companyName: '',
@@ -300,6 +309,9 @@ export function AdminPostJobFormSection({ onSubmit }: AdminPostJobFormSectionPro
               <AdminJobSkillsSelector
                 selectedSkills={formData.requiredSkills}
                 onSkillsChange={handleSkillsChange}
+                skillsCategories={skillsCategories}
+                isLoadingSkills={isLoadingSkills}
+                skillsError={skillsError}
               />
             </div>
 

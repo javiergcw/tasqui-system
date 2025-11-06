@@ -1,6 +1,6 @@
 // Servicio HTTP genérico para realizar peticiones API
 
-import { API_CONFIG } from '@/lib/constants';
+import { API_CONFIG, PUBLIC_API_LICENSE_KEY, USE_PUBLIC_API_LICENSE_HEADER } from '@/lib/constants';
 
 export interface HttpConfig {
   baseURL?: string;
@@ -41,17 +41,46 @@ class HttpService {
   ): Promise<HttpResponse<T>> {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
     
-    // Obtener token del localStorage si está disponible
-    const token = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+    // Verificar si es un endpoint público (no requiere autenticación)
+    const isPublicEndpoint = endpoint.includes('/public/') || endpoint.includes('/leads/');
+    // Solo los endpoints de public-web deben llevar el header x-license-key
+    const isPublicWebEndpoint = endpoint.includes('/public/');
+    
+    // Obtener token del localStorage si está disponible y no es endpoint público
+    const token = !isPublicEndpoint && typeof window !== 'undefined' 
+      ? localStorage.getItem('access_token') 
+      : null;
     
     const config: RequestInit = {
       ...options,
       headers: {
         ...this.defaultHeaders,
         ...(token && { Authorization: `Bearer ${token}` }),
+        // Agregar license key SOLO para endpoints de public-web (solo si está habilitado)
+        // Nota: Usar minúsculas 'x-license-key' para evitar problemas de CORS
+        ...(isPublicWebEndpoint && USE_PUBLIC_API_LICENSE_HEADER && { 'x-license-key': PUBLIC_API_LICENSE_KEY }),
         ...options.headers,
       },
     };
+
+    // Debug: Log para verificar headers en desarrollo
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Request to:', url);
+      console.log('Is public endpoint:', isPublicEndpoint);
+      console.log('Is public-web endpoint:', isPublicWebEndpoint);
+      console.log('Use license header:', USE_PUBLIC_API_LICENSE_HEADER);
+      if (!isPublicEndpoint) {
+        console.log('Has token:', !!token);
+      }
+      if (isPublicWebEndpoint) {
+        console.log('License key header:', USE_PUBLIC_API_LICENSE_HEADER ? PUBLIC_API_LICENSE_KEY : 'Not added');
+      }
+      console.log('Headers:', {
+        'Content-Type': config.headers?.['Content-Type'],
+        'Authorization': token ? `Bearer ${token.substring(0, 20)}...` : 'No token',
+        'x-license-key': isPublicWebEndpoint && USE_PUBLIC_API_LICENSE_HEADER ? PUBLIC_API_LICENSE_KEY : 'Not added'
+      });
+    }
 
     try {
       const controller = new AbortController();
@@ -74,6 +103,15 @@ class HttpService {
       }
 
       if (!response.ok) {
+        // Log del error completo en desarrollo
+        if (process.env.NODE_ENV === 'development') {
+          console.error('API Error Response:', {
+            status: response.status,
+            statusText: response.statusText,
+            data: data
+          });
+        }
+        
         const error: HttpError = {
           message: `HTTP Error: ${response.status} ${response.statusText}`,
           status: response.status,

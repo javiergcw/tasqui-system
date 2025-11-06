@@ -21,7 +21,7 @@ export const SkillsSection: React.FC = () => {
   const categories: Category[] = [
     {
       id: 'programming',
-      name: 'Programming Languages',
+      name: 'Lenguajes de Programación',
       subCategories: [
         { id: 'javascript', name: 'JavaScript' },
         { id: 'python', name: 'Python' },
@@ -35,7 +35,7 @@ export const SkillsSection: React.FC = () => {
     },
     {
       id: 'web-development',
-      name: 'Web Development',
+      name: 'Desarrollo Web',
       subCategories: [
         { id: 'react', name: 'React' },
         { id: 'vue', name: 'Vue.js' },
@@ -48,7 +48,7 @@ export const SkillsSection: React.FC = () => {
     },
     {
       id: 'database',
-      name: 'Database',
+      name: 'Base de Datos',
       subCategories: [
         { id: 'mysql', name: 'MySQL' },
         { id: 'postgresql', name: 'PostgreSQL' },
@@ -60,7 +60,7 @@ export const SkillsSection: React.FC = () => {
     },
     {
       id: 'cloud',
-      name: 'Cloud & DevOps',
+      name: 'Nube y DevOps',
       subCategories: [
         { id: 'aws', name: 'AWS' },
         { id: 'azure', name: 'Azure' },
@@ -72,7 +72,7 @@ export const SkillsSection: React.FC = () => {
     },
     {
       id: 'design',
-      name: 'Design',
+      name: 'Diseño',
       subCategories: [
         { id: 'figma', name: 'Figma' },
         { id: 'sketch', name: 'Sketch' },
@@ -84,7 +84,7 @@ export const SkillsSection: React.FC = () => {
     },
     {
       id: 'mobile',
-      name: 'Mobile Development',
+      name: 'Desarrollo Móvil',
       subCategories: [
         { id: 'react-native', name: 'React Native' },
         { id: 'flutter', name: 'Flutter' },
@@ -136,7 +136,7 @@ export const SkillsSection: React.FC = () => {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
-          Skills & Technologies
+          Habilidades y Tecnologías
         </h2>
         <button
           onClick={() => setExpandedCategory(null)}
@@ -149,7 +149,7 @@ export const SkillsSection: React.FC = () => {
             e.currentTarget.style.backgroundColor = colors.mainGreen;
           }}
         >
-          Collapse All
+          Contraer Todo
         </button>
       </div>
 
@@ -228,10 +228,10 @@ export const SkillsSection: React.FC = () => {
         ))}
       </div>
 
-      {/* Selected Skills Summary */}
+      {/* Resumen de Habilidades Seleccionadas */}
       {selectedCategories.length > 0 && (
         <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-          <h3 className="text-lg font-semibold text-gray-900 mb-3">Selected Skills:</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-3">Habilidades Seleccionadas:</h3>
           <div className="flex flex-wrap gap-2">
             {selectedCategories.map((categoryId) => {
               const category = categories.find(cat => cat.id === categoryId);

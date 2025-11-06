@@ -12,6 +12,12 @@ export const API_CONFIG = {
   apiVersion: 'v1',
 } as const;
 
+// License key para endpoints públicos
+export const PUBLIC_API_LICENSE_KEY = 'tasqui-public-api-license-2024-prod-a8f5c2e9b4d1';
+// Habilitar/deshabilitar el uso del header x-license-key
+// Si el backend no tiene configurado CORS para este header, establecer en false
+export const USE_PUBLIC_API_LICENSE_HEADER = process.env.NEXT_PUBLIC_USE_LICENSE_HEADER !== 'false';
+
 export const JOB_TYPES = [
   { value: 'full-time', label: 'Tiempo Completo' },
   { value: 'part-time', label: 'Medio Tiempo' },

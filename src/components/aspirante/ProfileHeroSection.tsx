@@ -24,7 +24,7 @@ export const ProfileHeroSection: React.FC = () => {
               href="/"
               className={`${colorClasses.sidebar.text} hover:${colorClasses.text.blue300} transition-colors font-medium`}
             >
-              Home
+              Inicio
             </Link>
             <span className={`${colorClasses.sidebar.text}/60`}>&gt;</span>
             <span className={`${colorClasses.sidebar.text} font-medium`}>Mi Perfil</span>

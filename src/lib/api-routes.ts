@@ -27,6 +27,7 @@ export const API_ROUTES = {
   company: {
     profile: '/api/v1/company/profile',
     tickets: '/api/v1/company/tickets',
+    ticketNotes: (ticketId: string) => `/api/v1/company/tickets/${ticketId}/notes`,
   },
   
   // Admin
@@ -43,6 +44,16 @@ export const API_ROUTES = {
     create: '/api/v1/jobs',
     update: (id: string) => `/api/v1/jobs/${id}`,
     delete: (id: string) => `/api/v1/jobs/${id}`,
+  },
+  
+  // Master
+  master: {
+    skillsComplete: '/api/v1/leads/skills-complete',
+  },
+  
+  // Public Web
+  publicWeb: {
+    companies: '/api/v1/public/companies',
   },
 } as const;
 

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
 import type { CompanyProfile } from '@/models';
 import type { Ticket } from '@/models/company/ticket.model';
+import type { UpdateCompanyProfileRequest } from '@/models/company/profile.model';
 
 interface LocalTicket extends Ticket {
   assigned_admin: string | null;
@@ -15,26 +16,50 @@ interface EmployerProfileMainSectionProps {
   isLoading?: boolean;
   onCreateTicket?: (formData: { title: string; description: string }) => Promise<Ticket>;
   isCreatingTicket?: boolean;
+  tickets?: Ticket[];
+  isLoadingTickets?: boolean;
+  onRefreshTickets?: () => Promise<void>;
+  onAddTicketNote?: (ticketId: string, note: string) => Promise<any>;
+  isAddingNote?: boolean;
+  onUpdateProfile?: (data: UpdateCompanyProfileRequest) => Promise<CompanyProfile>;
+  isUpdatingProfile?: boolean;
 }
 
 export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProps> = ({ 
   profile, 
   isLoading = false,
   onCreateTicket,
-  isCreatingTicket = false
+  isCreatingTicket = false,
+  tickets = [],
+  isLoadingTickets = false,
+  onRefreshTickets,
+  onAddTicketNote,
+  isAddingNote = false,
+  onUpdateProfile,
+  isUpdatingProfile = false
 }) => {
   const [activeTab, setActiveTab] = useState('company-data');
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'company-data':
-        return <CompanyDataForm profile={profile} isLoading={isLoading} />;
+        return <CompanyDataForm profile={profile} isLoading={isLoading} onUpdateProfile={onUpdateProfile} isUpdatingProfile={isUpdatingProfile} />;
       case 'dashboard':
         return <DashboardTab />;
       case 'kanban':
         return <KanbanTab />;
       case 'tickets':
-        return <TicketsTab onCreateTicket={onCreateTicket} isCreatingTicket={isCreatingTicket} />;
+        return (
+          <TicketsTab 
+            onCreateTicket={onCreateTicket} 
+            isCreatingTicket={isCreatingTicket}
+            tickets={tickets}
+            isLoadingTickets={isLoadingTickets}
+            onRefreshTickets={onRefreshTickets}
+            onAddTicketNote={onAddTicketNote}
+            isAddingNote={isAddingNote}
+          />
+        );
       default:
         return <CompanyDataForm profile={profile} isLoading={isLoading} />;
     }
@@ -211,15 +236,24 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
 interface CompanyDataFormProps {
   profile?: CompanyProfile | null;
   isLoading?: boolean;
+  onUpdateProfile?: (data: UpdateCompanyProfileRequest) => Promise<CompanyProfile>;
+  isUpdatingProfile?: boolean;
 }
 
-const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = false }) => {
+const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ 
+  profile, 
+  isLoading = false,
+  onUpdateProfile,
+  isUpdatingProfile = false
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     legal_name: '',
     contact_name: '',
     contact_email: '',
-    contact_phone: ''
+    contact_phone: '',
+    billing_plan: '',
+    max_open_jobs: 0
   });
 
   // Cargar datos del perfil cuando estén disponibles
@@ -229,7 +263,9 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
         legal_name: profile.legal_name || '',
         contact_name: profile.contact_name || '',
         contact_email: profile.contact_email || '',
-        contact_phone: profile.contact_phone || ''
+        contact_phone: profile.contact_phone || '',
+        billing_plan: profile.billing_plan || '',
+        max_open_jobs: profile.max_open_jobs || 0
       });
     }
   }, [profile]);
@@ -238,14 +274,44 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'max_open_jobs' ? parseInt(value) || 0 : value
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!onUpdateProfile || !profile) return;
+
+    try {
+      await onUpdateProfile({
+        legal_name: formData.legal_name,
+        contact_name: formData.contact_name,
+        contact_email: formData.contact_email,
+        contact_phone: formData.contact_phone,
+        billing_plan: formData.billing_plan,
+        max_open_jobs: formData.max_open_jobs
+      });
+      
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // El error ya se maneja en el componente padre con el toast
+    }
+  };
+
+  const handleCancel = () => {
+    if (profile) {
+      setFormData({
+        legal_name: profile.legal_name || '',
+        contact_name: profile.contact_name || '',
+        contact_email: profile.contact_email || '',
+        contact_phone: profile.contact_phone || '',
+        billing_plan: profile.billing_plan || '',
+        max_open_jobs: profile.max_open_jobs || 0
+      });
+    }
     setIsEditing(false);
-    // TODO: Implementar lógica de guardado
   };
 
   if (isLoading) {
@@ -263,21 +329,24 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
     <div>
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-bold text-gray-800">Información de la Empresa</h2>
-        <button
-          onClick={() => setIsEditing(!isEditing)}
-          className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white"
-          style={{
-            backgroundColor: isEditing ? '#16a34a' : colors.mainGreen
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#15803d' : colors.hoverGreen;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = isEditing ? '#16a34a' : colors.mainGreen;
-          }}
-        >
-          {isEditing ? 'Guardar Cambios' : 'Editar Información'}
-        </button>
+        {!isEditing && (
+          <button
+            onClick={() => setIsEditing(true)}
+            disabled={isUpdatingProfile}
+            className="px-6 py-2 rounded-lg font-medium transition-colors duration-200 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: colors.mainGreen }}
+            onMouseEnter={(e) => {
+              if (!isUpdatingProfile) {
+                e.currentTarget.style.backgroundColor = colors.hoverGreen;
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+            }}
+          >
+            Editar Información
+          </button>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -355,25 +424,54 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
         {/* Divider */}
         <div className="border-t border-dashed border-gray-300 my-8"></div>
 
-        {/* Read-only Information */}
+        {/* Billing Plan and Max Open Jobs */}
         {profile && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Plan de Facturación
               </label>
-              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                {profile.billing_plan || 'N/A'}
-              </div>
+              {isEditing ? (
+                <select
+                  name="billing_plan"
+                  value={formData.billing_plan}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
+                  style={{
+                    '--tw-ring-color': colors.mainGreen
+                  } as React.CSSProperties}
+                >
+                  <option value="basic">Basic</option>
+                  <option value="premium">Premium</option>
+                </select>
+              ) : (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                  {profile.billing_plan || 'N/A'}
+                </div>
+              )}
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Máximo de Trabajos Abiertos
               </label>
-              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                {profile.max_open_jobs || 'N/A'}
-              </div>
+              {isEditing ? (
+                <input
+                  type="number"
+                  name="max_open_jobs"
+                  value={formData.max_open_jobs}
+                  onChange={handleInputChange}
+                  min="1"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900 placeholder-gray-600"
+                  style={{
+                    '--tw-ring-color': colors.mainGreen
+                  } as React.CSSProperties}
+                />
+              ) : (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
+                  {profile.max_open_jobs || 'N/A'}
+                </div>
+              )}
             </div>
 
             <div>
@@ -400,23 +498,27 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({ profile, isLoading = 
           <div className="flex justify-end space-x-4 pt-6">
             <button
               type="button"
-              onClick={() => setIsEditing(false)}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+              onClick={handleCancel}
+              disabled={isUpdatingProfile}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-6 py-2 text-white rounded-lg transition-colors duration-200"
+              disabled={isUpdatingProfile}
+              className="px-6 py-2 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: colors.mainGreen }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                if (!isUpdatingProfile) {
+                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = colors.mainGreen;
               }}
             >
-              Guardar Cambios
+              {isUpdatingProfile ? 'Guardando...' : 'Guardar Cambios'}
             </button>
           </div>
         )}
@@ -946,60 +1048,37 @@ const KanbanTab: React.FC = () => {
 interface TicketsTabProps {
   onCreateTicket?: (formData: { title: string; description: string }) => Promise<Ticket>;
   isCreatingTicket?: boolean;
+  tickets?: Ticket[];
+  isLoadingTickets?: boolean;
+  onRefreshTickets?: () => Promise<void>;
+  onAddTicketNote?: (ticketId: string, note: string) => Promise<any>;
+  isAddingNote?: boolean;
 }
 
-const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicket = false }) => {
-  const [tickets, setTickets] = useState<LocalTicket[]>([
-    {
-      id: '1',
-      user_id: 'user1',
-      title: 'Problema con la plataforma',
-      description: 'No puedo acceder a mi cuenta de empresa',
-      status: 'OPEN',
-      created_at: '2024-01-20',
-      updated_at: '2024-01-20',
-      assigned_admin: null
-    },
-    {
-      id: '2',
-      user_id: 'user2',
-      title: 'Solicitud de nueva funcionalidad',
-      description: 'Me gustaría agregar filtros avanzados en la búsqueda',
-      status: 'IN_PROGRESS',
-      created_at: '2024-01-19',
-      updated_at: '2024-01-19',
-      assigned_admin: 'Admin User'
-    },
-    {
-      id: '3',
-      user_id: 'user3',
-      title: 'Error en el sistema de pagos',
-      description: 'El sistema no procesa correctamente los pagos',
-      status: 'CLOSED',
-      created_at: '2024-01-18',
-      updated_at: '2024-01-18',
-      assigned_admin: 'Admin User'
-    },
-    {
-      id: '4',
-      user_id: 'user4',
-      title: 'Consulta sobre facturación',
-      description: 'Necesito ayuda con la configuración de facturación',
-      status: 'OPEN',
-      created_at: '2024-01-17',
-      updated_at: '2024-01-17',
-      assigned_admin: null
-    }
-  ]);
+const TicketsTab: React.FC<TicketsTabProps> = ({ 
+  onCreateTicket, 
+  isCreatingTicket = false,
+  tickets = [],
+  isLoadingTickets = false,
+  onRefreshTickets,
+  onAddTicketNote,
+  isAddingNote = false
+}) => {
+  // Convertir tickets de la API al formato LocalTicket
+  const localTickets: LocalTicket[] = tickets.map(ticket => ({
+    ...ticket,
+    assigned_admin: null // La API no incluye este campo, se puede agregar después si es necesario
+  }));
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [isAddNoteModalOpen, setIsAddNoteModalOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<LocalTicket | null>(null);
   const [formData, setFormData] = useState({
     title: '',
     description: ''
   });
+  const [noteText, setNoteText] = useState('');
 
   const columns = [
     { id: 'OPEN', title: 'Abierto', color: 'bg-yellow-100 border-yellow-300' },
@@ -1008,7 +1087,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
   ];
 
   const getTicketsByStatus = (status: string) => {
-    return tickets.filter(ticket => ticket.status === status);
+    return localTickets.filter(ticket => ticket.status === status);
   };
 
   const handleCreateTicket = () => {
@@ -1016,15 +1095,23 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
     setFormData({ title: '', description: '' });
   };
 
-  const handleEditTicket = (ticket: LocalTicket) => {
-    setSelectedTicket(ticket);
-    setFormData({ title: ticket.title, description: ticket.description });
-    setIsEditModalOpen(true);
-  };
-
   const handleViewTicket = (ticket: LocalTicket) => {
     setSelectedTicket(ticket);
     setIsDetailModalOpen(true);
+  };
+
+  const handleAddNote = () => {
+    if (selectedTicket) {
+      setIsAddNoteModalOpen(true);
+      setNoteText('');
+    }
+  };
+
+  const handleAddNoteFromCard = (ticket: LocalTicket, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedTicket(ticket);
+    setIsAddNoteModalOpen(true);
+    setNoteText('');
   };
 
   const handleSubmitCreate = async (e: React.FormEvent) => {
@@ -1032,31 +1119,37 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
     
     if (!onCreateTicket) return;
     
-    const newTicket = await onCreateTicket({
-      title: formData.title,
-      description: formData.description
-    });
-    
-    setTickets([...tickets, {
-      ...newTicket,
-      assigned_admin: null
-    }]);
-    
-    setIsCreateModalOpen(false);
-    setFormData({ title: '', description: '' });
+    try {
+      const newTicket = await onCreateTicket({
+        title: formData.title,
+        description: formData.description
+      });
+      
+      // Refrescar la lista de tickets después de crear uno nuevo
+      if (onRefreshTickets) {
+        await onRefreshTickets();
+      }
+      
+      setIsCreateModalOpen(false);
+      setFormData({ title: '', description: '' });
+    } catch (error) {
+      // El error ya se maneja en el componente padre
+      console.error('Error creating ticket:', error);
+    }
   };
 
-  const handleSubmitEdit = (e: React.FormEvent) => {
+  const handleSubmitNote = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedTicket) {
-      setTickets(tickets.map(ticket => 
-        ticket.id === selectedTicket.id 
-          ? { ...ticket, title: formData.title, description: formData.description }
-          : ticket
-      ));
-      setIsEditModalOpen(false);
-      setSelectedTicket(null);
-      setFormData({ title: '', description: '' });
+    
+    if (!onAddTicketNote || !selectedTicket) return;
+    
+    try {
+      await onAddTicketNote(selectedTicket.id, noteText);
+      setIsAddNoteModalOpen(false);
+      setNoteText('');
+    } catch (error) {
+      // El error ya se maneja en el componente padre
+      console.error('Error adding note:', error);
     }
   };
 
@@ -1077,83 +1170,136 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-xl md:text-2xl font-bold text-gray-800">Tickets de Soporte</h2>
-        <button
-          onClick={handleCreateTicket}
-          className="px-4 py-2 text-white rounded-lg font-medium transition-colors duration-200"
-          style={{ backgroundColor: colors.mainGreen }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.backgroundColor = colors.hoverGreen;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.backgroundColor = colors.mainGreen;
-          }}
-        >
-          Crear Solicitud
-        </button>
+        <div className="flex gap-2">
+          {onRefreshTickets && (
+            <button
+              onClick={onRefreshTickets}
+              disabled={isLoadingTickets}
+              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+            >
+              {isLoadingTickets ? 'Actualizando...' : 'Actualizar'}
+            </button>
+          )}
+          <button
+            onClick={handleCreateTicket}
+            className="px-4 py-2 text-white rounded-lg font-medium transition-colors duration-200"
+            style={{ backgroundColor: colors.mainGreen }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+            }}
+          >
+            Crear Solicitud
+          </button>
+        </div>
       </div>
 
-      {/* Kanban Board */}
-      <div className="w-full overflow-x-auto">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          {columns.map(column => (
-            <div
-              key={column.id}
-              className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
-            >
-              <div className="flex items-center justify-between mb-4 flex-shrink-0">
-                <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
-                <span className="bg-white px-2 py-1 rounded-full text-xs font-medium text-gray-600">
-                  {getTicketsByStatus(column.id).length}
-                </span>
-              </div>
+      {isLoadingTickets ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+            <p className="mt-4 text-gray-600">Cargando tickets...</p>
+          </div>
+        </div>
+      ) : localTickets.length === 0 ? (
+        <div className="text-center py-12">
+          <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h3 className="mt-2 text-sm font-medium text-gray-900">No hay tickets</h3>
+          <p className="mt-1 text-sm text-gray-500">Comienza creando tu primer ticket de soporte.</p>
+        </div>
+      ) : (
+        <>
+          {/* Kanban Board */}
+          <div className="w-full overflow-x-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              {columns.map(column => (
+                <div
+                  key={column.id}
+                  className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
+                >
+                  <div className="flex items-center justify-between mb-4 flex-shrink-0">
+                    <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
+                    <span className="bg-white px-2 py-1 rounded-full text-xs font-medium text-gray-600">
+                      {getTicketsByStatus(column.id).length}
+                    </span>
+                  </div>
 
-              <div className="flex-1 overflow-y-auto space-y-3 pr-2">
-                  {getTicketsByStatus(column.id).map(ticket => (
-                    <div
-                      key={ticket.id}
-                      onClick={() => handleViewTicket(ticket)}
-                      className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 cursor-pointer hover:shadow-md transition-shadow duration-200"
-                    >
-                    <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
-                        {ticket.status}
-                      </span>
-                    </div>
+                  <div className="flex-1 overflow-y-auto space-y-3 pr-2">
+                    {getTicketsByStatus(column.id).map(ticket => (
+                      <div
+                        key={ticket.id}
+                        className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 hover:shadow-md transition-shadow duration-200"
+                      >
+                        <div className="flex items-start justify-between mb-2">
+                          <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
+                          <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
+                            {ticket.status}
+                          </span>
+                        </div>
 
-                    <p className="text-xs md:text-sm text-gray-600 mb-3 line-clamp-3">{ticket.description}</p>
+                        <p className="text-xs md:text-sm text-gray-600 mb-3 line-clamp-3">{ticket.description}</p>
 
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-gray-500">{ticket.created_at}</span>
-                        <div className="flex space-x-1">
-                          {ticket.status === 'OPEN' && (
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs text-gray-500">
+                            {new Date(ticket.created_at).toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        </div>
+
+                        {ticket.assigned_admin && (
+                          <div className="mb-3 text-xs text-gray-500">
+                            Asignado a: {ticket.assigned_admin}
+                          </div>
+                        )}
+
+                        <div className="flex items-center justify-end gap-2 pt-2 border-t border-gray-100">
+                          <button
+                            onClick={() => handleViewTicket(ticket)}
+                            className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                            title="Ver detalle"
+                          >
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Ver
+                          </button>
+                          {onAddTicketNote && (
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleEditTicket(ticket);
+                              onClick={(e) => handleAddNoteFromCard(ticket, e)}
+                              className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-colors"
+                              style={{ backgroundColor: colors.mainGreen }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.hoverGreen;
                               }}
-                              className="p-1 text-green-600 hover:bg-green-100 rounded"
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.mainGreen;
+                              }}
+                              title="Agregar nota"
                             >
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                               </svg>
+                              Nota
                             </button>
                           )}
                         </div>
                       </div>
-
-                    {ticket.assigned_admin && (
-                      <div className="mt-2 text-xs text-gray-500">
-                        Asignado a: {ticket.assigned_admin}
-                      </div>
-                    )}
+                    ))}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
 
       {/* Create Ticket Modal */}
       {isCreateModalOpen && (
@@ -1215,56 +1361,105 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
         </div>
       )}
 
-      {/* Edit Ticket Modal */}
-      {isEditModalOpen && selectedTicket && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      {/* Add Note Modal */}
+      {isAddNoteModalOpen && selectedTicket && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300">
           <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Editar Solicitud</h3>
-            <form onSubmit={handleSubmitEdit} className="space-y-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Agregar Nota al Ticket</h3>
+            <form onSubmit={handleSubmitNote} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Título
-                </label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Descripción
+                  Nota
                 </label>
                 <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={4}
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  rows={6}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+                  placeholder="Escribe una nota sobre este ticket..."
                   required
+                  maxLength={5000}
                 />
+                <p className="mt-1 text-xs text-gray-500">
+                  {noteText.length}/5000 caracteres
+                </p>
               </div>
               <div className="flex justify-end space-x-3">
                 <button
                   type="button"
-                  onClick={() => setIsEditModalOpen(false)}
+                  onClick={() => setIsAddNoteModalOpen(false)}
                   className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 text-white rounded-lg"
+                  disabled={isAddingNote || !noteText.trim()}
+                  className="px-4 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{ backgroundColor: colors.mainGreen }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    if (!isAddingNote && noteText.trim()) {
+                      e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    }
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = colors.mainGreen;
                   }}
                 >
-                  Guardar Cambios
+                  {isAddingNote ? 'Agregando...' : 'Agregar Nota'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add Note Modal */}
+      {isAddNoteModalOpen && selectedTicket && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[60] transition-opacity duration-300">
+          <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Agregar Nota al Ticket</h3>
+            <form onSubmit={handleSubmitNote} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nota
+                </label>
+                <textarea
+                  value={noteText}
+                  onChange={(e) => setNoteText(e.target.value)}
+                  rows={6}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+                  placeholder="Escribe una nota sobre este ticket..."
+                  required
+                  maxLength={5000}
+                />
+                <p className="mt-1 text-xs text-gray-500">
+                  {noteText.length}/5000 caracteres
+                </p>
+              </div>
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsAddNoteModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  disabled={isAddingNote || !noteText.trim()}
+                  className="px-4 py-2 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ backgroundColor: colors.mainGreen }}
+                  onMouseEnter={(e) => {
+                    if (!isAddingNote && noteText.trim()) {
+                      e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.mainGreen;
+                  }}
+                >
+                  {isAddingNote ? 'Agregando...' : 'Agregar Nota'}
                 </button>
               </div>
             </form>
@@ -1305,7 +1500,15 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Creación</label>
-                    <p className="text-sm text-gray-900">{selectedTicket.created_at}</p>
+                    <p className="text-sm text-gray-900">
+                      {new Date(selectedTicket.created_at).toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Asignado a</label>
@@ -1327,12 +1530,9 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
 
               {/* Actions */}
               <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                {selectedTicket.status === 'OPEN' && (
+                {onAddTicketNote && (
                   <button
-                    onClick={() => {
-                      setIsDetailModalOpen(false);
-                      handleEditTicket(selectedTicket);
-                    }}
+                    onClick={handleAddNote}
                     className="px-4 py-2 text-white rounded-lg"
                     style={{ backgroundColor: colors.mainGreen }}
                     onMouseEnter={(e) => {
@@ -1342,7 +1542,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ onCreateTicket, isCreatingTicke
                       e.currentTarget.style.backgroundColor = colors.mainGreen;
                     }}
                   >
-                    Editar Solicitud
+                    Agregar Nota
                   </button>
                 )}
                 <button

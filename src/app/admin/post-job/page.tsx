@@ -1,17 +1,44 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminPostJobHeroSection, AdminPostJobFormSection, Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
-import { createJobUseCase } from '@/use-cases';
+import { createJobUseCase, skillsCompleteUseCase } from '@/use-cases';
+import type { SkillCategory } from '@/models/master/skills-complete.model';
 
 export default function AdminPostJobPage() {
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingSkills, setIsLoadingSkills] = useState(true);
+  const [skillsCategories, setSkillsCategories] = useState<SkillCategory[]>([]);
+  const [skillsError, setSkillsError] = useState<string | null>(null);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
     type: 'success'
   });
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        setIsLoadingSkills(true);
+        setSkillsError(null);
+        const response = await skillsCompleteUseCase.execute();
+        setSkillsCategories(response.data.categories);
+      } catch (error) {
+        console.error('Error fetching skills:', error);
+        setSkillsError(error instanceof Error ? error.message : 'Error al cargar las habilidades');
+        setToast({
+          show: true,
+          message: 'Error al cargar las habilidades',
+          type: 'error'
+        });
+      } finally {
+        setIsLoadingSkills(false);
+      }
+    };
+
+    fetchSkills();
+  }, []);
 
   const handleSubmit = async (formData: {
     jobTitle: string;
@@ -81,7 +108,12 @@ export default function AdminPostJobPage() {
       <AdminPostJobHeroSection />
 
       {/* Job Form Section */}
-      <AdminPostJobFormSection onSubmit={handleSubmit} />
+      <AdminPostJobFormSection 
+        onSubmit={handleSubmit} 
+        skillsCategories={skillsCategories}
+        isLoadingSkills={isLoadingSkills}
+        skillsError={skillsError}
+      />
 
       <Footer />
       <CopyrightSection />

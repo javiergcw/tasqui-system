@@ -7,7 +7,8 @@ export interface CreateTicketRequest {
 
 export interface Ticket {
   id: string;
-  user_id: string;
+  company_id: string;
+  requested_by_user_id: string;
   title: string;
   description: string;
   status: string;
@@ -20,6 +21,37 @@ export interface CreateTicketResponse {
   message: string;
   data: {
     ticket: Ticket;
+  };
+}
+
+export interface GetTicketsResponse {
+  success: boolean;
+  message: string;
+  data: {
+    tickets: Ticket[];
+    total: number;
+    limit: number;
+    offset: number;
+  };
+}
+
+export interface AddTicketNoteRequest {
+  note: string;
+}
+
+export interface TicketNote {
+  id: string;
+  ticket_id: string;
+  note: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface AddTicketNoteResponse {
+  success: boolean;
+  message: string;
+  data: {
+    note: TicketNote;
   };
 }
 

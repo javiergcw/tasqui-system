@@ -21,3 +21,20 @@ export interface CompanyProfileResponse {
   };
 }
 
+export interface UpdateCompanyProfileRequest {
+  legal_name: string;
+  contact_name: string;
+  contact_email: string;
+  contact_phone: string;
+  billing_plan: string;
+  max_open_jobs: number;
+}
+
+export interface UpdateCompanyProfileResponse {
+  success: boolean;
+  message: string;
+  data: {
+    company_profile: CompanyProfile;
+  };
+}
+
