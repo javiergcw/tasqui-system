@@ -34,7 +34,10 @@ export const API_ROUTES = {
   admin: {
     profile: '/api/v1/admin/profile',
     tickets: '/api/v1/admin/tickets',
+    updateTicketStatus: (ticketId: string) => `/api/v1/admin/tickets/${ticketId}/status`,
     jobs: '/api/v1/admin/jobs',
+    jobDetail: (id: string) => `/api/v1/admin/jobs/${id}`,
+    updateJobStatus: (id: string) => `/api/v1/admin/jobs/${id}/status`,
   },
   
   // Jobs (pendiente)
@@ -49,6 +52,7 @@ export const API_ROUTES = {
   // Master
   master: {
     skillsComplete: '/api/v1/leads/skills-complete',
+    jobMasterDataComplete: '/api/v1/jobs/master-data-complete',
   },
   
   // Public Web

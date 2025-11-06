@@ -40,6 +40,18 @@ export class CreateJobUseCase {
       throw new Error('La ubicación es requerida');
     }
 
+    if (!data.category_id || data.category_id.trim().length === 0) {
+      throw new Error('La categoría es requerida');
+    }
+
+    if (!data.job_type || data.job_type.trim().length === 0) {
+      throw new Error('El tipo de trabajo es requerido');
+    }
+
+    if (!data.experience_level || data.experience_level.trim().length === 0) {
+      throw new Error('El nivel de experiencia es requerido');
+    }
+
     // ticket_id es opcional
 
     if (data.salary_min < 0 || data.salary_max < 0) {

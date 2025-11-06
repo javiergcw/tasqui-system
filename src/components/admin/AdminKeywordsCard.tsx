@@ -1,19 +1,25 @@
 'use client';
 import React from 'react';
 import { colors } from '@/lib/colors';
+import type { AdminJob } from '@/models/admin/job.model';
 
-export const AdminKeywordsCard: React.FC = () => {
+interface AdminKeywordsCardProps {
+  job: AdminJob;
+}
+
+export const AdminKeywordsCard: React.FC<AdminKeywordsCardProps> = ({ job }) => {
+  // Por ahora, los tags no están disponibles en AdminJob, así que usamos datos placeholder
+  // En el futuro, cuando los tags estén disponibles, se pueden mapear aquí
   const keywords = [
-    "Diseño Web",
-    "Ciencia de Datos", 
-    "SEO",
-    "Escritor de Contenido",
-    "Finanzas",
-    "Negocios",
-    "Educación",
-    "Gráficos",
-    "Video"
-  ];
+    job.job_type,
+    job.experience_level,
+    job.status,
+    job.visibility
+  ].filter(Boolean);
+
+  if (keywords.length === 0) {
+    keywords.push('Sin palabras clave');
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">

@@ -1,8 +1,11 @@
 'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { colorClasses, colors } from '@/lib/colors';
+import { Toast } from '@/components/ui/Toast';
 import type { AdminProfile, AdminTicket } from '@/models';
+import type { TicketStatus } from '@/models/admin/ticket.model';
 
 interface AdminProfileMainSectionProps {
   profile?: AdminProfile | null;
@@ -10,6 +13,8 @@ interface AdminProfileMainSectionProps {
   tickets?: AdminTicket[];
   isLoadingTickets?: boolean;
   onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
+  onTicketStatusUpdate?: (ticketId: string, status: TicketStatus) => Promise<AdminTicket>;
+  onRefreshTickets?: () => Promise<void>;
 }
 
 export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = ({ 
@@ -17,7 +22,9 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
   isLoading = false,
   tickets,
   isLoadingTickets = false,
-  onProfileUpdate
+  onProfileUpdate,
+  onTicketStatusUpdate,
+  onRefreshTickets
 }) => {
   const [activeTab, setActiveTab] = useState('admin-data');
   
@@ -44,7 +51,12 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       case 'dashboard':
         return <DashboardTab />;
       case 'tickets':
-        return <TicketsTab tickets={tickets} isLoading={isLoadingTickets} />;
+        return <TicketsTab 
+          tickets={tickets} 
+          isLoading={isLoadingTickets}
+          onTicketStatusUpdate={onTicketStatusUpdate}
+          onRefreshTickets={onRefreshTickets}
+        />;
       case 'employees':
         return <EmployeesTab />;
       default:
@@ -584,20 +596,41 @@ const DashboardTab: React.FC = () => {
 interface TicketsTabProps {
   tickets?: AdminTicket[];
   isLoading?: boolean;
+  onTicketStatusUpdate?: (ticketId: string, status: TicketStatus) => Promise<AdminTicket>;
+  onRefreshTickets?: () => Promise<void>;
 }
 
-const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false }) => {
+const TicketsTab: React.FC<TicketsTabProps> = ({ 
+  tickets = [], 
+  isLoading = false,
+  onTicketStatusUpdate,
+  onRefreshTickets
+}) => {
+  const router = useRouter();
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<AdminTicket | null>(null);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [localTickets, setLocalTickets] = useState<AdminTicket[]>([]);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
+
+  // Filtrar tickets para excluir CLOSED y actualizar tickets locales cuando cambien los tickets prop
+  React.useEffect(() => {
+    const filteredTickets = tickets.filter(ticket => ticket.status !== 'CLOSED');
+    setLocalTickets(filteredTickets);
+  }, [tickets]);
 
   const columns = [
     { id: 'OPEN', title: 'Abierto', color: 'bg-yellow-100 border-yellow-300' },
     { id: 'IN_PROGRESS', title: 'En Progreso', color: 'bg-blue-100 border-blue-300' },
-    { id: 'CLOSED', title: 'Cerrado', color: 'bg-green-100 border-green-300' }
+    { id: 'RESOLVED', title: 'Resuelto', color: 'bg-purple-100 border-purple-300' }
   ];
 
   const getTicketsByStatus = (status: string) => {
-    return tickets.filter(ticket => ticket.status === status);
+    return localTickets.filter(ticket => ticket.status === status);
   };
 
   const handleViewTicket = (ticket: AdminTicket) => {
@@ -605,27 +638,51 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
     setIsDetailModalOpen(true);
   };
 
-  const handleStatusChange = (ticketId: string, newStatus: string) => {
-    // TODO: Implementar actualización de estado en backend
-    console.log('Cambiar estado del ticket', ticketId, 'a', newStatus);
-  };
-
-  const handleDragStart = (e: React.DragEvent, ticketId: string) => {
-    e.dataTransfer.setData('ticketId', ticketId);
-  };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    // Do nothing
-  };
-
-  const handleDrop = (e: React.DragEvent, newStatus: string) => {
-    e.preventDefault();
-    const ticketId = e.dataTransfer.getData('ticketId');
-    handleStatusChange(ticketId, newStatus);
+  const handleStatusChange = async (ticketId: string, newStatus: string) => {
+    if (!onTicketStatusUpdate) return;
+    
+    try {
+      setIsUpdatingStatus(true);
+      const updatedTicket = await onTicketStatusUpdate(ticketId, newStatus as TicketStatus);
+      
+      // Actualizar el ticket en la lista local
+      setLocalTickets(prevTickets => 
+        prevTickets.map(ticket => 
+          ticket.id === ticketId ? updatedTicket : ticket
+        )
+      );
+      
+      // Si el ticket seleccionado es el que se actualizó, actualizarlo también
+      if (selectedTicket && selectedTicket.id === ticketId) {
+        setSelectedTicket(updatedTicket);
+      }
+      
+      // Refrescar la lista completa si hay función de refresh
+      if (onRefreshTickets) {
+        await onRefreshTickets();
+      }
+      
+      // Mostrar notificación de éxito y cerrar el modal
+      setToast({
+        show: true,
+        message: 'Estado del ticket actualizado exitosamente',
+        type: 'success'
+      });
+      
+      // Cerrar el modal después de un breve delay
+      setTimeout(() => {
+        setIsDetailModalOpen(false);
+      }, 500);
+    } catch (error) {
+      console.error('Error updating ticket status:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al actualizar el estado del ticket. Por favor, intenta nuevamente.',
+        type: 'error'
+      });
+    } finally {
+      setIsUpdatingStatus(false);
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -634,6 +691,8 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
         return 'bg-yellow-100 text-yellow-800';
       case 'IN_PROGRESS':
         return 'bg-blue-100 text-blue-800';
+      case 'RESOLVED':
+        return 'bg-purple-100 text-purple-800';
       case 'CLOSED':
         return 'bg-green-100 text-green-800';
       default:
@@ -657,7 +716,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-xl md:text-2xl font-bold text-gray-800">Gestión de Tickets de Soporte</h2>
-          <p className="text-sm text-gray-600 mt-1">Arrastra los tickets entre columnas para cambiar su estado</p>
+          <p className="text-sm text-gray-600 mt-1">Haz clic en un ticket para ver detalles y cambiar su estado</p>
         </div>
       </div>
 
@@ -668,9 +727,6 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
             <div
               key={column.id}
               className={`${column.color} rounded-lg border-2 border-dashed p-4 md:p-6 h-[500px] md:h-[600px] flex flex-col w-full md:min-w-[320px]`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={(e) => handleDrop(e, column.id)}
             >
               <div className="flex items-center justify-between mb-4 flex-shrink-0">
                 <h3 className="font-semibold text-gray-800 text-sm md:text-base">{column.title}</h3>
@@ -683,10 +739,8 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
                 {getTicketsByStatus(column.id).map(ticket => (
                   <div
                     key={ticket.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, ticket.id)}
                     onClick={() => handleViewTicket(ticket)}
-                    className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 cursor-move hover:shadow-md transition-shadow duration-200"
+                    className="bg-white p-3 md:p-5 rounded-lg shadow-sm border border-gray-200 flex-shrink-0 cursor-pointer hover:shadow-md transition-shadow duration-200"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
@@ -737,12 +791,17 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
                     <select
                       value={selectedTicket.status}
                       onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value)}
-                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-gray-900"
+                      disabled={isUpdatingStatus}
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm text-gray-900 disabled:bg-gray-100 disabled:cursor-not-allowed"
                     >
                       <option value="OPEN">Abierto</option>
                       <option value="IN_PROGRESS">En Progreso</option>
+                      <option value="RESOLVED">Resuelto</option>
                       <option value="CLOSED">Cerrado</option>
                     </select>
+                    {isUpdatingStatus && (
+                      <p className="mt-1 text-xs text-gray-500">Actualizando...</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">ID de Empresa</label>
@@ -775,18 +834,56 @@ const TicketsTab: React.FC<TicketsTabProps> = ({ tickets = [], isLoading = false
               </div>
 
               {/* Actions */}
-              <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
-                <button
-                  onClick={() => setIsDetailModalOpen(false)}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-                >
-                  Cerrar
-                </button>
+              <div className="flex flex-col gap-4 pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center gap-4">
+                  <button
+                    onClick={() => {
+                      if (selectedTicket) {
+                        router.push(`/admin/post-job?ticket_id=${selectedTicket.id}`);
+                      }
+                    }}
+                    disabled={selectedTicket?.status !== 'IN_PROGRESS'}
+                    className="px-4 py-2 text-white rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ backgroundColor: colors.mainGreen }}
+                    onMouseEnter={(e) => {
+                      if (selectedTicket?.status === 'IN_PROGRESS') {
+                        e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedTicket?.status === 'IN_PROGRESS') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      }
+                    }}
+                    title={selectedTicket?.status !== 'IN_PROGRESS' ? 'El ticket debe estar en estado "En Progreso" para crear un trabajo' : ''}
+                  >
+                    Crear Trabajo desde este Ticket
+                  </button>
+                  <button
+                    onClick={() => setIsDetailModalOpen(false)}
+                    className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+                {selectedTicket?.status !== 'IN_PROGRESS' && (
+                  <p className="text-xs text-gray-500 italic">
+                    El ticket debe estar en estado "En Progreso" para crear un trabajo
+                  </p>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
+
+      {/* Toast Notification */}
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 };

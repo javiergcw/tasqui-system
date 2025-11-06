@@ -1,5 +1,7 @@
 // Modelo para tickets de admin
 
+export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+
 export interface AdminTicket {
   id: string;
   company_id: string;
@@ -19,6 +21,18 @@ export interface AdminTicketsResponse {
     total: number;
     limit: number;
     offset: number;
+  };
+}
+
+export interface UpdateTicketStatusRequest {
+  status: TicketStatus;
+}
+
+export interface UpdateTicketStatusResponse {
+  success: boolean;
+  message: string;
+  data: {
+    ticket: AdminTicket;
   };
 }
 

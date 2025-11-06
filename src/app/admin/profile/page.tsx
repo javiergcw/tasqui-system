@@ -7,8 +7,9 @@ import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { AdminProfileHeroSection } from '@/components/admin/AdminProfileHeroSection';
 import { AdminProfileMainSection } from '@/components/admin/AdminProfileMainSection';
 import { colorClasses } from '@/lib/colors';
-import { adminProfileUseCase, getTicketsUseCase } from '@/use-cases';
+import { adminProfileUseCase, getTicketsUseCase, updateTicketStatusUseCase } from '@/use-cases';
 import type { AdminProfile, AdminTicket } from '@/models';
+import type { TicketStatus } from '@/models/admin/ticket.model';
 
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<AdminProfile | null>(null);
@@ -52,6 +53,34 @@ export default function AdminProfilePage() {
     }
   };
 
+  const handleTicketStatusUpdate = async (ticketId: string, status: TicketStatus) => {
+    try {
+      const updatedTicket = await updateTicketStatusUseCase.execute(ticketId, status);
+      // Actualizar el ticket en la lista local
+      setTickets(prevTickets => 
+        prevTickets.map(ticket => 
+          ticket.id === ticketId ? updatedTicket : ticket
+        )
+      );
+      return updatedTicket;
+    } catch (error) {
+      console.error('Error updating ticket status:', error);
+      throw error;
+    }
+  };
+
+  const refreshTickets = async () => {
+    try {
+      setIsLoadingTickets(true);
+      const ticketsData = await getTicketsUseCase.execute();
+      setTickets(ticketsData);
+    } catch (error) {
+      console.error('Error refreshing tickets:', error);
+    } finally {
+      setIsLoadingTickets(false);
+    }
+  };
+
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
@@ -63,6 +92,8 @@ export default function AdminProfilePage() {
           tickets={tickets}
           isLoadingTickets={isLoadingTickets}
           onProfileUpdate={handleProfileUpdate}
+          onTicketStatusUpdate={handleTicketStatusUpdate}
+          onRefreshTickets={refreshTickets}
         />
 
       <Footer />

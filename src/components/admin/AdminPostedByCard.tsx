@@ -1,24 +1,24 @@
 'use client';
 import React from 'react';
-import Image from 'next/image';
 import { colorClasses } from '@/lib/colors';
+import type { AdminJob } from '@/models/admin/job.model';
 
-export const AdminPostedByCard: React.FC = () => {
+interface AdminPostedByCardProps {
+  job: AdminJob;
+}
+
+export const AdminPostedByCard: React.FC<AdminPostedByCardProps> = ({ job }) => {
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
       <h3 className={`text-lg font-bold ${colorClasses.text.slate800} mb-4 text-center`}>Publicado Por</h3>
       <div className="text-center">
-        <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200">
-          <Image 
-            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face" 
-            alt="John Doe" 
-            width={100}
-            height={100}
-            className="w-full h-full object-cover"
-          />
+        <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+          <span className="text-3xl font-bold text-gray-600">
+            {job.title.charAt(0).toUpperCase()}
+          </span>
         </div>
-        <h4 className={`text-lg font-bold ${colorClasses.text.slate800} mb-1`}>John Doe</h4>
-        <p className={`${colorClasses.text.gray600} text-sm`}>CEO de Tourt Design LTD</p>
+        <h4 className={`text-lg font-bold ${colorClasses.text.slate800} mb-1`}>Admin</h4>
+        <p className={`${colorClasses.text.gray600} text-sm`}>Administrador del Sistema</p>
       </div>
     </div>
   );

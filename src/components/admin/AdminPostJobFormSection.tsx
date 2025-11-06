@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { colors } from '@/lib/colors';
 import { AdminJobSkillsSelector } from './AdminJobSkillsSelector';
 import type { SkillCategory } from '@/models/master/skills-complete.model';
+import type { JobCategory, JobTag, JobType, ExperienceLevel } from '@/models/master/job-master-data-complete.model';
 
 interface SelectedSkill {
   categoryId: string;
@@ -12,14 +13,12 @@ interface SelectedSkill {
 
 interface JobFormData {
   jobTitle: string;
-  companyName: string;
-  companyWebsite: string;
   jobType: string;
-  salary: string;
+  salaryMin: string;
+  salaryMax: string;
   jobCategory: string;
-  companyEmail: string;
   location: string;
-  jobTags: string;
+  jobTags: string[];
   experience: string;
   jobDescription: string;
   requiredSkills: SelectedSkill[];
@@ -31,29 +30,103 @@ interface AdminPostJobFormSectionProps {
   skillsCategories?: SkillCategory[];
   isLoadingSkills?: boolean;
   skillsError?: string | null;
+  initialTicketId?: string;
+  jobCategories?: JobCategory[];
+  jobTags?: JobTag[];
+  jobTypes?: JobType[];
+  experienceLevels?: ExperienceLevel[];
+  isLoadingMasterData?: boolean;
+  masterDataError?: string | null;
+  resetForm?: boolean;
+  onResetComplete?: () => void;
 }
 
 export function AdminPostJobFormSection({ 
   onSubmit,
   skillsCategories = [],
   isLoadingSkills = false,
-  skillsError = null
+  skillsError = null,
+  initialTicketId = '',
+  jobCategories = [],
+  jobTags = [],
+  jobTypes = [],
+  experienceLevels = [],
+  isLoadingMasterData = false,
+  masterDataError = null,
+  resetForm = false,
+  onResetComplete
 }: AdminPostJobFormSectionProps) {
   const [formData, setFormData] = useState<JobFormData>({
     jobTitle: '',
-    companyName: '',
-    companyWebsite: '',
     jobType: '',
-    salary: '',
+    salaryMin: '',
+    salaryMax: '',
     jobCategory: '',
-    companyEmail: '',
     location: '',
-    jobTags: '',
+    jobTags: [],
     experience: '',
     jobDescription: '',
     requiredSkills: [],
-    ticketId: ''
+    ticketId: initialTicketId
   });
+
+  const [tagSearchTerm, setTagSearchTerm] = useState('');
+  const [showTagDropdown, setShowTagDropdown] = useState(false);
+  const tagInputRef = React.useRef<HTMLInputElement>(null);
+  const tagDropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Actualizar ticketId cuando cambie initialTicketId
+  React.useEffect(() => {
+    if (initialTicketId) {
+      setFormData(prev => ({
+        ...prev,
+        ticketId: initialTicketId
+      }));
+    }
+  }, [initialTicketId]);
+
+  // Cerrar dropdown al hacer clic fuera
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        tagInputRef.current &&
+        tagDropdownRef.current &&
+        !tagInputRef.current.contains(event.target as Node) &&
+        !tagDropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowTagDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Resetear formulario cuando resetForm sea true
+  React.useEffect(() => {
+    if (resetForm) {
+      setFormData({
+        jobTitle: '',
+        jobType: '',
+        salaryMin: '',
+        salaryMax: '',
+        jobCategory: '',
+        location: '',
+        jobTags: [],
+        experience: '',
+        jobDescription: '',
+        requiredSkills: [],
+        ticketId: initialTicketId
+      });
+      setTagSearchTerm('');
+      setShowTagDropdown(false);
+      if (onResetComplete) {
+        onResetComplete();
+      }
+    }
+  }, [resetForm, initialTicketId, onResetComplete]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -69,6 +142,29 @@ export function AdminPostJobFormSection({
       requiredSkills: skills
     }));
   };
+
+  const handleAddTag = (tagId: string) => {
+    if (!formData.jobTags.includes(tagId)) {
+      setFormData(prev => ({
+        ...prev,
+        jobTags: [...prev.jobTags, tagId]
+      }));
+    }
+    setTagSearchTerm('');
+    setShowTagDropdown(false);
+  };
+
+  const handleRemoveTag = (tagId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      jobTags: prev.jobTags.filter(id => id !== tagId)
+    }));
+  };
+
+  const filteredTags = jobTags.filter(tag => 
+    tag.name.toLowerCase().includes(tagSearchTerm.toLowerCase()) &&
+    !formData.jobTags.includes(tag.id)
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,36 +218,6 @@ export function AdminPostJobFormSection({
                   />
                 </div>
 
-                {/* Company Name */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
-                    Nombre de la Empresa
-                  </label>
-                  <input
-                    type="text"
-                    name="companyName"
-                    value={formData.companyName}
-                    onChange={handleInputChange}
-                    placeholder="Nombre de la empresa"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  />
-                </div>
-
-                {/* Company Website */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
-                    Sitio Web de la Empresa (Opcional)
-                  </label>
-                  <input
-                    type="url"
-                    name="companyWebsite"
-                    value={formData.companyWebsite}
-                    onChange={handleInputChange}
-                    placeholder="ej. www.nombreempresa.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  />
-                </div>
-
                 {/* Job Type */}
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
@@ -162,14 +228,15 @@ export function AdminPostJobFormSection({
                       name="jobType"
                       value={formData.jobType}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
+                      disabled={isLoadingMasterData}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
                     >
                       <option value="">Tipo de Trabajo</option>
-                      <option value="full-time">Tiempo Completo</option>
-                      <option value="part-time">Medio Tiempo</option>
-                      <option value="contract">Contrato</option>
-                      <option value="freelance">Freelance</option>
-                      <option value="internship">Práctica</option>
+                      {jobTypes.map((type) => (
+                        <option key={type.value} value={type.value}>
+                          {type.label}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <svg className="w-5 h-5" style={{ color: colors.gray[600] }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -179,17 +246,36 @@ export function AdminPostJobFormSection({
                   </div>
                 </div>
 
-                {/* Salary */}
+                {/* Salary Min */}
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
-                    Salario (Opcional)
+                    Salario Mínimo (Opcional)
                   </label>
                   <input
-                    type="text"
-                    name="salary"
-                    value={formData.salary}
+                    type="number"
+                    name="salaryMin"
+                    value={formData.salaryMin}
                     onChange={handleInputChange}
-                    placeholder="ej. $20,000"
+                    placeholder="ej. 5000000"
+                    min="0"
+                    step="1000"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
+                  />
+                </div>
+
+                {/* Salary Max */}
+                <div>
+                  <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
+                    Salario Máximo (Opcional)
+                  </label>
+                  <input
+                    type="number"
+                    name="salaryMax"
+                    value={formData.salaryMax}
+                    onChange={handleInputChange}
+                    placeholder="ej. 8000000"
+                    min="0"
+                    step="1000"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
                   />
                 </div>
@@ -207,17 +293,15 @@ export function AdminPostJobFormSection({
                       name="jobCategory"
                       value={formData.jobCategory}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600"
+                      disabled={isLoadingMasterData}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
                     >
                       <option value="">Categoría</option>
-                      <option value="technology">Tecnología</option>
-                      <option value="design">Diseño</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="sales">Ventas</option>
-                      <option value="finance">Finanzas</option>
-                      <option value="hr">Recursos Humanos</option>
-                      <option value="operations">Operaciones</option>
-                      <option value="other">Otro</option>
+                      {jobCategories.map((category) => (
+                        <option key={category.id} value={category.id}>
+                          {category.name}
+                        </option>
+                      ))}
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                       <svg className="w-5 h-5" style={{ color: colors.gray[600] }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -225,21 +309,6 @@ export function AdminPostJobFormSection({
                       </svg>
                     </div>
                   </div>
-                </div>
-
-                {/* Company Email */}
-                <div>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
-                    Correo de la Empresa
-                  </label>
-                  <input
-                    type="email"
-                    name="companyEmail"
-                    value={formData.companyEmail}
-                    onChange={handleInputChange}
-                    placeholder="ej. hola@empresa.com"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  />
                 </div>
 
                 {/* Location */}
@@ -262,29 +331,95 @@ export function AdminPostJobFormSection({
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
                     Etiquetas del Trabajo
                   </label>
-                  <input
-                    type="text"
-                    name="jobTags"
-                    value={formData.jobTags}
-                    onChange={handleInputChange}
-                    placeholder="ej. diseño web, diseño gráfico, edición de video"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  />
+                  <div className="relative">
+                    <input
+                      ref={tagInputRef}
+                      type="text"
+                      value={tagSearchTerm}
+                      onChange={(e) => {
+                        setTagSearchTerm(e.target.value);
+                        setShowTagDropdown(true);
+                      }}
+                      onFocus={() => setShowTagDropdown(true)}
+                      placeholder="Buscar etiquetas..."
+                      disabled={isLoadingMasterData}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                    />
+                    {showTagDropdown && tagSearchTerm && filteredTags.length > 0 && (
+                      <div ref={tagDropdownRef} className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                        {filteredTags.slice(0, 10).map((tag) => (
+                          <div
+                            key={tag.id}
+                            onClick={() => handleAddTag(tag.id)}
+                            className="px-4 py-2 hover:bg-green-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="font-medium text-gray-900">{tag.name}</div>
+                            {tag.description && (
+                              <div className="text-sm text-gray-500">{tag.description}</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  {/* Selected Tags */}
+                  {formData.jobTags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {formData.jobTags.map((tagId) => {
+                        const tag = jobTags.find(t => t.id === tagId);
+                        if (!tag) return null;
+                        return (
+                          <span
+                            key={tagId}
+                            className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium text-white"
+                            style={{ backgroundColor: colors.mainGreen }}
+                          >
+                            {tag.name}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveTag(tagId)}
+                              className="ml-2 hover:text-gray-200"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                  {masterDataError && (
+                    <p className="mt-1 text-sm text-red-600">{masterDataError}</p>
+                  )}
                 </div>
 
                 {/* Experience */}
                 <div>
                   <label className="block text-sm font-medium mb-2" style={{ color: colors.gray[800] }}>
-                    Experiencia
+                    Nivel de Experiencia
                   </label>
-                  <input
-                    type="text"
-                    name="experience"
-                    value={formData.experience}
-                    onChange={handleInputChange}
-                    placeholder="ej. 1 año"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent text-gray-900 placeholder-gray-600"
-                  />
+                  <div className="relative">
+                    <select
+                      name="experience"
+                      value={formData.experience}
+                      onChange={handleInputChange}
+                      disabled={isLoadingMasterData}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent appearance-none bg-white text-gray-900 placeholder-gray-600 disabled:bg-gray-50 disabled:cursor-not-allowed"
+                    >
+                      <option value="">Nivel de Experiencia</option>
+                      {experienceLevels.map((level) => (
+                        <option key={level.value} value={level.value}>
+                          {level.label} ({level.years})
+                        </option>
+                      ))}
+                    </select>
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                      <svg className="w-5 h-5" style={{ color: colors.gray[600] }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

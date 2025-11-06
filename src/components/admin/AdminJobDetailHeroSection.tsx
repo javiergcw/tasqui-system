@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
-export function AdminJobDetailHeroSection() {
+interface AdminJobDetailHeroSectionProps {
+  jobTitle?: string;
+}
+
+export function AdminJobDetailHeroSection({ jobTitle }: AdminJobDetailHeroSectionProps) {
   return (
     <section 
       className="relative py-20 px-4"
@@ -13,7 +17,7 @@ export function AdminJobDetailHeroSection() {
       <div className="relative max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Detalles del Trabajo
+            {jobTitle || 'Detalles del Trabajo'}
           </h1>
           
           {/* Breadcrumb */}
