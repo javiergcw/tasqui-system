@@ -88,6 +88,8 @@ export { AdminEducationCard } from './admin/AdminEducationCard';
 export { AdminExperienceCard } from './admin/AdminExperienceCard';
 export { AdminSkillsCard } from './admin/AdminSkillsCard';
 export { AdminActionButtonsCard } from './admin/AdminActionButtonsCard';
+export { AdminLeadDetailHeroSection } from './admin/AdminLeadDetailHeroSection';
+export { AdminLeadDetailMainSection } from './admin/AdminLeadDetailMainSection';
 export { AdminPostJobHeroSection } from './admin/AdminPostJobHeroSection';
 export { AdminPostJobFormSection } from './admin/AdminPostJobFormSection';
 export { AdminJobSkillsSelector } from './admin/AdminJobSkillsSelector';

@@ -7,8 +7,8 @@ import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { AdminProfileHeroSection } from '@/components/admin/AdminProfileHeroSection';
 import { AdminProfileMainSection } from '@/components/admin/AdminProfileMainSection';
 import { colorClasses } from '@/lib/colors';
-import { adminProfileUseCase, getTicketsUseCase, updateTicketStatusUseCase } from '@/use-cases';
-import type { AdminProfile, AdminTicket } from '@/models';
+import { adminProfileUseCase, getTicketsUseCase, updateTicketStatusUseCase, getAdminStatsUseCase, getAdminLeadsUseCase } from '@/use-cases';
+import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
 import type { TicketStatus } from '@/models/admin/ticket.model';
 
 export default function AdminProfilePage() {
@@ -16,6 +16,10 @@ export default function AdminProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [tickets, setTickets] = useState<AdminTicket[]>([]);
   const [isLoadingTickets, setIsLoadingTickets] = useState(true);
+  const [stats, setStats] = useState<AdminStatsData | null>(null);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
+  const [leads, setLeads] = useState<AdminLead[]>([]);
+  const [isLoadingLeads, setIsLoadingLeads] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +41,26 @@ export default function AdminProfilePage() {
         console.error('Error fetching admin tickets:', error);
       } finally {
         setIsLoadingTickets(false);
+      }
+
+      // Fetch stats
+      try {
+        const statsData = await getAdminStatsUseCase.execute();
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error fetching admin stats:', error);
+      } finally {
+        setIsLoadingStats(false);
+      }
+
+      // Fetch leads
+      try {
+        const leadsData = await getAdminLeadsUseCase.execute();
+        setLeads(leadsData);
+      } catch (error) {
+        console.error('Error fetching admin leads:', error);
+      } finally {
+        setIsLoadingLeads(false);
       }
     };
 
@@ -91,6 +115,10 @@ export default function AdminProfilePage() {
           isLoading={isLoading}
           tickets={tickets}
           isLoadingTickets={isLoadingTickets}
+          statsData={stats}
+          isLoadingStats={isLoadingStats}
+          leads={leads}
+          isLoadingLeads={isLoadingLeads}
           onProfileUpdate={handleProfileUpdate}
           onTicketStatusUpdate={handleTicketStatusUpdate}
           onRefreshTickets={refreshTickets}

@@ -42,7 +42,7 @@ class HttpService {
     const url = this.baseURL ? `${this.baseURL}${endpoint}` : endpoint;
     
     // Verificar si es un endpoint público (no requiere autenticación)
-    const isPublicEndpoint = endpoint.includes('/public/') || endpoint.includes('/leads/');
+    const isPublicEndpoint = endpoint.includes('/public/') || (endpoint.includes('/leads/') && !endpoint.includes('/admin/'));
     // Solo los endpoints de public-web deben llevar el header x-license-key
     const isPublicWebEndpoint = endpoint.includes('/public/');
     

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { colorClasses, colors } from '@/lib/colors';
 import { Toast } from '@/components/ui/Toast';
-import type { AdminProfile, AdminTicket } from '@/models';
+import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
 import type { TicketStatus } from '@/models/admin/ticket.model';
 
 interface AdminProfileMainSectionProps {
@@ -12,6 +12,10 @@ interface AdminProfileMainSectionProps {
   isLoading?: boolean;
   tickets?: AdminTicket[];
   isLoadingTickets?: boolean;
+  statsData?: AdminStatsData | null;
+  isLoadingStats?: boolean;
+  leads?: AdminLead[];
+  isLoadingLeads?: boolean;
   onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
   onTicketStatusUpdate?: (ticketId: string, status: TicketStatus) => Promise<AdminTicket>;
   onRefreshTickets?: () => Promise<void>;
@@ -22,6 +26,10 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
   isLoading = false,
   tickets,
   isLoadingTickets = false,
+  statsData,
+  isLoadingStats = false,
+  leads,
+  isLoadingLeads = false,
   onProfileUpdate,
   onTicketStatusUpdate,
   onRefreshTickets
@@ -49,7 +57,7 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       case 'admin-data':
         return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
       case 'dashboard':
-        return <DashboardTab />;
+        return <DashboardTab statsData={statsData} isLoading={isLoadingStats} />;
       case 'tickets':
         return <TicketsTab 
           tickets={tickets} 
@@ -59,6 +67,8 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
         />;
       case 'employees':
         return <EmployeesTab />;
+      case 'leads':
+        return <LeadsTab leads={leads} isLoading={isLoadingLeads} />;
       default:
         return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
     }
@@ -212,6 +222,34 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                     </svg>
                     <span>Empleados</span>
+                  </button>
+
+                  {/* Leads */}
+                  <button
+                    type="button"
+                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'leads'
+                      ? 'border border-dashed rounded-md'
+                      : 'text-slate-800'
+                      }`}
+                    style={activeTab === 'leads' ? { backgroundColor: colors.mainGreen, color: 'white' } : {}}
+                    onMouseEnter={(e) => {
+                      if (activeTab !== 'leads') {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                        e.currentTarget.style.color = 'white';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (activeTab !== 'leads') {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '';
+                      }
+                    }}
+                    onClick={() => setActiveTab('leads')}
+                  >
+                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2a4 4 0 00-3-3.874M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2a4 4 0 013-3.874m0 0a3.001 3.001 0 11-4.005-3.52M10 14.126a3.001 3.001 0 104.005-3.52M12 7a3 3 0 100-6 3 3 0 000 6z" />
+                    </svg>
+                    <span>Leads</span>
                   </button>
                 </div>
               </nav>
@@ -498,22 +536,36 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
 };
 
 // Dashboard Tab Component
-const DashboardTab: React.FC = () => {
+interface DashboardTabProps {
+  statsData?: AdminStatsData | null;
+  isLoading?: boolean;
+}
 
-  // Mock data
+const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = false }) => {
+  const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState<AdminStatsData['latest_tickets'][number] | null>(null);
+  const ticketStats = statsData?.ticket_statistics;
+
   const stats = [
-    { title: 'Total de Tickets', value: '156', color: 'bg-blue-50 border-blue-200', iconColor: 'text-blue-600' },
-    { title: 'Tickets Abiertos', value: '23', color: 'bg-yellow-50 border-yellow-200', iconColor: 'text-yellow-600' },
-    { title: 'En Progreso', value: '45', color: 'bg-orange-50 border-orange-200', iconColor: 'text-orange-600' },
-    { title: 'Resueltos', value: '88', color: 'bg-green-50 border-green-200', iconColor: 'text-green-600' }
+    { title: 'Total de Tickets', value: ticketStats?.total ?? 0, color: 'bg-blue-50 border-blue-200', iconColor: 'text-blue-600' },
+    { title: 'Tickets Abiertos', value: ticketStats?.by_status?.OPEN ?? 0, color: 'bg-yellow-50 border-yellow-200', iconColor: 'text-yellow-600' },
+    { title: 'En Progreso', value: ticketStats?.by_status?.IN_PROGRESS ?? 0, color: 'bg-orange-50 border-orange-200', iconColor: 'text-orange-600' },
+    { title: 'Resueltos', value: ticketStats?.by_status?.RESOLVED ?? 0, color: 'bg-green-50 border-green-200', iconColor: 'text-green-600' }
   ];
 
-  const recentTickets = [
-    { id: '1', title: 'Login Issue', company: 'TechCorp', status: 'Open', priority: 'High', created: '2024-01-20' },
-    { id: '2', title: 'Payment Problem', company: 'FinanceCo', status: 'In Progress', priority: 'Medium', created: '2024-01-19' },
-    { id: '3', title: 'Feature Request', company: 'StartupXYZ', status: 'Open', priority: 'Low', created: '2024-01-18' },
-    { id: '4', title: 'Bug Report', company: 'DevCorp', status: 'Resolved', priority: 'High', created: '2024-01-17' }
-  ];
+  const recentTickets = statsData?.latest_tickets ?? [];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Cargando estadísticas...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -558,36 +610,184 @@ const DashboardTab: React.FC = () => {
               {recentTickets.map((ticket) => (
                 <tr key={ticket.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ticket.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.company}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.company_id}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      ticket.status === 'Open' ? 'bg-yellow-100 text-yellow-800' :
-                      ticket.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
-                      'bg-green-100 text-green-800'
+                      ticket.status === 'OPEN' ? 'bg-yellow-100 text-yellow-800' :
+                      ticket.status === 'IN_PROGRESS' ? 'bg-blue-100 text-blue-800' :
+                      ticket.status === 'RESOLVED' ? 'bg-green-100 text-green-800' :
+                      'bg-gray-100 text-gray-800'
                     }`}>
                       {ticket.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                      ticket.priority === 'High' ? 'bg-red-100 text-red-800' :
-                      ticket.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-green-100 text-green-800'
+                      'bg-gray-100 text-gray-800'
                     }`}>
-                      {ticket.priority}
+                      {'N/A'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{ticket.created}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(ticket.created_at).toLocaleDateString()}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <button className="text-green-600 hover:text-green-900 mr-3">Ver</button>
-                    <button className="text-green-600 hover:text-green-900">Asignar</button>
+                    <button
+                      onClick={() => {
+                        setSelectedTicket(ticket);
+                        setIsModalOpen(true);
+                      }}
+                      className="text-green-600 hover:text-green-900 transition-colors"
+                    >
+                      Ver
+                    </button>
                   </td>
                 </tr>
               ))}
+              {recentTickets.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                    No hay tickets recientes disponibles.
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {isModalOpen && selectedTicket && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+          <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/80 bg-white/90 shadow-2xl backdrop-blur-xl">
+            <div className="absolute -inset-32 bg-gradient-to-br from-green-200/40 via-white/30 to-transparent blur-3xl" aria-hidden="true" />
+            <div className="relative p-8 space-y-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-gray-500">Ticket reciente</p>
+                  <h3 className="mt-2 text-2xl font-semibold text-gray-900">{selectedTicket.title}</h3>
+                </div>
+                <button
+                  onClick={() => {
+                    setIsModalOpen(false);
+                    setSelectedTicket(null);
+                  }}
+                  className="rounded-full bg-white/80 p-2 text-gray-500 transition hover:bg-white hover:text-gray-700"
+                  aria-label="Cerrar detalle del ticket"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Estado</p>
+                  <span className="mt-2 inline-flex items-center rounded-full bg-gradient-to-r from-green-100 to-green-200 px-3 py-1 text-sm font-semibold text-green-700">
+                    {selectedTicket.status}
+                  </span>
+                </div>
+                <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Empresa</p>
+                  <p className="mt-2 text-sm text-gray-900">{selectedTicket.company_id}</p>
+                </div>
+                <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
+                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Solicitado por</p>
+                  <p className="mt-2 text-sm text-gray-900">{selectedTicket.requested_by_user_id}</p>
+                </div>
+                {selectedTicket.assigned_admin_id ? (
+                  <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
+                    <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Administrador asignado</p>
+                    <p className="mt-2 text-sm text-gray-900">{selectedTicket.assigned_admin_id}</p>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
+                    <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Administrador asignado</p>
+                    <p className="mt-2 text-sm text-gray-500">Sin asignar</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="rounded-3xl bg-white/70 p-6 shadow-sm backdrop-blur">
+                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Descripción</p>
+                <p className="mt-3 text-sm leading-relaxed text-gray-900 whitespace-pre-line">{selectedTicket.description}</p>
+              </div>
+
+              <div className="rounded-3xl bg-white/60 p-6 shadow-sm backdrop-blur">
+                <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Notas</p>
+                {Array.isArray(selectedTicket.notes) && selectedTicket.notes.length > 0 ? (
+                  <div className="mt-3 space-y-3">
+                    {selectedTicket.notes.map(note => (
+                      <div key={note.id} className="rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm">
+                        <p className="text-sm leading-relaxed text-gray-900 whitespace-pre-line">{note.note}</p>
+                        <div className="mt-3 flex flex-col text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+                          <span>ID Nota: {note.id}</span>
+                          <span>
+                            {new Date(note.created_at).toLocaleString('es-ES', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="mt-3 text-sm leading-relaxed text-gray-500">
+                    Este ticket aún no tiene notas registradas.
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-3 text-xs text-gray-500 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <span className="font-medium text-gray-600">Creado:</span>{' '}
+                  {new Date(selectedTicket.created_at).toLocaleString('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </div>
+                <div>
+                  <span className="font-medium text-gray-600">Actualizado:</span>{' '}
+                  {new Date(selectedTicket.updated_at).toLocaleString('es-ES', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </div>
+              </div>
+
+              <div className="flex justify-end">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                  {selectedTicket.status === 'IN_PROGRESS' && (
+                    <button
+                      onClick={() => router.push(`/admin/post-job?ticket_id=${selectedTicket.id}`)}
+                      className="rounded-full bg-green-600 px-6 py-2 text-sm font-semibold text-white transition hover:bg-green-700"
+                    >
+                      Crear nuevo trabajo
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setSelectedTicket(null);
+                    }}
+                    className="rounded-full bg-gray-900 px-6 py-2 text-sm font-semibold text-white transition hover:bg-black"
+                  >
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -831,6 +1031,35 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
                 <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedTicket.description}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Notas</label>
+                {Array.isArray(selectedTicket.notes) && selectedTicket.notes.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedTicket.notes.map(note => (
+                      <div key={note.id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <p className="text-sm text-gray-900 whitespace-pre-wrap">{note.note}</p>
+                        <div className="mt-2 text-xs text-gray-500 flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                          <span>ID Nota: {note.id}</span>
+                          <span>
+                            {new Date(note.created_at).toLocaleString('es-ES', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit'
+                            })}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                    Este ticket aún no tiene notas registradas.
+                  </p>
+                )}
               </div>
 
               {/* Actions */}
@@ -1143,6 +1372,137 @@ const EmployeesTab: React.FC = () => {
           <button className="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">Siguiente</button>
         </div>
       </div>
+    </div>
+  );
+};
+
+interface LeadsTabProps {
+  leads?: AdminLead[];
+  isLoading?: boolean;
+}
+
+const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false }) => {
+  const router = useRouter();
+ 
+  const getStatusBadgeColor = (status: string) => {
+    switch (status) {
+      case 'PENDING':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'CONTACTED':
+        return 'bg-blue-100 text-blue-800';
+      case 'QUALIFIED':
+        return 'bg-green-100 text-green-800';
+      case 'NEGOTIATION':
+        return 'bg-purple-100 text-purple-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getFullName = (lead: AdminLead) => {
+    const fullName = `${lead.first_name ?? ''} ${lead.last_name ?? ''}`.trim();
+    return fullName.length > 0 ? fullName : 'Sin nombre';
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Cargando leads...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 className="text-xl md:text-2xl font-bold text-gray-800">Leads</h2>
+          <p className="text-sm text-gray-600 mt-1">Monitorea y da seguimiento a los leads que llegan a la plataforma.</p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            Exportar CSV
+          </button>
+          <button
+            className="px-4 py-2 text-white rounded-lg transition-colors"
+            style={{ backgroundColor: colors.mainGreen }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.hoverGreen;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.mainGreen;
+            }}
+          >
+            Nuevo Lead
+          </button>
+        </div>
+      </div>
+
+      {leads.length === 0 ? (
+        <div className="bg-white border border-gray-200 rounded-lg p-8 text-center">
+          <h3 className="text-lg font-semibold text-gray-800 mb-2">Aún no hay leads registrados</h3>
+          <p className="text-sm text-gray-500">Cuando existan leads en la plataforma aparecerán aquí.</p>
+        </div>
+      ) : (
+      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compañía</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fuente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actualizado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {leads.map((lead) => (
+                <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{getFullName(lead)}</p>
+                      <p className="text-xs text-gray-500">{lead.email}</p>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.company || 'No especificado'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(lead.status)}`}>
+                      {lead.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.source || 'Desconocido'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.created_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.updated_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="text-green-600 hover:text-green-900 text-sm"
+                        onClick={() => router.push(`/admin/leads/${lead.id}`)}
+                      >
+                        Ver
+                      </button>
+                      <span className="text-gray-300">|</span>
+                      <button className="text-blue-600 hover:text-blue-900 text-sm">Contactar</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 text-sm text-gray-600">
+          Mostrando {leads.length} leads
+        </div>
+      </div>
+      )}
     </div>
   );
 };

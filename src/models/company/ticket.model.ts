@@ -9,11 +9,13 @@ export interface Ticket {
   id: string;
   company_id: string;
   requested_by_user_id: string;
+  assigned_admin_id?: string | null;
   title: string;
   description: string;
   status: string;
   created_at: string;
   updated_at: string;
+  notes?: TicketNote[] | null;
 }
 
 export interface CreateTicketResponse {
@@ -42,6 +44,7 @@ export interface AddTicketNoteRequest {
 export interface TicketNote {
   id: string;
   ticket_id: string;
+  company_id: string;
   note: string;
   created_at: string;
   updated_at: string;

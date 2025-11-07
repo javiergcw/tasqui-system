@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MyJobCard } from './MyJobCard';
 import { MyJobsFilter } from './MyJobsFilter';
 import { colorClasses, colors } from '@/lib/colors';
+import type { CompanyJobListItem } from '@/models/company/job.model';
 
 interface FilterData {
   status: string;
@@ -13,7 +14,121 @@ interface FilterData {
   date: string;
 }
 
-export const MyJobsSection: React.FC = () => {
+type MyJobCardStatus = 'Active' | 'Paused' | 'Closed';
+
+interface DisplayJob {
+  id: string;
+  companyInitial: string;
+  jobTitle: string;
+  jobCategory: string;
+  salary: string;
+  location: string;
+  postedTime: string;
+  jobType: string;
+  status: MyJobCardStatus;
+  statusFilterValue: string;
+  city: string;
+  modality: string;
+  postedDate: Date;
+}
+
+interface MyJobsSectionProps {
+  jobs: CompanyJobListItem[];
+}
+
+const normalizeStatusForCard = (status?: string): MyJobCardStatus => {
+  const normalized = status?.toUpperCase() ?? 'UNKNOWN';
+
+  switch (normalized) {
+    case 'OPEN':
+    case 'PUBLISHED':
+    case 'ACTIVE':
+      return 'Active';
+    case 'PAUSED':
+    case 'IN_PROGRESS':
+    case 'DRAFT':
+      return 'Paused';
+    default:
+      return 'Closed';
+  }
+};
+
+const getRelativeTime = (dateIso: string): { label: string; date: Date } => {
+  const parsedDate = new Date(dateIso);
+  if (Number.isNaN(parsedDate.getTime())) {
+    return { label: 'Fecha desconocida', date: new Date() };
+  }
+
+  const date = parsedDate;
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (diffDays <= 0) {
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    if (diffHours <= 0) {
+      const diffMinutes = Math.floor(diffMs / (1000 * 60));
+      if (diffMinutes <= 0) {
+        return { label: 'Publicado hace un momento', date };
+      }
+      return { label: `Hace ${diffMinutes} minuto${diffMinutes === 1 ? '' : 's'}`, date };
+    }
+    return { label: `Hace ${diffHours} hora${diffHours === 1 ? '' : 's'}`, date };
+  }
+
+  if (diffDays === 1) {
+    return { label: 'Hace 1 día', date };
+  }
+
+  if (diffDays < 7) {
+    return { label: `Hace ${diffDays} días`, date };
+  }
+
+  if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return { label: `Hace ${weeks} semana${weeks === 1 ? '' : 's'}`, date };
+  }
+
+  if (diffDays < 365) {
+    const months = Math.floor(diffDays / 30);
+    return { label: `Hace ${months} mes${months === 1 ? '' : 'es'}`, date };
+  }
+
+  const years = Math.floor(diffDays / 365);
+  return { label: `Hace ${years} año${years === 1 ? '' : 's'}`, date };
+};
+
+const getCityKey = (location: string): string => {
+  if (!location) return '';
+  const [city] = location.split(',');
+  return city?.trim().toLowerCase() || '';
+};
+
+const mapJobsToDisplay = (jobs: CompanyJobListItem[]): DisplayJob[] => {
+  return jobs.map((job) => {
+    const relative = getRelativeTime(job.created_at);
+    const statusForCard = normalizeStatusForCard(job.status);
+    const rawStatus = job.status ?? 'UNKNOWN';
+
+    return {
+      id: job.id,
+      companyInitial: job.title?.charAt(0)?.toUpperCase() || 'T',
+      jobTitle: job.title || 'Trabajo sin título',
+      jobCategory: 'Categoría no especificada',
+      salary: 'Salario no especificado',
+      location: job.location || 'Ubicación no especificada',
+      postedTime: relative.label,
+      jobType: 'Tipo no especificado',
+      status: statusForCard,
+      statusFilterValue: rawStatus.toLowerCase(),
+      city: getCityKey(job.location),
+      modality: 'unknown',
+      postedDate: relative.date,
+    };
+  });
+};
+
+export const MyJobsSection: React.FC<MyJobsSectionProps> = ({ jobs }) => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<FilterData>({
@@ -23,160 +138,41 @@ export const MyJobsSection: React.FC = () => {
     date: ''
   });
   const jobsPerPage = 4;
-  
-  const jobs = useMemo(() => [
-    {
-      id: "1",
-      companyInitial: "V",
-      jobTitle: "Diseñador Web, Diseñador Gráfico, Diseñador UI/UX",
-      jobCategory: "Diseñador Gráfico",
-      salary: "$2.500.000-$3.000.000",
-      location: "Bogotá, Colombia",
-      postedTime: "hace 9 días",
-      jobType: "Tiempo Completo",
-      status: "Active" as const,
-      city: "bogota",
-      modality: "full-time",
-      postedDate: new Date('2024-01-15')
-    },
-    {
-      id: "2",
-      companyInitial: "T",
-      jobTitle: "Desarrollador Web y Desarrollador de Software",
-      jobCategory: "Desarrollador Web",
-      salary: "$3.500.000-$5.000.000",
-      location: "Medellín, Colombia",
-      postedTime: "hace 5 días",
-      jobType: "Tiempo Completo",
-      status: "Paused" as const,
-      city: "medellin",
-      modality: "full-time",
-      postedDate: new Date('2024-01-20')
-    },
-    {
-      id: "3",
-      companyInitial: "A",
-      jobTitle: "Especialista en Marketing",
-      jobCategory: "Marketing",
-      salary: "$2.000.000-$2.800.000",
-      location: "Cali, Colombia",
-      postedTime: "hace 2 días",
-      jobType: "Medio Tiempo",
-      status: "Active" as const,
-      city: "cali",
-      modality: "part-time",
-      postedDate: new Date('2024-01-23')
-    },
-    {
-      id: "4",
-      companyInitial: "B",
-      jobTitle: "Analista de Datos",
-      jobCategory: "Ciencia de Datos",
-      salary: "$3.800.000-$4.500.000",
-      location: "Barranquilla, Colombia",
-      postedTime: "hace 1 semana",
-      jobType: "Contrato",
-      status: "Closed" as const,
-      city: "barranquilla",
-      modality: "contract",
-      postedDate: new Date('2024-01-16')
-    },
-    {
-      id: "5",
-      companyInitial: "C",
-      jobTitle: "Desarrollador Frontend",
-      jobCategory: "Desarrollador Web",
-      salary: "$4.500.000-$5.000.000",
-      location: "Medellín, Colombia",
-      postedTime: "hace 3 días",
-      jobType: "Tiempo Completo",
-      status: "Active" as const,
-      city: "medellin",
-      modality: "full-time",
-      postedDate: new Date('2024-01-21')
-    },
-    {
-      id: "6",
-      companyInitial: "D",
-      jobTitle: "Desarrollador Backend",
-      jobCategory: "Desarrollador Web",
-      salary: "$5.000.000-$5.500.000",
-      location: "Cali, Colombia",
-      postedTime: "hace 1 día",
-      jobType: "Tiempo Completo",
-      status: "Active" as const,
-      city: "cali",
-      modality: "full-time",
-      postedDate: new Date('2024-01-24')
-    },
-    {
-      id: "7",
-      companyInitial: "E",
-      jobTitle: "Diseñador UI/UX",
-      jobCategory: "Diseñador Gráfico",
-      salary: "$2.800.000-$3.200.000",
-      location: "Barranquilla, Colombia",
-      postedTime: "hace 4 días",
-      jobType: "Medio Tiempo",
-      status: "Paused" as const,
-      city: "barranquilla",
-      modality: "part-time",
-      postedDate: new Date('2024-01-20')
-    },
-    {
-      id: "8",
-      companyInitial: "F",
-      jobTitle: "Gerente de Proyectos",
-      jobCategory: "Gestión",
-      salary: "$6.000.000-$6.500.000",
-      location: "Bogotá, Colombia",
-      postedTime: "hace 6 días",
-      jobType: "Tiempo Completo",
-      status: "Active" as const,
-      city: "bogota",
-      modality: "full-time",
-      postedDate: new Date('2024-01-18')
-    }
-  ], []);
+
+  const displayJobs = useMemo(() => mapJobsToDisplay(jobs), [jobs]);
 
   const handleView = (jobId: string) => {
-    console.log('View job:', jobId);
     router.push(`/company/view-job/${jobId}`);
   };
 
   const handleFilterChange = (newFilters: FilterData) => {
     setFilters(newFilters);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
-  // Filter jobs based on current filters
   const filteredJobs = useMemo(() => {
-    return jobs.filter(job => {
-      // Status filter
-      if (filters.status && job.status.toLowerCase() !== filters.status) {
+    return displayJobs.filter((job) => {
+      if (filters.status && job.statusFilterValue !== filters.status) {
         return false;
       }
-      
-      // City filter
+
       if (filters.city && job.city !== filters.city) {
         return false;
       }
-      
-      // Modality filter
+
       if (filters.modality && job.modality !== filters.modality) {
         return false;
       }
-      
-      // Date filter
+
       if (filters.date) {
         const now = new Date();
         const jobDate = job.postedDate;
         const daysDiff = Math.floor((now.getTime() - jobDate.getTime()) / (1000 * 60 * 60 * 24));
-        
+
         switch (filters.date) {
           case 'today':
             if (daysDiff > 1) return false;
@@ -195,13 +191,12 @@ export const MyJobsSection: React.FC = () => {
             break;
         }
       }
-      
+
       return true;
     });
-  }, [jobs, filters]);
+  }, [displayJobs, filters]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage);
+  const totalPages = Math.ceil(filteredJobs.length / jobsPerPage) || 1;
   const startIndex = (currentPage - 1) * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
   const currentJobs = filteredJobs.slice(startIndex, endIndex);
@@ -221,15 +216,13 @@ export const MyJobsSection: React.FC = () => {
           </p>
         </div>
         
-        {/* Filter Component */}
         <MyJobsFilter onFilterChange={handleFilterChange} />
 
-        {/* Jobs List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {currentJobs.length > 0 ? (
-            currentJobs.map((job, index) => (
+            currentJobs.map((job) => (
               <MyJobCard
-                key={index}
+                key={job.id}
                 id={job.id}
                 companyInitial={job.companyInitial}
                 jobTitle={job.jobTitle}
@@ -250,10 +243,8 @@ export const MyJobsSection: React.FC = () => {
           )}
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center space-x-2">
-            {/* Previous Button */}
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -291,7 +282,6 @@ export const MyJobsSection: React.FC = () => {
               </svg>
             </button>
 
-            {/* Page Numbers */}
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
@@ -328,7 +318,6 @@ export const MyJobsSection: React.FC = () => {
               </button>
             ))}
 
-            {/* Next Button */}
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}

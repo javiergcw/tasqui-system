@@ -28,6 +28,7 @@ export const API_ROUTES = {
     profile: '/api/v1/company/profile',
     tickets: '/api/v1/company/tickets',
     ticketNotes: (ticketId: string) => `/api/v1/company/tickets/${ticketId}/notes`,
+    jobs: '/api/v1/company/jobs',
   },
   
   // Admin
@@ -38,6 +39,9 @@ export const API_ROUTES = {
     jobs: '/api/v1/admin/jobs',
     jobDetail: (id: string) => `/api/v1/admin/jobs/${id}`,
     updateJobStatus: (id: string) => `/api/v1/admin/jobs/${id}/status`,
+    stats: '/api/v1/admin/stats',
+    leads: '/api/v1/admin/leads',
+    leadDetail: (id: string) => `/api/v1/admin/leads/${id}`,
   },
   
   // Jobs (pendiente)

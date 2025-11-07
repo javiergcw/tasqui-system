@@ -1067,7 +1067,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
   // Convertir tickets de la API al formato LocalTicket
   const localTickets: LocalTicket[] = tickets.map(ticket => ({
     ...ticket,
-    assigned_admin: null // La API no incluye este campo, se puede agregar después si es necesario
+    assigned_admin: ticket.assigned_admin_id ?? null
   }));
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -1526,6 +1526,32 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Descripción</label>
                 <p className="text-sm text-gray-900 bg-gray-50 p-3 rounded-lg whitespace-pre-wrap">{selectedTicket.description}</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Notas</label>
+                {Array.isArray(selectedTicket.notes) && selectedTicket.notes.length > 0 ? (
+                  <div className="space-y-3">
+                    {selectedTicket.notes.map(note => (
+                      <div key={note.id} className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                        <p className="text-sm text-gray-900 whitespace-pre-wrap">{note.note}</p>
+                        <div className="mt-2 text-xs text-gray-500">
+                          {new Date(note.created_at).toLocaleString('es-ES', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                    Este ticket aún no tiene notas registradas.
+                  </p>
+                )}
               </div>
 
               {/* Actions */}
