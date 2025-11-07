@@ -2,4 +2,5 @@
 
 export * from './register.model';
 export * from './profile.model';
+export * from './education.model';
 

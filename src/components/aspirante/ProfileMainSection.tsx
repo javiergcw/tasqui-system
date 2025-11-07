@@ -10,20 +10,37 @@ import { EntrevistasProgramadas } from './EntrevistasProgramadas';
 import { SkillsSection } from './SkillsSection';
 import { colors } from '@/lib/colors';
 import type { EmployeeProfile } from '@/models';
+import type { EmployeeEducation } from '@/models/employee/education.model';
 import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
+import type {
+  CreateEmployeeEducationRequest,
+  UpdateEmployeeEducationRequest,
+} from '@/models/employee/education.model';
 
 interface ProfileMainSectionProps {
   profile?: EmployeeProfile | null;
   isLoading?: boolean;
   onUpdateProfile?: (data: UpdateEmployeeProfileRequest) => Promise<EmployeeProfile>;
   isUpdatingProfile?: boolean;
+  educations?: EmployeeEducation[];
+  isLoadingEducations?: boolean;
+  onCreateEducation?: (data: CreateEmployeeEducationRequest) => Promise<EmployeeEducation>;
+  onUpdateEducation?: (id: string, data: UpdateEmployeeEducationRequest) => Promise<EmployeeEducation>;
+  onDeleteEducation?: (id: string) => Promise<void>;
+  isSavingEducation?: boolean;
 }
 
 export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({ 
   profile, 
   isLoading = false,
   onUpdateProfile,
-  isUpdatingProfile = false
+  isUpdatingProfile = false,
+  educations,
+  isLoadingEducations = false,
+  onCreateEducation,
+  onUpdateEducation,
+  onDeleteEducation,
+  isSavingEducation = false
 }) => {
   const [activeTab, setActiveTab] = useState('datos-personales');
 
@@ -32,7 +49,16 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
       case 'datos-personales':
         return <DatosPersonales profile={profile} onUpdateProfile={onUpdateProfile} isUpdatingProfile={isUpdatingProfile} />;
       case 'formacion-academica':
-        return <FormacionAcademica />;
+        return (
+          <FormacionAcademica
+            educations={educations}
+            isLoading={isLoadingEducations}
+            isSaving={isSavingEducation}
+            onCreateEducation={onCreateEducation}
+            onUpdateEducation={onUpdateEducation}
+            onDeleteEducation={onDeleteEducation}
+          />
+        );
       case 'experiencia-laboral':
         return <ExperienciaLaboral />;
       case 'vacantes-aplicadas':

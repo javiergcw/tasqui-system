@@ -1,50 +1,120 @@
 'use client';
-import React, { useState } from 'react';
-import { colorClasses,colors } from '@/lib/colors';
 
-export const FormacionAcademica: React.FC = () => {
-  const [formaciones, setFormaciones] = useState([
-    {
-      id: 1,
-      institucion: 'Universidad Tecnológica',
-      titulo: 'Ingeniería en Sistemas',
-      fechaInicio: '2018-09-01',
-      fechaFin: '2022-06-30',
-      descripcion: 'Especialización en desarrollo de software y tecnologías web.'
-    }
-  ]);
+import React, { useMemo, useState } from 'react';
+import { colorClasses, colors } from '@/lib/colors';
+import type { EmployeeEducation } from '@/models/employee/education.model';
+import type {
+  CreateEmployeeEducationRequest,
+  UpdateEmployeeEducationRequest,
+} from '@/models/employee/education.model';
 
-  const [nuevaFormacion, setNuevaFormacion] = useState({
-    institucion: '',
-    titulo: '',
-    fechaInicio: '',
-    fechaFin: '',
-    descripcion: ''
+interface FormacionAcademicaProps {
+  educations?: EmployeeEducation[];
+  isLoading?: boolean;
+  isSaving?: boolean;
+  onCreateEducation?: (data: CreateEmployeeEducationRequest) => Promise<EmployeeEducation>;
+  onUpdateEducation?: (id: string, data: UpdateEmployeeEducationRequest) => Promise<EmployeeEducation>;
+  onDeleteEducation?: (id: string) => Promise<void>;
+}
+
+export const FormacionAcademica: React.FC<FormacionAcademicaProps> = ({
+  educations = [],
+  isLoading = false,
+  isSaving = false,
+  onCreateEducation,
+  onUpdateEducation,
+  onDeleteEducation,
+}) => {
+  const [showForm, setShowForm] = useState(false);
+  const [editingEducation, setEditingEducation] = useState<EmployeeEducation | null>(null);
+  const [formData, setFormData] = useState<UpdateEmployeeEducationRequest>({
+    degree_name: '',
+    institution_name: '',
+    start_date: '',
+    end_date: '',
+    description: '',
   });
 
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const sortedEducations = useMemo(
+    () =>
+      [...educations].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()),
+    [educations]
+  );
 
-  const handleAgregarFormacion = () => {
-    if (nuevaFormacion.institucion && nuevaFormacion.titulo) {
-      const nueva = {
-        id: Date.now(),
-        ...nuevaFormacion
-      };
-      setFormaciones([...formaciones, nueva]);
-      setNuevaFormacion({
-        institucion: '',
-        titulo: '',
-        fechaInicio: '',
-        fechaFin: '',
-        descripcion: ''
-      });
-      setMostrarFormulario(false);
+  const resetForm = () => {
+    setFormData({
+      degree_name: '',
+      institution_name: '',
+      start_date: '',
+      end_date: '',
+      description: '',
+    });
+    setEditingEducation(null);
+  };
+
+  const handleStartCreate = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const handleEdit = (education: EmployeeEducation) => {
+    setEditingEducation(education);
+    setFormData({
+      degree_name: education.degree_name,
+      institution_name: education.institution_name,
+      start_date: education.start_date,
+      end_date: education.end_date,
+      description: education.description,
+    });
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!onDeleteEducation) return;
+    try {
+      await onDeleteEducation(id);
+    } catch (error) {
+      console.error('Error al eliminar formación:', error);
     }
   };
 
-  const handleEliminarFormacion = (id: number) => {
-    setFormaciones(formaciones.filter(f => f.id !== id));
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const normalizeDate = (value: string) => {
+      if (!value) return '';
+      return value.includes('T') ? value : `${value}T00:00:00Z`;
+    };
+
+    const payload: UpdateEmployeeEducationRequest = {
+      ...formData,
+      start_date: normalizeDate(formData.start_date),
+      end_date: normalizeDate(formData.end_date),
+    };
+
+    try {
+      if (editingEducation && onUpdateEducation) {
+        await onUpdateEducation(editingEducation.id, payload);
+      } else if (onCreateEducation) {
+        await onCreateEducation(payload as CreateEmployeeEducationRequest);
+      }
+      setShowForm(false);
+      resetForm();
+    } catch (error) {
+      console.error('Error guardando formación académica:', error);
+    }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12 text-gray-600">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4">Cargando formación académica...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -52,19 +122,25 @@ export const FormacionAcademica: React.FC = () => {
         <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
           Formación Académica
         </h2>
-        <button
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-          style={{ backgroundColor: colors.mainGreen }}
-        >
-          {mostrarFormulario ? 'Cancelar' : '+ Agregar Formación'}
-        </button>
+        {onCreateEducation && (
+          <button
+            onClick={handleStartCreate}
+            className="px-4 py-2 text-white font-medium rounded-md transition-colors"
+            style={{ backgroundColor: colors.mainGreen }}
+          >
+            {showForm ? 'Cancelar' : '+ Agregar Formación'}
+          </button>
+        )}
       </div>
 
-      {/* Formulario para nueva formación */}
-      {mostrarFormulario && (
-        <div className={`border ${colorClasses.border.gray200} rounded-lg p-6 mb-6 ${colorClasses.background.gray50}`}>
-          <h3 className="text-lg font-semibold mb-4">Nueva Formación Académica</h3>
+      {showForm && (
+        <form
+          onSubmit={handleSubmit}
+          className={`border ${colorClasses.border.gray200} rounded-lg p-6 mb-6 ${colorClasses.background.gray50}`}
+        >
+          <h3 className="text-lg font-semibold mb-4" style={{ color: colors.mainGreen }}>
+            {editingEducation ? 'Editar formación académica' : 'Nueva formación académica'}
+          </h3>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
@@ -72,10 +148,10 @@ export const FormacionAcademica: React.FC = () => {
               </label>
               <input
                 type="text"
-                placeholder="Universidad o Instituto"
-                value={nuevaFormacion.institucion}
-                onChange={(e) => setNuevaFormacion({...nuevaFormacion, institucion: e.target.value})}
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${colorClasses.text.gray900}`}
+                value={formData.institution_name}
+                onChange={(e) => setFormData({ ...formData, institution_name: e.target.value })}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${colorClasses.text.gray900}`}
+                required
               />
             </div>
             <div>
@@ -84,10 +160,10 @@ export const FormacionAcademica: React.FC = () => {
               </label>
               <input
                 type="text"
-                placeholder="Título o Certificación"
-                value={nuevaFormacion.titulo}
-                onChange={(e) => setNuevaFormacion({...nuevaFormacion, titulo: e.target.value})}
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${colorClasses.text.gray900}`}
+                value={formData.degree_name}
+                onChange={(e) => setFormData({ ...formData, degree_name: e.target.value })}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${colorClasses.text.gray900}`}
+                required
               />
             </div>
             <div>
@@ -96,9 +172,9 @@ export const FormacionAcademica: React.FC = () => {
               </label>
               <input
                 type="date"
-                value={nuevaFormacion.fechaInicio}
-                onChange={(e) => setNuevaFormacion({...nuevaFormacion, fechaInicio: e.target.value})}
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${colorClasses.text.gray900}`}
+                value={formData.start_date?.slice(0, 10) || ''}
+                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${colorClasses.text.gray900}`}
               />
             </div>
             <div>
@@ -107,9 +183,9 @@ export const FormacionAcademica: React.FC = () => {
               </label>
               <input
                 type="date"
-                value={nuevaFormacion.fechaFin}
-                onChange={(e) => setNuevaFormacion({...nuevaFormacion, fechaFin: e.target.value})}
-                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 ${colorClasses.text.gray900}`}
+                value={formData.end_date?.slice(0, 10) || ''}
+                onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 ${colorClasses.text.gray900}`}
               />
             </div>
           </div>
@@ -118,73 +194,86 @@ export const FormacionAcademica: React.FC = () => {
               Descripción
             </label>
             <textarea
-              placeholder="Descripción de la formación académica"
               rows={3}
-              value={nuevaFormacion.descripcion}
-              onChange={(e) => setNuevaFormacion({...nuevaFormacion, descripcion: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
             />
           </div>
           <div className="flex gap-4 mt-4">
             <button
-              onClick={handleAgregarFormacion}
-              className="px-6 py-2 text-white font-medium rounded-md transition-colors"
+              type="submit"
+              disabled={isSaving}
+              className="px-6 py-2 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: colors.mainGreen }}
             >
-              Guardar Formación
+              {isSaving ? 'Guardando...' : 'Guardar'}
             </button>
             <button
-              onClick={() => setMostrarFormulario(false)}
+              type="button"
+              onClick={() => {
+                setShowForm(false);
+                resetForm();
+              }}
               className="px-6 py-2 text-gray-600 font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
               Cancelar
             </button>
           </div>
-        </div>
+        </form>
       )}
 
-      {/* Lista de formaciones */}
       <div className="space-y-4">
-        {formaciones.map((formacion) => (
-          <div key={formacion.id} className={`border ${colorClasses.border.gray200} rounded-lg p-4`}>
-            <div className="flex justify-between items-start">
+        {sortedEducations.map((education) => (
+          <div key={education.id} className={`border ${colorClasses.border.gray200} rounded-lg p-4 bg-white`}>
+            <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
-                <h3 className={`text-lg font-semibold ${colorClasses.text.gray900}`}>{formacion.titulo}</h3>
-                <p className={`${colorClasses.text.gray600} font-medium`}>{formacion.institucion}</p>
-                <div className={`flex gap-4 text-sm ${colorClasses.text.gray600} mt-2`}>
-                  {formacion.fechaInicio && (
-                    <span>Inicio: {new Date(formacion.fechaInicio).toLocaleDateString()}</span>
-                  )}
-                  {formacion.fechaFin && (
-                    <span>Fin: {new Date(formacion.fechaFin).toLocaleDateString()}</span>
-                  )}
+                <h3 className={`text-lg font-semibold ${colorClasses.text.gray900}`}>{education.degree_name}</h3>
+                <p className={`${colorClasses.text.gray600} font-medium`}>{education.institution_name}</p>
+                <div className={`flex flex-wrap gap-4 text-sm ${colorClasses.text.gray600} mt-2`}>
+                  <span>
+                    Inicio: {education.start_date ? new Date(education.start_date).toLocaleDateString() : 'N/D'}
+                  </span>
+                  <span>
+                    Fin: {education.end_date ? new Date(education.end_date).toLocaleDateString() : 'Actual'}
+                  </span>
                 </div>
-                {formacion.descripcion && (
-                  <p className={`${colorClasses.text.gray600} mt-2`}>{formacion.descripcion}</p>
+                {education.description && (
+                  <p className={`${colorClasses.text.gray600} mt-2 whitespace-pre-wrap`}>{education.description}</p>
                 )}
               </div>
-              <button
-                onClick={() => handleEliminarFormacion(formacion.id)}
-                className={`${colorClasses.text.red500} hover:${colorClasses.text.red500} p-2`}
-                title="Eliminar formación"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
+              <div className="flex flex-col gap-2">
+                {onUpdateEducation && (
+                  <button
+                    onClick={() => handleEdit(education)}
+                    className="px-3 py-1 text-sm font-medium text-white rounded-md transition-colors"
+                    style={{ backgroundColor: colors.mainGreen }}
+                  >
+                    Editar
+                  </button>
+                )}
+                {onDeleteEducation && (
+                  <button
+                    onClick={() => handleDelete(education.id)}
+                    className="px-3 py-1 text-sm font-medium text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {formaciones.length === 0 && (
+      {sortedEducations.length === 0 && (
         <div className={`text-center py-8 ${colorClasses.text.gray600}`}>
           <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
           </svg>
           <p>No tienes formación académica registrada</p>
-          <p className="text-sm">Haz clic en &quot;Agregar Formación&quot; para comenzar</p>
+          <p className="text-sm">Actualiza tu perfil para agregar tu formación.</p>
         </div>
       )}
     </div>

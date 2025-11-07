@@ -21,6 +21,8 @@ export const API_ROUTES = {
   // Employee
   employee: {
     profile: '/api/v1/employee/profile',
+    educations: '/api/v1/employee/educations',
+    educationDetail: (id: string) => `/api/v1/employee/educations/${id}`,
   },
   
   // Company
