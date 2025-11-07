@@ -23,6 +23,8 @@ export const API_ROUTES = {
     profile: '/api/v1/employee/profile',
     educations: '/api/v1/employee/educations',
     educationDetail: (id: string) => `/api/v1/employee/educations/${id}`,
+    experiences: '/api/v1/employee/experiences',
+    experienceDetail: (id: string) => `/api/v1/employee/experiences/${id}`,
   },
   
   // Company

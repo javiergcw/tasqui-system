@@ -138,7 +138,7 @@ export const MyJobsSection: React.FC<MyJobsSectionProps> = ({ jobs }) => {
     date: ''
   });
   const jobsPerPage = 4;
-
+  
   const displayJobs = useMemo(() => mapJobsToDisplay(jobs), [jobs]);
 
   const handleView = (jobId: string) => {
@@ -159,20 +159,20 @@ export const MyJobsSection: React.FC<MyJobsSectionProps> = ({ jobs }) => {
       if (filters.status && job.statusFilterValue !== filters.status) {
         return false;
       }
-
+      
       if (filters.city && job.city !== filters.city) {
         return false;
       }
-
+      
       if (filters.modality && job.modality !== filters.modality) {
         return false;
       }
-
+      
       if (filters.date) {
         const now = new Date();
         const jobDate = job.postedDate;
         const daysDiff = Math.floor((now.getTime() - jobDate.getTime()) / (1000 * 60 * 60 * 24));
-
+        
         switch (filters.date) {
           case 'today':
             if (daysDiff > 1) return false;
@@ -191,7 +191,7 @@ export const MyJobsSection: React.FC<MyJobsSectionProps> = ({ jobs }) => {
             break;
         }
       }
-
+      
       return true;
     });
   }, [displayJobs, filters]);

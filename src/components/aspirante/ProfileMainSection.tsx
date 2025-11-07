@@ -11,11 +11,16 @@ import { SkillsSection } from './SkillsSection';
 import { colors } from '@/lib/colors';
 import type { EmployeeProfile } from '@/models';
 import type { EmployeeEducation } from '@/models/employee/education.model';
-import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
 import type {
   CreateEmployeeEducationRequest,
   UpdateEmployeeEducationRequest,
 } from '@/models/employee/education.model';
+import type { EmployeeExperience } from '@/models/employee/experience.model';
+import type {
+  CreateEmployeeExperienceRequest,
+  UpdateEmployeeExperienceRequest,
+} from '@/models/employee/experience.model';
+import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
 
 interface ProfileMainSectionProps {
   profile?: EmployeeProfile | null;
@@ -28,6 +33,12 @@ interface ProfileMainSectionProps {
   onUpdateEducation?: (id: string, data: UpdateEmployeeEducationRequest) => Promise<EmployeeEducation>;
   onDeleteEducation?: (id: string) => Promise<void>;
   isSavingEducation?: boolean;
+  experiences?: EmployeeExperience[];
+  isLoadingExperiences?: boolean;
+  onCreateExperience?: (data: CreateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
+  onUpdateExperience?: (id: string, data: UpdateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
+  onDeleteExperience?: (id: string) => Promise<void>;
+  isSavingExperience?: boolean;
 }
 
 export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({ 
@@ -40,7 +51,13 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
   onCreateEducation,
   onUpdateEducation,
   onDeleteEducation,
-  isSavingEducation = false
+  isSavingEducation = false,
+  experiences,
+  isLoadingExperiences = false,
+  onCreateExperience,
+  onUpdateExperience,
+  onDeleteExperience,
+  isSavingExperience = false,
 }) => {
   const [activeTab, setActiveTab] = useState('datos-personales');
 
@@ -60,7 +77,16 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
           />
         );
       case 'experiencia-laboral':
-        return <ExperienciaLaboral />;
+        return (
+          <ExperienciaLaboral
+            experiences={experiences}
+            isLoading={isLoadingExperiences}
+            isSaving={isSavingExperience}
+            onCreateExperience={onCreateExperience}
+            onUpdateExperience={onUpdateExperience}
+            onDeleteExperience={onDeleteExperience}
+          />
+        );
       case 'vacantes-aplicadas':
         return <VacantesAplicadas />;
       case 'entrevistas-programadas':

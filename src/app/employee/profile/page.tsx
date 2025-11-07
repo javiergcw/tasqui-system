@@ -14,6 +14,10 @@ import {
   createEmployeeEducationUseCase,
   updateEmployeeEducationUseCase,
   deleteEmployeeEducationUseCase,
+  getEmployeeExperiencesUseCase,
+  createEmployeeExperienceUseCase,
+  updateEmployeeExperienceUseCase,
+  deleteEmployeeExperienceUseCase,
 } from '@/use-cases';
 import type { EmployeeProfile } from '@/models';
 import type {
@@ -21,6 +25,11 @@ import type {
   CreateEmployeeEducationRequest,
   UpdateEmployeeEducationRequest as UpdateEducationRequest,
 } from '@/models/employee/education.model';
+import type {
+  EmployeeExperience,
+  CreateEmployeeExperienceRequest,
+  UpdateEmployeeExperienceRequest as UpdateExperienceRequest,
+} from '@/models/employee/experience.model';
 import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
 
 export default function ProfilePage() {
@@ -30,6 +39,9 @@ export default function ProfilePage() {
   const [educations, setEducations] = useState<EmployeeEducation[]>([]);
   const [isLoadingEducations, setIsLoadingEducations] = useState(true);
   const [isSavingEducation, setIsSavingEducation] = useState(false);
+  const [experiences, setExperiences] = useState<EmployeeExperience[]>([]);
+  const [isLoadingExperiences, setIsLoadingExperiences] = useState(true);
+  const [isSavingExperience, setIsSavingExperience] = useState(false);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
@@ -56,6 +68,16 @@ export default function ProfilePage() {
         console.error('Error al obtener formaciones académicas:', error);
       } finally {
         setIsLoadingEducations(false);
+      }
+
+      try {
+        setIsLoadingExperiences(true);
+        const experienceList = await getEmployeeExperiencesUseCase.execute();
+        setExperiences(experienceList);
+      } catch (error) {
+        console.error('Error al obtener experiencias laborales:', error);
+      } finally {
+        setIsLoadingExperiences(false);
       }
     };
 
@@ -134,6 +156,50 @@ export default function ProfilePage() {
     }
   };
 
+  const handleCreateExperience = async (data: CreateEmployeeExperienceRequest): Promise<EmployeeExperience> => {
+    setIsSavingExperience(true);
+    try {
+      const newExperience = await createEmployeeExperienceUseCase.execute(data);
+      setExperiences(prev => [newExperience, ...prev]);
+      setToast({ show: true, message: 'Experiencia creada exitosamente', type: 'success' });
+      return newExperience;
+    } catch (error) {
+      console.error('Error al crear experiencia laboral:', error);
+      setToast({ show: true, message: error instanceof Error ? error.message : 'Error al crear la experiencia', type: 'error' });
+      throw error;
+    } finally {
+      setIsSavingExperience(false);
+    }
+  };
+
+  const handleUpdateExperience = async (id: string, data: UpdateExperienceRequest): Promise<EmployeeExperience> => {
+    setIsSavingExperience(true);
+    try {
+      const updatedExperience = await updateEmployeeExperienceUseCase.execute(id, data);
+      setExperiences(prev => prev.map(item => (item.id === id ? updatedExperience : item)));
+      setToast({ show: true, message: 'Experiencia actualizada exitosamente', type: 'success' });
+      return updatedExperience;
+    } catch (error) {
+      console.error('Error al actualizar experiencia laboral:', error);
+      setToast({ show: true, message: error instanceof Error ? error.message : 'Error al actualizar la experiencia', type: 'error' });
+      throw error;
+    } finally {
+      setIsSavingExperience(false);
+    }
+  };
+
+  const handleDeleteExperience = async (id: string): Promise<void> => {
+    try {
+      await deleteEmployeeExperienceUseCase.execute(id);
+      setExperiences(prev => prev.filter(item => item.id !== id));
+      setToast({ show: true, message: 'Experiencia eliminada exitosamente', type: 'success' });
+    } catch (error) {
+      console.error('Error al eliminar experiencia laboral:', error);
+      setToast({ show: true, message: error instanceof Error ? error.message : 'Error al eliminar la experiencia', type: 'error' });
+      throw error;
+    }
+  };
+
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
@@ -148,6 +214,12 @@ export default function ProfilePage() {
           onUpdateEducation={handleUpdateEducation}
           onDeleteEducation={handleDeleteEducation}
           isSavingEducation={isSavingEducation}
+          experiences={experiences}
+          isLoadingExperiences={isLoadingExperiences}
+          onCreateExperience={handleCreateExperience}
+          onUpdateExperience={handleUpdateExperience}
+          onDeleteExperience={handleDeleteExperience}
+          isSavingExperience={isSavingExperience}
           onUpdateProfile={handleUpdateProfile}
           isUpdatingProfile={isUpdatingProfile}
         />

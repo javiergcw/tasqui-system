@@ -569,7 +569,7 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
 
   return (
     <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800">Panel de Control del Administrador</h2>
+        <h2 className="text-2xl font-bold text-gray-800">Panel de Control del Administrador</h2>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
@@ -578,8 +578,8 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
             <div className="flex items-center">
               <div className="p-2 bg-white rounded-lg">
                 <svg className={`w-5 h-5 md:w-6 md:h-6 ${stat.iconColor}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
               </div>
               <div className="ml-3 md:ml-4">
                 <p className="text-xs md:text-sm font-medium text-gray-600">{stat.title}</p>
@@ -591,22 +591,22 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
       </div>
 
       {/* Recent Tickets */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+        <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Tickets Recientes</h3>
-        
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
+
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Empresa</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prioridad</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
               {recentTickets.map((ticket) => (
                 <tr key={ticket.id}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{ticket.title}</td>
@@ -618,9 +618,9 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                       ticket.status === 'RESOLVED' ? 'bg-green-100 text-green-800' :
                       'bg-gray-100 text-gray-800'
                     }`}>
-                      {ticket.status}
-                    </span>
-                  </td>
+                          {ticket.status}
+                        </span>
+                      </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                       'bg-gray-100 text-gray-800'
@@ -640,8 +640,8 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                       Ver
                     </button>
                   </td>
-                </tr>
-              ))}
+                    </tr>
+                  ))}
               {recentTickets.length === 0 && (
                 <tr>
                   <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
@@ -649,10 +649,10 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                   </td>
                 </tr>
               )}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </div>
         </div>
-      </div>
 
       {isModalOpen && selectedTicket && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
@@ -676,7 +676,7 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
-              </div>
+          </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
@@ -728,17 +728,17 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                               hour: '2-digit',
                               minute: '2-digit'
                             })}
-                          </span>
+                        </span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                  ))}
+            </div>
                 ) : (
                   <p className="mt-3 text-sm leading-relaxed text-gray-500">
                     Este ticket aún no tiene notas registradas.
                   </p>
-                )}
-              </div>
+          )}
+        </div>
 
               <div className="flex flex-col gap-3 text-xs text-gray-500 md:flex-row md:items-center md:justify-between">
                 <div>
@@ -750,7 +750,7 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                     hour: '2-digit',
                     minute: '2-digit'
                   })}
-                </div>
+      </div>
                 <div>
                   <span className="font-medium text-gray-600">Actualizado:</span>{' '}
                   {new Date(selectedTicket.updated_at).toLocaleString('es-ES', {

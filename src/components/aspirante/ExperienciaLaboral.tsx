@@ -1,50 +1,120 @@
 'use client';
-import React, { useState } from 'react';
-import { colors } from '@/lib/colors';
 
-export const ExperienciaLaboral: React.FC = () => {
-  const [experiencias, setExperiencias] = useState([
-    {
-      id: 1,
-      empresa: 'TechCorp Solutions',
-      cargo: 'Desarrollador Frontend Senior',
-      fechaInicio: '2022-01-15',
-      fechaFin: '2024-01-15',
-      descripcion: 'Desarrollo de aplicaciones web responsivas usando React, TypeScript y Node.js. Lideré un equipo de 3 desarrolladores y implementé mejoras que aumentaron la performance en un 40%.'
-    }
-  ]);
+import React, { useMemo, useState } from 'react';
+import { colors, colorClasses } from '@/lib/colors';
+import type {
+  EmployeeExperience,
+  CreateEmployeeExperienceRequest,
+  UpdateEmployeeExperienceRequest,
+} from '@/models/employee/experience.model';
 
-  const [nuevaExperiencia, setNuevaExperiencia] = useState({
-    empresa: '',
-    cargo: '',
-    fechaInicio: '',
-    fechaFin: '',
-    descripcion: ''
+interface ExperienciaLaboralProps {
+  experiences?: EmployeeExperience[];
+  isLoading?: boolean;
+  isSaving?: boolean;
+  onCreateExperience?: (data: CreateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
+  onUpdateExperience?: (id: string, data: UpdateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
+  onDeleteExperience?: (id: string) => Promise<void>;
+}
+
+export const ExperienciaLaboral: React.FC<ExperienciaLaboralProps> = ({
+  experiences = [],
+  isLoading = false,
+  isSaving = false,
+  onCreateExperience,
+  onUpdateExperience,
+  onDeleteExperience,
+}) => {
+  const [showForm, setShowForm] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<EmployeeExperience | null>(null);
+  const [formData, setFormData] = useState<UpdateEmployeeExperienceRequest>({
+    job_title: '',
+    company_name: '',
+    start_date: '',
+    end_date: '',
+    description: '',
   });
 
-  const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const sortedExperiences = useMemo(
+    () =>
+      [...experiences].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()),
+    [experiences]
+  );
 
-  const handleAgregarExperiencia = () => {
-    if (nuevaExperiencia.empresa && nuevaExperiencia.cargo) {
-      const nueva = {
-        id: Date.now(),
-        ...nuevaExperiencia
-      };
-      setExperiencias([...experiencias, nueva]);
-      setNuevaExperiencia({
-        empresa: '',
-        cargo: '',
-        fechaInicio: '',
-        fechaFin: '',
-        descripcion: ''
-      });
-      setMostrarFormulario(false);
+  const resetForm = () => {
+    setFormData({
+      job_title: '',
+      company_name: '',
+      start_date: '',
+      end_date: '',
+      description: '',
+    });
+    setEditingExperience(null);
+  };
+
+  const handleStartCreate = () => {
+    resetForm();
+    setShowForm(true);
+  };
+
+  const handleEdit = (experience: EmployeeExperience) => {
+    setEditingExperience(experience);
+    setFormData({
+      job_title: experience.job_title,
+      company_name: experience.company_name,
+      start_date: experience.start_date,
+      end_date: experience.end_date,
+      description: experience.description,
+    });
+    setShowForm(true);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!onDeleteExperience) return;
+    try {
+      await onDeleteExperience(id);
+    } catch (error) {
+      console.error('Error al eliminar experiencia:', error);
     }
   };
 
-  const handleEliminarExperiencia = (id: number) => {
-    setExperiencias(experiencias.filter(e => e.id !== id));
+  const normalizeDate = (value?: string | null) => {
+    if (!value) return null;
+    return value.includes('T') ? value : `${value}T00:00:00Z`;
   };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const payload: UpdateEmployeeExperienceRequest = {
+      ...formData,
+      start_date: normalizeDate(formData.start_date) ?? undefined,
+      end_date: normalizeDate(formData.end_date),
+    };
+
+    try {
+      if (editingExperience && onUpdateExperience) {
+        await onUpdateExperience(editingExperience.id, payload);
+      } else if (onCreateExperience) {
+        await onCreateExperience(payload as CreateEmployeeExperienceRequest);
+      }
+      setShowForm(false);
+      resetForm();
+    } catch (error) {
+      console.error('Error guardando experiencia laboral:', error);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12 text-gray-600">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4">Cargando experiencia laboral...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -52,19 +122,22 @@ export const ExperienciaLaboral: React.FC = () => {
         <h2 className="text-xl font-bold" style={{ color: colors.mainGreen }}>
           Experiencia Laboral
         </h2>
-        <button
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
-          className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-          style={{ backgroundColor: colors.mainGreen }}
-        >
-          {mostrarFormulario ? 'Cancelar' : '+ Agregar Experiencia'}
-        </button>
+        {onCreateExperience && (
+          <button
+            onClick={handleStartCreate}
+            className="px-4 py-2 text-white font-medium rounded-md transition-colors"
+            style={{ backgroundColor: colors.mainGreen }}
+          >
+            {showForm ? 'Cancelar' : '+ Agregar Experiencia'}
+          </button>
+        )}
       </div>
 
-      {/* Formulario para nueva experiencia */}
-      {mostrarFormulario && (
-        <div className="border border-gray-200 rounded-lg p-6 mb-6 bg-gray-50">
-          <h3 className="text-lg font-semibold mb-4">Nueva Experiencia Laboral</h3>
+      {showForm && (
+        <form onSubmit={handleSubmit} className="border border-gray-200 rounded-lg p-6 mb-6 bg-gray-50">
+          <h3 className="text-lg font-semibold mb-4" style={{ color: colors.mainGreen }}>
+            {editingExperience ? 'Editar experiencia laboral' : 'Nueva experiencia laboral'}
+          </h3>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -72,10 +145,10 @@ export const ExperienciaLaboral: React.FC = () => {
               </label>
               <input
                 type="text"
-                placeholder="Nombre de la empresa"
-                value={nuevaExperiencia.empresa}
-                onChange={(e) => setNuevaExperiencia({...nuevaExperiencia, empresa: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                value={formData.company_name ?? ''}
+                onChange={(e) => setFormData({ ...formData, company_name: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                required
               />
             </div>
             <div>
@@ -84,10 +157,10 @@ export const ExperienciaLaboral: React.FC = () => {
               </label>
               <input
                 type="text"
-                placeholder="Posición o cargo"
-                value={nuevaExperiencia.cargo}
-                onChange={(e) => setNuevaExperiencia({...nuevaExperiencia, cargo: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                value={formData.job_title ?? ''}
+                onChange={(e) => setFormData({ ...formData, job_title: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                required
               />
             </div>
             <div>
@@ -96,9 +169,10 @@ export const ExperienciaLaboral: React.FC = () => {
               </label>
               <input
                 type="date"
-                value={nuevaExperiencia.fechaInicio}
-                onChange={(e) => setNuevaExperiencia({...nuevaExperiencia, fechaInicio: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                value={formData.start_date ? formData.start_date.slice(0, 10) : ''}
+                onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+                required
               />
             </div>
             <div>
@@ -107,9 +181,9 @@ export const ExperienciaLaboral: React.FC = () => {
               </label>
               <input
                 type="date"
-                value={nuevaExperiencia.fechaFin}
-                onChange={(e) => setNuevaExperiencia({...nuevaExperiencia, fechaFin: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+                value={formData.end_date && formData.end_date !== 'null' ? formData.end_date.slice(0, 10) : ''}
+                onChange={(e) => setFormData({ ...formData, end_date: e.target.value || null })}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
               />
             </div>
           </div>
@@ -118,72 +192,86 @@ export const ExperienciaLaboral: React.FC = () => {
               Descripción de Responsabilidades
             </label>
             <textarea
-              placeholder="Describe tus responsabilidades y logros en este puesto"
               rows={4}
-              value={nuevaExperiencia.descripcion}
-              onChange={(e) => setNuevaExperiencia({...nuevaExperiencia, descripcion: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900"
+              value={formData.description ?? ''}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 text-gray-900"
+              placeholder="Describe tus responsabilidades y logros en este puesto"
             />
           </div>
           <div className="flex gap-4 mt-4">
             <button
-              onClick={handleAgregarExperiencia}
-              className="px-6 py-2 text-white font-medium rounded-md transition-colors"
+              type="submit"
+              disabled={isSaving}
+              className="px-6 py-2 text-white font-medium rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               style={{ backgroundColor: colors.mainGreen }}
             >
-              Guardar Experiencia
+              {isSaving ? 'Guardando...' : 'Guardar experiencia'}
             </button>
             <button
-              onClick={() => setMostrarFormulario(false)}
+              type="button"
+              onClick={() => {
+                setShowForm(false);
+                resetForm();
+              }}
               className="px-6 py-2 text-gray-600 font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
             >
               Cancelar
             </button>
           </div>
-        </div>
+        </form>
       )}
 
-      {/* Lista de experiencias */}
       <div className="space-y-4">
-        {experiencias.map((experiencia) => (
-          <div key={experiencia.id} className="border border-gray-200 rounded-lg p-4">
-            <div className="flex justify-between items-start">
+        {sortedExperiences.map((experience) => (
+          <div key={experience.id} className="border border-gray-200 rounded-lg p-4 bg-white">
+            <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-gray-900">{experiencia.cargo}</h3>
-                <p className="text-gray-600 font-medium">{experiencia.empresa}</p>
-                <div className="flex gap-4 text-sm text-gray-500 mt-2">
-                  {experiencia.fechaInicio && (
-                    <span>Inicio: {new Date(experiencia.fechaInicio).toLocaleDateString()}</span>
-                  )}
-                  {experiencia.fechaFin && (
-                    <span>Fin: {new Date(experiencia.fechaFin).toLocaleDateString()}</span>
-                  )}
+                <h3 className="text-lg font-semibold text-gray-900">{experience.job_title}</h3>
+                <p className="text-gray-600 font-medium">{experience.company_name}</p>
+                <div className="flex flex-wrap gap-4 text-sm text-gray-500 mt-2">
+                  <span>
+                    Inicio: {experience.start_date ? new Date(experience.start_date).toLocaleDateString() : 'N/D'}
+                  </span>
+                  <span>
+                    Fin: {experience.end_date ? new Date(experience.end_date).toLocaleDateString() : 'Actual'}
+                  </span>
                 </div>
-                {experiencia.descripcion && (
-                  <p className="text-gray-600 mt-2">{experiencia.descripcion}</p>
+                {experience.description && (
+                  <p className="text-gray-600 mt-2 whitespace-pre-wrap">{experience.description}</p>
                 )}
               </div>
-              <button
-                onClick={() => handleEliminarExperiencia(experiencia.id)}
-                className="text-red-600 hover:text-red-800 p-2"
-                title="Eliminar experiencia"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </button>
+              <div className="flex flex-col gap-2">
+                {onUpdateExperience && (
+                  <button
+                    onClick={() => handleEdit(experience)}
+                    className="px-3 py-1 text-sm font-medium text-white rounded-md transition-colors"
+                    style={{ backgroundColor: colors.mainGreen }}
+                  >
+                    Editar
+                  </button>
+                )}
+                {onDeleteExperience && (
+                  <button
+                    onClick={() => handleDelete(experience.id)}
+                    className="px-3 py-1 text-sm font-medium text-red-600 border border-red-200 rounded-md hover:bg-red-50 transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {experiencias.length === 0 && (
+      {sortedExperiences.length === 0 && (
         <div className="text-center py-8 text-gray-500">
           <svg className="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2V6" />
           </svg>
           <p>No tienes experiencia laboral registrada</p>
-          <p className="text-sm">Haz clic en &quot;Agregar Experiencia&quot; para comenzar</p>
+          <p className="text-sm">Actualiza tu perfil para agregar tu experiencia.</p>
         </div>
       )}
     </div>
