@@ -1,24 +1,73 @@
 'use client';
 import React from 'react';
 import { FeatureCard } from './FeatureCard';
-import { School, ConnectWithoutContact, TrendingUp } from '@mui/icons-material';
+
+const SchoolIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1.8}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M12 3l9 6-9 6-9-6 9-6z" />
+    <path d="M3 10.5v6l9 6 9-6v-6" />
+    <path d="M12 21v-9" />
+  </svg>
+);
+
+const ConnectIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1.8}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M7 12a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+    <path d="M17 18a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
+    <path d="M9.5 10.5l5 5" />
+    <path d="M11.5 8.5 14 11" />
+    <path d="M5 17l3.5-3.5" />
+    <path d="M16 7l3-3" />
+  </svg>
+);
+
+const TrendingUpIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1.8}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M3 17l6-6 4 4 7-7" />
+    <path d="M14 8h7v7" />
+  </svg>
+);
 
 export const FeaturesSection: React.FC = () => {
   const features = [
     {
       title: "Formación Profesional",
       description: "Cursos especializados diseñados para desarrollar competencias clave y habilidades profesionales. Aprende a tu ritmo con programas adaptados a tus objetivos de carrera.",
-      icon: School
+      icon: SchoolIcon
     },
     {
       title: "Conectamos Talento con Empleo", 
       description: "Encuentra oportunidades laborales que se alinean con tu perfil profesional. Conectamos candidatos calificados con empresas que buscan el mejor talento.",
-      icon: ConnectWithoutContact
+      icon: ConnectIcon
     },
     {
       title: "Desarrollo de Alto Desempeño",
       description: "Formamos profesionales con inclusión social y cultural. Plataforma virtual accesible 24/7 que impulsa tu crecimiento profesional y mejora tu calidad de vida.",
-      icon: TrendingUp
+      icon: TrendingUpIcon
     }
   ];
 

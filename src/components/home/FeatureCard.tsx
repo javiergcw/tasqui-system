@@ -1,12 +1,11 @@
 'use client';
 import React from 'react';
 import { colors } from '@/lib/colors';
-import { SvgIconComponent } from '@mui/icons-material';
 
 interface FeatureCardProps {
   title: string;
   description: string;
-  icon: SvgIconComponent;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
 export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon: Icon }) => {
@@ -114,11 +113,12 @@ export const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, ic
             className="flex items-center justify-center transition-all duration-300"
             style={{ borderColor: colors.mainGreen }}
           >
-            <Icon 
+            <Icon
               data-icon
               className="transition-all duration-300"
-              style={{ 
-                fontSize: '2rem',
+              style={{
+                width: '2rem',
+                height: '2rem',
                 color: colors.ctaGreen,
               }}
             />
