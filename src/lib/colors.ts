@@ -78,6 +78,7 @@ export const colorClasses = {
     gray300: 'text-gray-300',
     gray900: 'text-gray-900',
     slate800: 'text-slate-800',
+    red500: 'text-red-500',
   },
   gradient: {
     purpleOrange: 'bg-gradient-to-r from-purple-500 to-orange-500',

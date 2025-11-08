@@ -46,6 +46,7 @@ export const API_ROUTES = {
     stats: '/api/v1/admin/stats',
     leads: '/api/v1/admin/leads',
     leadDetail: (id: string) => `/api/v1/admin/leads/${id}`,
+    sendLeadEmail: (leadId: string) => `/api/v1/admin/leads/${leadId}/email`,
   },
   
   // Jobs (pendiente)

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminPostJobHeroSection, AdminPostJobFormSection, Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
@@ -10,6 +10,14 @@ import type { JobCategory, JobTag, JobType, ExperienceLevel } from '@/models/mas
 import type { CreateJobRequest } from '@/models/admin/job.model';
 
 export default function AdminPostJobPage() {
+  return (
+    <Suspense fallback={null}>
+      <AdminPostJobPageContent />
+    </Suspense>
+  );
+}
+
+function AdminPostJobPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const ticketId = searchParams.get('ticket_id') || '';

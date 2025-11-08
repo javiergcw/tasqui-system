@@ -75,8 +75,15 @@ class HttpService {
       if (isPublicWebEndpoint) {
         console.log('License key header:', USE_PUBLIC_API_LICENSE_HEADER ? PUBLIC_API_LICENSE_KEY : 'Not added');
       }
+      const normalizedHeaders =
+        config.headers instanceof Headers
+          ? Object.fromEntries(config.headers.entries())
+          : Array.isArray(config.headers)
+            ? Object.fromEntries(config.headers)
+            : config.headers ?? {};
+
       console.log('Headers:', {
-        'Content-Type': config.headers?.['Content-Type'],
+        'Content-Type': normalizedHeaders['Content-Type'],
         'Authorization': token ? `Bearer ${token.substring(0, 20)}...` : 'No token',
         'x-license-key': isPublicWebEndpoint && USE_PUBLIC_API_LICENSE_HEADER ? PUBLIC_API_LICENSE_KEY : 'Not added'
       });

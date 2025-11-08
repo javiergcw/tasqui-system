@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
@@ -14,6 +14,14 @@ import { employeeRegisterUseCase, companyRegisterUseCase } from '@/use-cases';
 import type { EmployeeRegisterRequest, CompanyRegisterRequest } from '@/models';
 
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={null}>
+      <RegisterPageContent />
+    </Suspense>
+  );
+}
+
+function RegisterPageContent() {
   const searchParams = useSearchParams();
   const [selectedRole, setSelectedRole] = useState<'company' | 'employee' | null>(null);
   const [isLoading, setIsLoading] = useState(false);

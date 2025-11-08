@@ -111,4 +111,20 @@ export interface AdminLeadDetailResponse {
   data: AdminLeadDetailData;
 }
 
+export type AdminLeadRole = 'EMPLOYEE' | 'COMPANY' | 'ADMIN';
+
+export interface SendAdminLeadEmailRequest {
+  password: string;
+  role: AdminLeadRole;
+}
+
+export interface SendAdminLeadEmailResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    lead_id: string;
+    [key: string]: unknown;
+  };
+}
+
 

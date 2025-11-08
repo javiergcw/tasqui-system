@@ -26,7 +26,7 @@ export const JobSkillsSelector: React.FC<JobSkillsSelectorProps> = ({
   onCategoryChange,
   onSubCategoryChange
 }) => {
-  const [expandedCategory] = useState<string | null>(null);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   const categories: Category[] = [
     {

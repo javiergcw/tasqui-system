@@ -6,6 +6,7 @@ import { colorClasses, colors } from '@/lib/colors';
 import { Toast } from '@/components/ui/Toast';
 import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
 import type { TicketStatus } from '@/models/admin/ticket.model';
+import type { AdminLeadRole, SendAdminLeadEmailRequest } from '@/models/admin/lead.model';
 
 interface AdminProfileMainSectionProps {
   profile?: AdminProfile | null;
@@ -19,6 +20,7 @@ interface AdminProfileMainSectionProps {
   onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
   onTicketStatusUpdate?: (ticketId: string, status: TicketStatus) => Promise<AdminTicket>;
   onRefreshTickets?: () => Promise<void>;
+  onSendLeadEmail?: (leadId: string, data: SendAdminLeadEmailRequest) => Promise<void>;
 }
 
 export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = ({ 
@@ -32,7 +34,8 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
   isLoadingLeads = false,
   onProfileUpdate,
   onTicketStatusUpdate,
-  onRefreshTickets
+  onRefreshTickets,
+  onSendLeadEmail
 }) => {
   const [activeTab, setActiveTab] = useState('admin-data');
   
@@ -68,7 +71,7 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       case 'employees':
         return <EmployeesTab />;
       case 'leads':
-        return <LeadsTab leads={leads} isLoading={isLoadingLeads} />;
+        return <LeadsTab leads={leads} isLoading={isLoadingLeads} onSendLeadEmail={onSendLeadEmail} />;
       default:
         return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
     }
@@ -1379,11 +1382,29 @@ const EmployeesTab: React.FC = () => {
 interface LeadsTabProps {
   leads?: AdminLead[];
   isLoading?: boolean;
+  onSendLeadEmail?: (leadId: string, data: SendAdminLeadEmailRequest) => Promise<void>;
 }
 
-const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false }) => {
+const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSendLeadEmail }) => {
   const router = useRouter();
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedLead, setSelectedLead] = useState<AdminLead | null>(null);
+  const [tempPassword, setTempPassword] = useState('ClaveTemporal123!');
+  const [role, setRole] = useState<AdminLeadRole>('EMPLOYEE');
+  const [isSending, setIsSending] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success',
+  });
+
+  const roleOptions: { label: string; value: AdminLeadRole; description: string }[] = [
+    { label: 'Empleado', value: 'EMPLOYEE', description: 'Acceso al portal de candidatos.' },
+    { label: 'Empresa', value: 'COMPANY', description: 'Acceso al panel de empleadores.' },
+    { label: 'Administrador', value: 'ADMIN', description: 'Acceso completo al panel administrativo.' },
+  ];
+
   const getStatusBadgeColor = (status: string) => {
     switch (status) {
       case 'PENDING':
@@ -1402,6 +1423,57 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false }) =>
   const getFullName = (lead: AdminLead) => {
     const fullName = `${lead.first_name ?? ''} ${lead.last_name ?? ''}`.trim();
     return fullName.length > 0 ? fullName : 'Sin nombre';
+  };
+
+  const handleOpenModal = (lead: AdminLead) => {
+    setSelectedLead(lead);
+    setTempPassword('ClaveTemporal123!');
+    setRole('EMPLOYEE');
+    setFormError(null);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedLead(null);
+    setFormError(null);
+  };
+
+  const handleSendEmail = async () => {
+    if (!onSendLeadEmail || !selectedLead) {
+      return;
+    }
+
+    if (!tempPassword.trim()) {
+      setFormError('La contraseña temporal es obligatoria.');
+      return;
+    }
+
+    setFormError(null);
+    setIsSending(true);
+    try {
+      await onSendLeadEmail(selectedLead.id, {
+        password: tempPassword.trim(),
+        role,
+      });
+      setToast({
+        show: true,
+        message: 'Correo enviado exitosamente.',
+        type: 'success',
+      });
+      handleCloseModal();
+    } catch (error) {
+      setToast({
+        show: true,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'No se pudo enviar el correo al lead. Intenta nuevamente.',
+        type: 'error',
+      });
+    } finally {
+      setIsSending(false);
+    }
   };
 
   if (isLoading) {
@@ -1423,9 +1495,7 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false }) =>
           <p className="text-sm text-gray-600 mt-1">Monitorea y da seguimiento a los leads que llegan a la plataforma.</p>
         </div>
         <div className="flex gap-2">
-          <button
-            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-          >
+          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
             Exportar CSV
           </button>
           <button
@@ -1449,60 +1519,201 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false }) =>
           <p className="text-sm text-gray-500">Cuando existan leads en la plataforma aparecerán aquí.</p>
         </div>
       ) : (
-      <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compañía</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fuente</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actualizado</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {leads.map((lead) => (
-                <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{getFullName(lead)}</p>
-                      <p className="text-xs text-gray-500">{lead.email}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.company || 'No especificado'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(lead.status)}`}>
-                      {lead.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.source || 'Desconocido'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.created_at).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.updated_at).toLocaleDateString()}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <div className="flex items-center gap-2">
-                      <button
-                        className="text-green-600 hover:text-green-900 text-sm"
-                        onClick={() => router.push(`/admin/leads/${lead.id}`)}
-                      >
-                        Ver
-                      </button>
-                      <span className="text-gray-300">|</span>
-                      <button className="text-blue-600 hover:text-blue-900 text-sm">Contactar</button>
-                    </div>
-                  </td>
+        <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Compañía</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fuente</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actualizado</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {leads.map((lead) => (
+                  <tr key={lead.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{getFullName(lead)}</p>
+                        <p className="text-xs text-gray-500">{lead.email}</p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.company || 'No especificado'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(lead.status)}`}>
+                        {lead.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.source || 'Desconocido'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.created_at).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(lead.updated_at).toLocaleDateString()}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <div className="flex items-center gap-2">
+                        <button
+                          className="rounded-full p-2 text-gray-500 hover:text-green-600 transition-colors"
+                          onClick={() => router.push(`/admin/leads/${lead.id}`)}
+                          aria-label="Ver lead"
+                          title="Ver lead"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          className="rounded-full p-2 text-gray-500 hover:text-green-600 transition-colors disabled:opacity-40"
+                          onClick={() => handleOpenModal(lead)}
+                          disabled={!onSendLeadEmail}
+                          aria-label="Enviar acceso"
+                          title="Enviar acceso"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M15 7a4 4 0 11-8 0 4 4 0 018 0z"
+                            />
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M11 11l6 6m0 0h3m-3 0v3"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 text-sm text-gray-600">
+            Mostrando {leads.length} leads
+          </div>
         </div>
-        <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 text-sm text-gray-600">
-          Mostrando {leads.length} leads
-        </div>
-      </div>
       )}
+
+      {isModalOpen && selectedLead && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-xl px-4">
+          <div className="relative w-full max-w-xl">
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/85 via-white/70 to-white/40 shadow-[0_50px_80px_-40px_rgba(15,23,42,0.4)]" />
+            <div className="relative rounded-3xl border border-white/60 bg-white/80 p-8 backdrop-blur-2xl">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-xs tracking-[0.3em] uppercase text-gray-500">Enviar credenciales</p>
+                  <h3 className="mt-2 text-2xl font-semibold text-gray-900">
+                    {getFullName(selectedLead)}
+                  </h3>
+                  <p className="text-sm text-gray-500">{selectedLead.email}</p>
+                </div>
+                <button
+                  onClick={handleCloseModal}
+                  className="rounded-full bg-white/70 p-2 text-gray-500 transition hover:bg-white hover:text-gray-700"
+                  aria-label="Cerrar"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              <div className="mt-8 space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Contraseña temporal</label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={tempPassword}
+                      onChange={(e) => setTempPassword(e.target.value)}
+                      placeholder="Ingresa una contraseña temporal"
+                      className="w-full rounded-2xl border border-gray-200 bg-white/70 px-4 py-3 text-gray-900 shadow-inner focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+                    />
+                    <span className="absolute inset-y-0 right-3 flex items-center text-gray-300">
+                      <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15l-3.5-3.5m3.5 3.5l3.5-3.5M12 15V9" />
+                      </svg>
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs text-gray-500">
+                    Comparte esta contraseña temporal con el lead. Podrá cambiarla después de iniciar sesión.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-3">Rol de acceso</label>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {roleOptions.map((option) => {
+                      const isActive = role === option.value;
+                      return (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setRole(option.value)}
+                          className={`rounded-2xl border px-4 py-3 text-left transition-all ${
+                            isActive
+                              ? 'border-transparent bg-gradient-to-br from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30'
+                              : 'border-gray-200 bg-white/70 text-gray-700 hover:border-gray-300 hover:bg-white'
+                          }`}
+                        >
+                          <span className="block text-sm font-semibold">{option.label}</span>
+                          <span className={`mt-1 block text-xs ${isActive ? 'text-white/80' : 'text-gray-500'}`}>
+                            {option.description}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {formError && (
+                  <div className="rounded-2xl border border-red-100 bg-red-50/70 px-4 py-3 text-sm text-red-600">
+                    {formError}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+                <button
+                  onClick={handleCloseModal}
+                  className="rounded-2xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleSendEmail}
+                  disabled={isSending || !onSendLeadEmail}
+                  className="rounded-2xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/20 transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isSending ? 'Enviando...' : 'Enviar credenciales'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.show}
+        onClose={() => setToast((prev) => ({ ...prev, show: false }))}
+      />
     </div>
   );
 };

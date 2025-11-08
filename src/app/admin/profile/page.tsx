@@ -7,8 +7,9 @@ import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { AdminProfileHeroSection } from '@/components/admin/AdminProfileHeroSection';
 import { AdminProfileMainSection } from '@/components/admin/AdminProfileMainSection';
 import { colorClasses } from '@/lib/colors';
-import { adminProfileUseCase, getTicketsUseCase, updateTicketStatusUseCase, getAdminStatsUseCase, getAdminLeadsUseCase } from '@/use-cases';
+import { adminProfileUseCase, getAdminTicketsUseCase, updateTicketStatusUseCase, getAdminStatsUseCase, getAdminLeadsUseCase, sendLeadEmailUseCase } from '@/use-cases';
 import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
+import type { SendAdminLeadEmailRequest } from '@/models/admin/lead.model';
 import type { TicketStatus } from '@/models/admin/ticket.model';
 
 export default function AdminProfilePage() {
@@ -35,7 +36,7 @@ export default function AdminProfilePage() {
 
       // Fetch tickets
       try {
-        const ticketsData = await getTicketsUseCase.execute();
+        const ticketsData = await getAdminTicketsUseCase.execute();
         setTickets(ticketsData);
       } catch (error) {
         console.error('Error fetching admin tickets:', error);
@@ -96,12 +97,21 @@ export default function AdminProfilePage() {
   const refreshTickets = async () => {
     try {
       setIsLoadingTickets(true);
-      const ticketsData = await getTicketsUseCase.execute();
+      const ticketsData = await getAdminTicketsUseCase.execute();
       setTickets(ticketsData);
     } catch (error) {
       console.error('Error refreshing tickets:', error);
     } finally {
       setIsLoadingTickets(false);
+    }
+  };
+
+  const handleSendLeadEmail = async (leadId: string, data: SendAdminLeadEmailRequest) => {
+    try {
+      await sendLeadEmailUseCase.execute(leadId, data);
+    } catch (error) {
+      console.error('Error sending lead email:', error);
+      throw error;
     }
   };
 
@@ -122,6 +132,7 @@ export default function AdminProfilePage() {
           onProfileUpdate={handleProfileUpdate}
           onTicketStatusUpdate={handleTicketStatusUpdate}
           onRefreshTickets={refreshTickets}
+          onSendLeadEmail={handleSendLeadEmail}
         />
 
       <Footer />

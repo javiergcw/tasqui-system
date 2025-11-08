@@ -6,6 +6,7 @@ import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { ProfileHeroSection } from '@/components/aspirante/ProfileHeroSection';
 import { ProfileMainSection } from '@/components/aspirante/ProfileMainSection';
+import type { SkillsSelectionPayload } from '@/components/aspirante/SkillsSection';
 import { Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import {
@@ -18,6 +19,7 @@ import {
   createEmployeeExperienceUseCase,
   updateEmployeeExperienceUseCase,
   deleteEmployeeExperienceUseCase,
+  skillsCompleteUseCase,
 } from '@/use-cases';
 import type { EmployeeProfile } from '@/models';
 import type {
@@ -31,6 +33,7 @@ import type {
   UpdateEmployeeExperienceRequest as UpdateExperienceRequest,
 } from '@/models/employee/experience.model';
 import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
+import type { SkillCategory } from '@/models/master/skills-complete.model';
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<EmployeeProfile | null>(null);
@@ -42,6 +45,11 @@ export default function ProfilePage() {
   const [experiences, setExperiences] = useState<EmployeeExperience[]>([]);
   const [isLoadingExperiences, setIsLoadingExperiences] = useState(true);
   const [isSavingExperience, setIsSavingExperience] = useState(false);
+  const [employeeSkills, setEmployeeSkills] = useState<SkillsSelectionPayload | null>(null);
+  const [isSavingSkills, setIsSavingSkills] = useState(false);
+  const [removingSkill, setRemovingSkill] = useState<{ categoryId: string; subCategoryId?: string } | null>(null);
+  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [isLoadingSkills, setIsLoadingSkills] = useState(true);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
@@ -78,6 +86,21 @@ export default function ProfilePage() {
         console.error('Error al obtener experiencias laborales:', error);
       } finally {
         setIsLoadingExperiences(false);
+      }
+
+      try {
+        setIsLoadingSkills(true);
+        const skillsResponse = await skillsCompleteUseCase.execute();
+        if (skillsResponse.success) {
+          setSkillCategories(skillsResponse.data?.categories ?? []);
+        } else {
+          setSkillCategories([]);
+        }
+      } catch (error) {
+        console.error('Error al obtener habilidades:', error);
+        setSkillCategories([]);
+      } finally {
+        setIsLoadingSkills(false);
       }
     };
 
@@ -200,13 +223,107 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSaveSkills = async (selection: SkillsSelectionPayload) => {
+    setIsSavingSkills(true);
+    try {
+      setEmployeeSkills(selection);
+      setToast({ show: true, message: 'Habilidades guardadas exitosamente', type: 'success' });
+    } catch (error) {
+      console.error('Error al guardar habilidades:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al guardar habilidades',
+        type: 'error'
+      });
+      throw error;
+    } finally {
+      setIsSavingSkills(false);
+    }
+  };
+
+  const handleRemoveSkillCategory = async (categoryId: string) => {
+    setRemovingSkill({ categoryId });
+    try {
+      setEmployeeSkills(prev => {
+        if (!prev) return prev;
+        const nextCategories = prev.categories.filter(id => id !== categoryId);
+        const nextSubcategories = { ...prev.subcategories };
+        delete nextSubcategories[categoryId];
+
+        if (!nextCategories.length) {
+          return null;
+        }
+
+        return {
+          categories: nextCategories,
+          subcategories: nextSubcategories
+        };
+      });
+      setToast({ show: true, message: 'Categoría de habilidades eliminada', type: 'success' });
+    } catch (error) {
+      console.error('Error al eliminar categoría de habilidades:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al eliminar la categoría',
+        type: 'error'
+      });
+      throw error;
+    } finally {
+      setRemovingSkill(null);
+    }
+  };
+
+  const handleRemoveSkillSubcategory = async (categoryId: string, subCategoryId: string) => {
+    setRemovingSkill({ categoryId, subCategoryId });
+    try {
+      setEmployeeSkills(prev => {
+        if (!prev) return prev;
+
+        const current = prev.subcategories[categoryId] ?? [];
+        const updated = current.filter(id => id !== subCategoryId);
+        const nextSubcategories = { ...prev.subcategories };
+
+        if (updated.length) {
+          nextSubcategories[categoryId] = updated;
+          return {
+            categories: [...prev.categories],
+            subcategories: nextSubcategories
+          };
+        }
+
+        delete nextSubcategories[categoryId];
+        const nextCategories = prev.categories.filter(id => id !== categoryId);
+
+        if (!nextCategories.length) {
+          return null;
+        }
+
+        return {
+          categories: nextCategories,
+          subcategories: nextSubcategories
+        };
+      });
+      setToast({ show: true, message: 'Habilidad eliminada', type: 'success' });
+    } catch (error) {
+      console.error('Error al eliminar habilidad:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al eliminar la habilidad',
+        type: 'error'
+      });
+      throw error;
+    } finally {
+      setRemovingSkill(null);
+    }
+  };
+
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
    
         <ProfileHeroSection />
-        <ProfileMainSection 
-          profile={profile} 
+        <ProfileMainSection
+          profile={profile}
           isLoading={isLoading}
           educations={educations}
           isLoadingEducations={isLoadingEducations}
@@ -222,6 +339,14 @@ export default function ProfilePage() {
           isSavingExperience={isSavingExperience}
           onUpdateProfile={handleUpdateProfile}
           isUpdatingProfile={isUpdatingProfile}
+          skillCategories={skillCategories}
+          isLoadingSkills={isLoadingSkills}
+          savedSkills={employeeSkills}
+          onSaveSkills={handleSaveSkills}
+          isSavingSkills={isSavingSkills}
+          onRemoveSkillCategory={handleRemoveSkillCategory}
+          onRemoveSkillSubcategory={handleRemoveSkillSubcategory}
+          removingSkill={removingSkill}
         />
 
       <Footer />

@@ -8,6 +8,7 @@ import { ExperienciaLaboral } from './ExperienciaLaboral';
 import { VacantesAplicadas } from './VacantesAplicadas';
 import { EntrevistasProgramadas } from './EntrevistasProgramadas';
 import { SkillsSection } from './SkillsSection';
+import type { SkillsSelectionPayload } from './SkillsSection';
 import { colors } from '@/lib/colors';
 import type { EmployeeProfile } from '@/models';
 import type { EmployeeEducation } from '@/models/employee/education.model';
@@ -21,6 +22,7 @@ import type {
   UpdateEmployeeExperienceRequest,
 } from '@/models/employee/experience.model';
 import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
+import type { SkillCategory } from '@/models/master/skills-complete.model';
 
 interface ProfileMainSectionProps {
   profile?: EmployeeProfile | null;
@@ -39,6 +41,14 @@ interface ProfileMainSectionProps {
   onUpdateExperience?: (id: string, data: UpdateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
   onDeleteExperience?: (id: string) => Promise<void>;
   isSavingExperience?: boolean;
+  skillCategories?: SkillCategory[];
+  isLoadingSkills?: boolean;
+  onSaveSkills?: (selection: SkillsSelectionPayload) => Promise<void> | void;
+  isSavingSkills?: boolean;
+  savedSkills?: SkillsSelectionPayload | null;
+  onRemoveSkillCategory?: (categoryId: string) => Promise<void> | void;
+  onRemoveSkillSubcategory?: (categoryId: string, subCategoryId: string) => Promise<void> | void;
+  removingSkill?: { categoryId: string; subCategoryId?: string } | null;
 }
 
 export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({ 
@@ -58,6 +68,14 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
   onUpdateExperience,
   onDeleteExperience,
   isSavingExperience = false,
+  skillCategories,
+  isLoadingSkills = false,
+  onSaveSkills,
+  isSavingSkills,
+  savedSkills,
+  onRemoveSkillCategory,
+  onRemoveSkillSubcategory,
+  removingSkill,
 }) => {
   const [activeTab, setActiveTab] = useState('datos-personales');
 
@@ -92,9 +110,26 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
       case 'entrevistas-programadas':
         return <EntrevistasProgramadas />;
       case 'skills':
-        return <SkillsSection />;
+        return (
+          <SkillsSection
+            categories={skillCategories}
+            isLoading={isLoadingSkills}
+            onSaveSkills={onSaveSkills}
+            isSaving={isSavingSkills}
+            savedSkills={savedSkills}
+            onRemoveCategory={onRemoveSkillCategory}
+            onRemoveSubcategory={onRemoveSkillSubcategory}
+            removingSkill={removingSkill}
+          />
+        );
       default:
-        return <DatosPersonales profile={profile} />;
+        return (
+          <DatosPersonales
+            profile={profile}
+            onUpdateProfile={onUpdateProfile}
+            isUpdatingProfile={isUpdatingProfile}
+          />
+        );
     }
   };
 
