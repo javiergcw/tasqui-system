@@ -15,7 +15,7 @@ export default function Home() {
       <FeaturesSection />
       <CategorySection />
       <JobsSection />
-      <TopCompaniesSection />
+      <TopCompaniesSection enableClientFetch />
 
       <CallToActionSection />
       <StatsSection />

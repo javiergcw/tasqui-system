@@ -1,13 +1,17 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CompanyCard } from '../CompanyCard';
 import { colors, colorClasses } from '@/lib/colors';
 import type { PublicCompanyProfile } from '@/models/public-web/public-companies.model';
+import type { PublicCompaniesResponse } from '@/models/public-web/public-companies.model';
+import { API_ROUTES } from '@/lib/api-routes';
+import { API_CONFIG } from '@/lib/constants';
 
 interface TopCompaniesSectionProps {
   companies?: PublicCompanyProfile[];
   isLoading?: boolean;
   error?: string | null;
+  enableClientFetch?: boolean;
 }
 
 // Función para generar logo con inicial
@@ -46,13 +50,83 @@ const generateCompanyLogo = (companyName: string, index: number): React.ReactNod
   return <LogoComponent />;
 };
 
-export const TopCompaniesSection: React.FC<TopCompaniesSectionProps> = ({ 
-  companies = [], 
+export const TopCompaniesSection: React.FC<TopCompaniesSectionProps> = ({
+  companies = [],
   isLoading = false,
-  error = null 
+  error = null,
+  enableClientFetch = false,
 }) => {
+  const [companyList, setCompanyList] = useState<PublicCompanyProfile[]>(companies);
+  const [loading, setLoading] = useState<boolean>(isLoading);
+  const [fetchError, setFetchError] = useState<string | null>(error ?? null);
+
+  useEffect(() => {
+    setCompanyList(companies);
+  }, [companies]);
+
+  useEffect(() => {
+    setLoading(isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    setFetchError(error ?? null);
+  }, [error]);
+
+  useEffect(() => {
+    if (!enableClientFetch) {
+      return;
+    }
+
+    let isMounted = true;
+
+    const fetchCompanies = async () => {
+      try {
+        setLoading(true);
+        setFetchError(null);
+        const response = await fetch(
+          `${API_CONFIG.baseURL}${API_ROUTES.publicWeb.companies}`,
+          {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+              Accept: 'application/json',
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data: PublicCompaniesResponse = await response.json();
+        if (!isMounted) {
+          return;
+        }
+
+        setCompanyList(data?.data?.company_profiles ?? []);
+      } catch (err) {
+        if (!isMounted) {
+          return;
+        }
+
+        console.error('Error al cargar empresas destacadas:', err);
+        setFetchError('No fue posible cargar las empresas destacadas');
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchCompanies();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [enableClientFetch]);
+
   // Datos por defecto si no hay empresas cargadas
-  const defaultCompanies = [
+  const defaultCompanies = useMemo(() => [
     {
       logo: (
         <div className="w-12 h-12 rounded flex items-center justify-center" style={{ backgroundColor: colors.mainGreen }}>
@@ -93,11 +167,11 @@ export const TopCompaniesSection: React.FC<TopCompaniesSectionProps> = ({
       location: "Medellín, Colombia",
       openPositions: 45
     }
-  ];
+  ], []);
 
   // Mapear empresas de la API al formato esperado
-  const mappedCompanies = companies.length > 0 
-    ? companies.map((company, index) => ({
+  const mappedCompanies = companyList.length > 0
+    ? companyList.map((company, index) => ({
         logo: generateCompanyLogo(company.legal_name, index),
         companyName: company.legal_name,
         location: "Colombia", // Valor por defecto ya que la API no incluye ubicación
@@ -117,19 +191,19 @@ export const TopCompaniesSection: React.FC<TopCompaniesSectionProps> = ({
           </p>
         </div>
         
-        {isLoading ? (
+        {loading ? (
           <div className="text-center py-12">
             <p className="text-gray-600">Cargando empresas...</p>
           </div>
-        ) : error ? (
+        ) : fetchError ? (
           <div className="text-center py-12">
-            <p className="text-red-600">{error}</p>
+            <p className="text-red-600">{fetchError}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {mappedCompanies.map((company, index) => (
               <CompanyCard
-                key={companies.length > 0 ? companies[index]?.id || index : index}
+                key={companyList.length > 0 ? companyList[index]?.id || index : index}
                 logo={company.logo}
                 companyName={company.companyName}
                 location={company.location}
