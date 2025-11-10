@@ -1,12 +1,12 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { colorClasses, colors } from '@/lib/colors';
 import { Toast } from '@/components/ui/Toast';
 import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
 import type { TicketStatus } from '@/models/admin/ticket.model';
-import type { AdminLeadRole, SendAdminLeadEmailRequest } from '@/models/admin/lead.model';
+import type { AdminLeadRole, ConvertAdminLeadRequest } from '@/models/admin/lead.model';
 
 interface AdminProfileMainSectionProps {
   profile?: AdminProfile | null;
@@ -20,7 +20,8 @@ interface AdminProfileMainSectionProps {
   onProfileUpdate?: (data: { display_name?: string; scope_notes?: string; can_publish_direct?: boolean }) => Promise<void>;
   onTicketStatusUpdate?: (ticketId: string, status: TicketStatus) => Promise<AdminTicket>;
   onRefreshTickets?: () => Promise<void>;
-  onSendLeadEmail?: (leadId: string, data: SendAdminLeadEmailRequest) => Promise<void>;
+  onConvertLead?: (leadId: string, data: ConvertAdminLeadRequest) => Promise<void>;
+  onUpdateLeadEmail?: (leadId: string, email: string) => Promise<void>;
 }
 
 export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = ({ 
@@ -35,25 +36,31 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
   onProfileUpdate,
   onTicketStatusUpdate,
   onRefreshTickets,
-  onSendLeadEmail
+  onConvertLead,
+  onUpdateLeadEmail
 }) => {
   const [activeTab, setActiveTab] = useState('admin-data');
-  
-  // Obtener email del usuario desde localStorage
-  const getUserEmail = () => {
-    if (typeof window !== 'undefined') {
-      const user = localStorage.getItem('user');
-      if (user) {
-        try {
-          const userData = JSON.parse(user);
-          return userData.email || 'Administrador del Sistema';
-        } catch (e) {
-          return 'Administrador del Sistema';
-        }
-      }
+  const [userEmail, setUserEmail] = useState('Administrador del Sistema');
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
     }
-    return 'Administrador del Sistema';
-  };
+
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (!storedUser) {
+        return;
+      }
+
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser?.email) {
+        setUserEmail(parsedUser.email);
+      }
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+    }
+  }, []);
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -71,7 +78,7 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
       case 'employees':
         return <EmployeesTab />;
       case 'leads':
-        return <LeadsTab leads={leads} isLoading={isLoadingLeads} onSendLeadEmail={onSendLeadEmail} />;
+        return <LeadsTab leads={leads} isLoading={isLoadingLeads} onConvertLead={onConvertLead} onUpdateLeadEmail={onUpdateLeadEmail} />;
       default:
         return <AdminDataForm profile={profile} isLoading={isLoading} onProfileUpdate={onProfileUpdate} />;
     }
@@ -107,7 +114,7 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                   {isLoading ? 'Cargando...' : profile ? profile.display_name || 'Admin' : 'Admin'}
                 </h3>
                 <p className={colorClasses.text.gray600}>
-                  {getUserEmail()}
+                  {userEmail}
                 </p>
               </div>
 
@@ -1382,17 +1389,23 @@ const EmployeesTab: React.FC = () => {
 interface LeadsTabProps {
   leads?: AdminLead[];
   isLoading?: boolean;
-  onSendLeadEmail?: (leadId: string, data: SendAdminLeadEmailRequest) => Promise<void>;
+  onConvertLead?: (leadId: string, data: ConvertAdminLeadRequest) => Promise<void>;
+  onUpdateLeadEmail?: (leadId: string, email: string) => Promise<void>;
 }
 
-const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSendLeadEmail }) => {
+const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onConvertLead, onUpdateLeadEmail }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLead, setSelectedLead] = useState<AdminLead | null>(null);
-  const [tempPassword, setTempPassword] = useState('ClaveTemporal123!');
-  const [role, setRole] = useState<AdminLeadRole>('EMPLOYEE');
+  const [tempPassword, setTempPassword] = useState('');
+  const [selectedRole, setSelectedRole] = useState<AdminLeadRole>('EMPLOYEE');
   const [isSending, setIsSending] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+  const [selectedLeadForEmail, setSelectedLeadForEmail] = useState<AdminLead | null>(null);
+  const [newEmail, setNewEmail] = useState('');
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
@@ -1428,7 +1441,7 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
   const handleOpenModal = (lead: AdminLead) => {
     setSelectedLead(lead);
     setTempPassword('ClaveTemporal123!');
-    setRole('EMPLOYEE');
+    setSelectedRole('EMPLOYEE');
     setFormError(null);
     setIsModalOpen(true);
   };
@@ -1439,8 +1452,22 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
     setFormError(null);
   };
 
+  const handleOpenEmailModal = (lead: AdminLead) => {
+    setSelectedLeadForEmail(lead);
+    setNewEmail(lead.email ?? '');
+    setEmailError(null);
+    setIsEmailModalOpen(true);
+  };
+
+  const handleCloseEmailModal = () => {
+    setIsEmailModalOpen(false);
+    setSelectedLeadForEmail(null);
+    setEmailError(null);
+    setNewEmail('');
+  };
+
   const handleSendEmail = async () => {
-    if (!onSendLeadEmail || !selectedLead) {
+    if (!onConvertLead || !selectedLead) {
       return;
     }
 
@@ -1452,9 +1479,9 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
     setFormError(null);
     setIsSending(true);
     try {
-      await onSendLeadEmail(selectedLead.id, {
+      await onConvertLead(selectedLead.id, {
         password: tempPassword.trim(),
-        role,
+        role: selectedRole,
       });
       setToast({
         show: true,
@@ -1473,6 +1500,47 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
       });
     } finally {
       setIsSending(false);
+    }
+  };
+
+  const handleUpdateEmail = async () => {
+    if (!onUpdateLeadEmail || !selectedLeadForEmail) {
+      return;
+    }
+
+    const trimmedEmail = newEmail.trim();
+    if (!trimmedEmail) {
+      setEmailError('El correo electrónico es obligatorio.');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      setEmailError('Ingresa un correo electrónico válido.');
+      return;
+    }
+
+    setEmailError(null);
+    setIsUpdatingEmail(true);
+    try {
+      await onUpdateLeadEmail(selectedLeadForEmail.id, trimmedEmail);
+      setToast({
+        show: true,
+        message: 'Correo del lead actualizado correctamente.',
+        type: 'success',
+      });
+      handleCloseEmailModal();
+    } catch (error) {
+      setToast({
+        show: true,
+        message:
+          error instanceof Error
+            ? error.message
+            : 'No se pudo actualizar el correo del lead. Intenta nuevamente.',
+        type: 'error',
+      });
+    } finally {
+      setIsUpdatingEmail(false);
     }
   };
 
@@ -1577,7 +1645,7 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
                         <button
                           className="rounded-full p-2 text-gray-500 hover:text-green-600 transition-colors disabled:opacity-40"
                           onClick={() => handleOpenModal(lead)}
-                          disabled={!onSendLeadEmail}
+                          disabled={!onConvertLead}
                           aria-label="Enviar acceso"
                           title="Enviar acceso"
                         >
@@ -1596,6 +1664,22 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
                             />
                           </svg>
                         </button>
+                        <button
+                          className="rounded-full p-2 text-gray-500 hover:text-blue-600 transition-colors disabled:opacity-40"
+                          onClick={() => handleOpenEmailModal(lead)}
+                          disabled={!onUpdateLeadEmail}
+                          aria-label="Actualizar correo"
+                          title="Actualizar correo"
+                        >
+                          <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={1.5}
+                              d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v5m-8-5v5m-3 4h14"
+                            />
+                          </svg>
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -1605,6 +1689,58 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
           </div>
           <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 text-sm text-gray-600">
             Mostrando {leads.length} leads
+          </div>
+        </div>
+      )}
+
+      {isEmailModalOpen && selectedLeadForEmail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur px-4">
+          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-lg p-8 relative">
+            <button
+              onClick={handleCloseEmailModal}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              aria-label="Cerrar"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-1">Actualizar correo</h3>
+              <p className="text-sm text-gray-500">
+                Cambia el correo electrónico de <span className="font-medium">{getFullName(selectedLeadForEmail)}</span>.
+              </p>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Nuevo correo electrónico</label>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(e) => setNewEmail(e.target.value)}
+                  placeholder="nombre@empresa.com"
+                  className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-gray-900 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200"
+                />
+                {emailError && <p className="mt-2 text-xs text-red-600">{emailError}</p>}
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-end">
+              <button
+                onClick={handleCloseEmailModal}
+                className="rounded-2xl border border-gray-200 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleUpdateEmail}
+                disabled={isUpdatingEmail || !onUpdateLeadEmail}
+                className="rounded-2xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {isUpdatingEmail ? 'Actualizando...' : 'Guardar cambios'}
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -1659,12 +1795,12 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
                   <label className="block text-sm font-medium text-gray-700 mb-3">Rol de acceso</label>
                   <div className="grid gap-3 sm:grid-cols-3">
                     {roleOptions.map((option) => {
-                      const isActive = role === option.value;
+                      const isActive = selectedRole === option.value;
                       return (
                         <button
                           key={option.value}
                           type="button"
-                          onClick={() => setRole(option.value)}
+                          onClick={() => setSelectedRole(option.value)}
                           className={`rounded-2xl border px-4 py-3 text-left transition-all ${
                             isActive
                               ? 'border-transparent bg-gradient-to-br from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30'
@@ -1697,7 +1833,7 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onSe
                 </button>
                 <button
                   onClick={handleSendEmail}
-                  disabled={isSending || !onSendLeadEmail}
+                  disabled={isSending || !onConvertLead}
                   className="rounded-2xl bg-gray-900 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-gray-900/20 transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isSending ? 'Enviando...' : 'Enviar credenciales'}

@@ -5,8 +5,10 @@ import { API_ROUTES } from '@/lib/api-routes';
 import type {
   AdminLeadDetailResponse,
   AdminLeadsResponse,
-  SendAdminLeadEmailRequest,
-  SendAdminLeadEmailResponse,
+  ConvertAdminLeadRequest,
+  ConvertAdminLeadResponse,
+  UpdateAdminLeadEmailRequest,
+  UpdateAdminLeadEmailResponse,
 } from '@/models/admin/lead.model';
 
 class AdminLeadService {
@@ -24,12 +26,23 @@ class AdminLeadService {
     return response.data;
   }
 
-  async sendLeadEmail(
+  async convertLead(
     id: string,
-    data: SendAdminLeadEmailRequest
-  ): Promise<SendAdminLeadEmailResponse> {
-    const response = await httpService.post<SendAdminLeadEmailResponse>(
-      API_ROUTES.admin.sendLeadEmail(id),
+    data: ConvertAdminLeadRequest
+  ): Promise<ConvertAdminLeadResponse> {
+    const response = await httpService.post<ConvertAdminLeadResponse>(
+      API_ROUTES.admin.convertLead(id),
+      data
+    );
+    return response.data;
+  }
+
+  async updateLeadEmail(
+    id: string,
+    data: UpdateAdminLeadEmailRequest
+  ): Promise<UpdateAdminLeadEmailResponse> {
+    const response = await httpService.put<UpdateAdminLeadEmailResponse>(
+      API_ROUTES.admin.updateLeadEmail(id),
       data
     );
     return response.data;

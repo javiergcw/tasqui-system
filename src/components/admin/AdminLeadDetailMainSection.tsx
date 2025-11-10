@@ -83,12 +83,16 @@ export const AdminLeadDetailMainSection = ({ lead, isLoading = false, error = nu
     );
   };
 
-  const renderLanguages = (items: AdminLeadLanguage[]) => {
-    if (!items.length) return <p className="text-sm text-gray-500">Sin idiomas registrados.</p>;
+  const renderLanguages = (items?: AdminLeadLanguage[] | null) => {
+    const safeItems = items ?? [];
+
+    if (!safeItems.length) {
+      return <p className="text-sm text-gray-500">Sin idiomas registrados.</p>;
+    }
 
     return (
       <ul className="space-y-2">
-        {items.map((language, index) => (
+        {safeItems.map((language, index) => (
           <li key={`${language.language_name}-${index}`} className="flex flex-col rounded-lg border border-gray-200 bg-white p-3 shadow-sm">
             <span className="text-sm font-semibold text-gray-900">{language.language_name}</span>
             <span className="text-xs text-gray-500">
@@ -208,7 +212,12 @@ export const AdminLeadDetailMainSection = ({ lead, isLoading = false, error = nu
             </div>
 
             <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Idiomas</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M3 7a2 2 0 012-2h14a2 2 0 012 2m-18 0l9 5 9-5" />
+                </svg>
+                Idiomas
+              </h3>
               {renderLanguages(languages)}
             </div>
 

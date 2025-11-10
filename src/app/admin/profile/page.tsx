@@ -6,10 +6,11 @@ import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { AdminProfileHeroSection } from '@/components/admin/AdminProfileHeroSection';
 import { AdminProfileMainSection } from '@/components/admin/AdminProfileMainSection';
+import { Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
-import { adminProfileUseCase, getAdminTicketsUseCase, updateTicketStatusUseCase, getAdminStatsUseCase, getAdminLeadsUseCase, sendLeadEmailUseCase } from '@/use-cases';
+import { adminProfileUseCase, getAdminTicketsUseCase, updateTicketStatusUseCase, getAdminStatsUseCase, getAdminLeadsUseCase, convertLeadUseCase, updateLeadEmailUseCase } from '@/use-cases';
 import type { AdminProfile, AdminTicket, AdminStatsData, AdminLead } from '@/models';
-import type { SendAdminLeadEmailRequest } from '@/models/admin/lead.model';
+import type { ConvertAdminLeadRequest } from '@/models/admin/lead.model';
 import type { TicketStatus } from '@/models/admin/ticket.model';
 
 export default function AdminProfilePage() {
@@ -21,6 +22,11 @@ export default function AdminProfilePage() {
   const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [leads, setLeads] = useState<AdminLead[]>([]);
   const [isLoadingLeads, setIsLoadingLeads] = useState(true);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success',
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -106,11 +112,38 @@ export default function AdminProfilePage() {
     }
   };
 
-  const handleSendLeadEmail = async (leadId: string, data: SendAdminLeadEmailRequest) => {
+  const handleConvertLead = async (leadId: string, data: ConvertAdminLeadRequest) => {
     try {
-      await sendLeadEmailUseCase.execute(leadId, data);
+      await convertLeadUseCase.execute(leadId, data);
+      setToast({
+        show: true,
+        message: 'Lead convertido y correo enviado satisfactoriamente',
+        type: 'success'
+      });
     } catch (error) {
       console.error('Error sending lead email:', error);
+      throw error;
+    }
+  };
+
+  const handleUpdateLeadEmail = async (leadId: string, email: string) => {
+    try {
+      const response = await updateLeadEmailUseCase.execute(leadId, { email });
+      setLeads(prev =>
+        prev.map(lead => (lead.id === leadId ? { ...lead, email: response.data?.email ?? email } : lead))
+      );
+      setToast({
+        show: true,
+        message: 'Correo del lead actualizado exitosamente',
+        type: 'success',
+      });
+    } catch (error) {
+      console.error('Error updating lead email:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al actualizar el correo del lead',
+        type: 'error',
+      });
       throw error;
     }
   };
@@ -132,12 +165,19 @@ export default function AdminProfilePage() {
           onProfileUpdate={handleProfileUpdate}
           onTicketStatusUpdate={handleTicketStatusUpdate}
           onRefreshTickets={refreshTickets}
-          onSendLeadEmail={handleSendLeadEmail}
+          onConvertLead={handleConvertLead}
+          onUpdateLeadEmail={handleUpdateLeadEmail}
         />
 
       <Footer />
       <CopyrightSection />
       <ScrollToTopButton />
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        isVisible={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+      />
     </div>
   );
 }

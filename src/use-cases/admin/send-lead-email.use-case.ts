@@ -1,26 +1,26 @@
-// Caso de uso para enviar correo de activación a un lead
+// Caso de uso para convertir un lead en usuario
 
 import { adminLeadService } from '@/services/admin';
 import type {
   AdminLeadRole,
-  SendAdminLeadEmailRequest,
-  SendAdminLeadEmailResponse,
+  ConvertAdminLeadRequest,
+  ConvertAdminLeadResponse,
 } from '@/models/admin/lead.model';
 
 const VALID_ROLES: AdminLeadRole[] = ['EMPLOYEE', 'COMPANY', 'ADMIN'];
 
-export class SendLeadEmailUseCase {
+export class ConvertLeadUseCase {
   async execute(
     leadId: string,
-    data: SendAdminLeadEmailRequest
-  ): Promise<SendAdminLeadEmailResponse> {
+    data: ConvertAdminLeadRequest
+  ): Promise<ConvertAdminLeadResponse> {
     this.validateLeadId(leadId);
     this.validatePayload(data);
 
-    const response = await adminLeadService.sendLeadEmail(leadId, data);
+    const response = await adminLeadService.convertLead(leadId, data);
 
     if (!response.success) {
-      throw new Error(response.message || 'Error al enviar el correo al lead');
+      throw new Error(response.message || 'Error al convertir el lead en usuario');
     }
 
     return response;
@@ -32,7 +32,7 @@ export class SendLeadEmailUseCase {
     }
   }
 
-  private validatePayload(data: SendAdminLeadEmailRequest): void {
+  private validatePayload(data: ConvertAdminLeadRequest): void {
     if (!data.password || data.password.trim().length === 0) {
       throw new Error('La contraseña temporal es obligatoria');
     }
@@ -43,6 +43,6 @@ export class SendLeadEmailUseCase {
   }
 }
 
-export default new SendLeadEmailUseCase();
+export default new ConvertLeadUseCase();
 
 

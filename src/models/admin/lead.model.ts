@@ -113,17 +113,30 @@ export interface AdminLeadDetailResponse {
 
 export type AdminLeadRole = 'EMPLOYEE' | 'COMPANY' | 'ADMIN';
 
-export interface SendAdminLeadEmailRequest {
+export interface ConvertAdminLeadRequest {
   password: string;
   role: AdminLeadRole;
 }
 
-export interface SendAdminLeadEmailResponse {
+export interface ConvertAdminLeadResponse {
   success: boolean;
   message: string;
   data?: {
     lead_id: string;
     [key: string]: unknown;
+  };
+}
+
+export interface UpdateAdminLeadEmailRequest {
+  email: string;
+}
+
+export interface UpdateAdminLeadEmailResponse {
+  success: boolean;
+  message: string;
+  data?: {
+    lead_id: string;
+    email: string;
   };
 }
 
