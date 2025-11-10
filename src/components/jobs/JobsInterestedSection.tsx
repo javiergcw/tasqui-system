@@ -1,51 +1,69 @@
 'use client';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { JobInterestedCard } from './JobInterestedCard';
 import { colorClasses } from '@/lib/colors';
+import type { PublicJob } from '@/models/public-web/public-jobs.model';
 
-export const JobsInterestedSection: React.FC = () => {
-  const jobs = [
-    {
-      id: 1,
-      jobTitle: "Operador de Sala de Correo",
-      companyName: "Tourt Design S.A.",
-      location: "Bogotá, Colombia",
-      category: "Contabilidad",
-      jobType: "Freelance",
-      postedTime: "hace 1 hora",
-      contractType: "Tiempo Completo"
-    },
-    {
-      id: 2,
-      jobTitle: "Digitador de Datos",
-      companyName: "Techno Inc.",
-      location: "Medellín, Colombia",
-      category: "Digitación",
-      jobType: "Freelance",
-      postedTime: "hace 3 horas",
-      contractType: null
-    },
-    {
-      id: 3,
-      jobTitle: "Diseñador Gráfico",
-      companyName: "Devon Design",
-      location: "Cali, Colombia",
-      category: "Diseño Gráfico",
-      jobType: "Freelance",
-      postedTime: "hace 4 horas",
-      contractType: null
-    },
-    {
-      id: 4,
-      jobTitle: "Desarrollador Web",
-      companyName: "MegaNews S.A.",
-      location: "Barranquilla, Colombia",
-      category: "Desarrollo",
-      jobType: "Freelance",
-      postedTime: "hace 5 horas",
-      contractType: null
+interface JobsInterestedSectionProps {
+  jobs?: PublicJob[];
+  isLoading?: boolean;
+  error?: string | null;
+}
+
+const jobTypeLabels: Record<string, string> = {
+  FULL_TIME: 'Tiempo Completo',
+  PART_TIME: 'Medio Tiempo',
+  CONTRACT: 'Contrato',
+  TEMPORARY: 'Temporal',
+  INTERNSHIP: 'Pasantía',
+  FREELANCE: 'Freelance',
+};
+
+const experienceLevelLabels: Record<string, string> = {
+  ENTRY_LEVEL: 'Nivel Junior',
+  MID_LEVEL: 'Nivel Semi Senior',
+  SENIOR_LEVEL: 'Nivel Senior',
+  EXECUTIVE: 'Nivel Ejecutivo',
+};
+
+const formatDateLabel = (dateString?: string | null): string => {
+  if (!dateString) {
+    return 'Fecha no disponible';
+  }
+
+  try {
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return 'Fecha no disponible';
     }
-  ];
+
+    const formatter = new Intl.DateTimeFormat('es-CO', {
+      dateStyle: 'medium',
+    });
+
+    return `Actualizado el ${formatter.format(date)}`;
+  } catch {
+    return 'Fecha no disponible';
+  }
+};
+
+export const JobsInterestedSection: React.FC<JobsInterestedSectionProps> = ({
+  jobs = [],
+  isLoading = false,
+  error = null,
+}) => {
+  const formattedJobs = useMemo(() => {
+    return jobs.map((job) => ({
+      id: job.id,
+      jobTitle: job.title || 'Cargo sin título',
+      companyName: job.company_id ? `Empresa #${job.company_id.substring(0, 8)}` : 'Empresa confidencial',
+      location: job.location ?? 'Ubicación no especificada',
+      category: job.category_id ? `Categoría #${job.category_id.substring(0, 8)}` : 'Categoría no especificada',
+      jobType: jobTypeLabels[job.job_type ?? ''] ?? 'Modalidad no especificada',
+      postedTime: formatDateLabel(job.published_at ?? job.updated_at ?? job.created_at),
+      contractType: jobTypeLabels[job.job_type ?? ''] ?? null,
+    }));
+  }, [jobs]);
 
   return (
     <section className="bg-white py-16">
@@ -58,22 +76,36 @@ export const JobsInterestedSection: React.FC = () => {
             Descubre oportunidades laborales personalizadas basadas en tu perfil. Encuentra trabajos que se ajusten a tus habilidades y experiencia profesional en Tasqui.
           </p>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {jobs.map((job) => (
-            <JobInterestedCard
-              key={job.id}
-              id={job.id}
-              jobTitle={job.jobTitle}
-              companyName={job.companyName}
-              location={job.location}
-              category={job.category}
-              jobType={job.jobType}
-              postedTime={job.postedTime}
-              contractType={job.contractType}
-            />
-          ))}
-        </div>
+
+        {isLoading ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">Cargando empleos...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-600">{error}</p>
+          </div>
+        ) : formattedJobs.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-gray-600">No hay empleos disponibles por ahora.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {formattedJobs.map((job) => (
+              <JobInterestedCard
+                key={job.id}
+                id={job.id}
+                jobTitle={job.jobTitle}
+                companyName={job.companyName}
+                location={job.location}
+                category={job.category}
+                jobType={job.jobType}
+                postedTime={job.postedTime}
+                contractType={job.contractType}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

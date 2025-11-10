@@ -67,6 +67,8 @@ export const API_ROUTES = {
   // Public Web
   publicWeb: {
     companies: '/api/v1/public/companies',
+    jobs: '/api/v1/public/jobs',
+    newsletter: '/api/v1/public/newsletter',
   },
 } as const;
 

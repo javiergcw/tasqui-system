@@ -1,19 +1,64 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import { colors, colorClasses } from '@/lib/colors';
+import { Toast } from '@/components/ui/Toast';
 
-export const JobNotificationsSection: React.FC = () => {
+interface JobNotificationsSectionProps {
+  onSubscribe?: (email: string) => Promise<{ success: boolean; message: string }>;
+}
+
+type ToastType = 'success' | 'error' | 'info' | 'warning';
+
+export const JobNotificationsSection: React.FC<JobNotificationsSectionProps> = ({ onSubscribe }) => {
   const [email, setEmail] = useState('');
+  const [isPending, startTransition] = useTransition();
+  const [toastState, setToastState] = useState<{ visible: boolean; type: ToastType; message: string }>({
+    visible: false,
+    type: 'info',
+    message: '',
+  });
+
+  const showToast = (type: ToastType, message: string) => {
+    setToastState({
+      visible: true,
+      type,
+      message,
+    });
+  };
+
+  const handleCloseToast = () => {
+    setToastState((prev) => ({
+      ...prev,
+      visible: false,
+    }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Aquí puedes agregar la lógica para manejar la suscripción
-    console.log('Email suscrito:', email);
-    setEmail('');
+
+    if (!onSubscribe) {
+      showToast('error', 'El servicio de suscripción no está disponible en este momento.');
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const result = await onSubscribe(email);
+        if (result.success) {
+          showToast('success', result.message || 'Te has suscrito correctamente.');
+          setEmail('');
+        } else {
+          showToast('error', result.message || 'No fue posible completar la suscripción.');
+        }
+      } catch (err) {
+        console.error('Error al suscribirse al newsletter:', err);
+        showToast('error', 'Ocurrió un error al procesar tu suscripción. Intenta nuevamente.');
+      }
+    });
   };
 
   return (
-    <section 
+    <section
       className="py-16"
       style={{ backgroundColor: colors.mainGreen }}
     >
@@ -43,7 +88,7 @@ export const JobNotificationsSection: React.FC = () => {
               <button
                 type="submit"
                 className={`px-6 py-3 ${colorClasses.sidebar.text} font-semibold rounded-lg transition-colors duration-200 whitespace-nowrap`}
-                style={{ 
+                style={{
                   backgroundColor: colors.dark[800],
                 }}
                 onMouseEnter={(e) => {
@@ -52,13 +97,22 @@ export const JobNotificationsSection: React.FC = () => {
                 onMouseLeave={(e) => {
                   e.currentTarget.style.backgroundColor = colors.dark[800];
                 }}
+                disabled={isPending}
               >
-                Suscribirse
+                {isPending ? 'Enviando...' : 'Suscribirse'}
               </button>
             </form>
           </div>
         </div>
       </div>
+
+      <Toast
+        message={toastState.message}
+        type={toastState.type}
+        isVisible={toastState.visible}
+        onClose={handleCloseToast}
+        duration={4000}
+      />
     </section>
   );
 };

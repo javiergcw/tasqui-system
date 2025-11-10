@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { colors, colorClasses } from '@/lib/colors';
 
 interface JobInterestedCardProps {
-  id: number;
+  id: string;
   jobTitle: string;
   companyName: string;
   location: string;
