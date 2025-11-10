@@ -4,8 +4,10 @@ import { useRouter } from 'next/navigation';
 import { colorClasses, colors } from '@/lib/colors';
 import { JobDetailHeader } from './JobDetailHeader';
 import { JobApplicationModal } from './JobApplicationModal';
-import { isAuthenticated } from '@/utils/auth';
+import { isAuthenticated, getUser } from '@/utils/auth';
 import type { LoginUser } from '@/models/auth/login.model';
+import { createEmployeeJobApplicationUseCase } from '@/use-cases';
+import type { CreateEmployeeJobApplicationRequest } from '@/models/employee/job-application.model';
 
 interface JobDetailContentProps {
   jobId: string;
@@ -24,6 +26,7 @@ export const JobDetailContent: React.FC<JobDetailContentProps> = ({
 }) => {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleApplyNow = () => {
     // Si no está autenticado, redirigir a registro
@@ -52,15 +55,30 @@ export const JobDetailContent: React.FC<JobDetailContentProps> = ({
   };
 
   const handleSubmitApplication = async () => {
-    // TODO: Implementar envío real de aplicación
-    // await submitApplicationUseCase.execute(jobId, formData);
-    console.log('Enviando aplicación para trabajo:', jobId);
-    
-    // Cerrar modal después de enviar
-    setIsModalOpen(false);
-    
-    // TODO: Actualizar estado hasApplied después de enviar exitosamente
-    // setHasApplied(true);
+    if (isSubmitting || hasApplied) {
+      return;
+    }
+
+    const currentUser = user ?? getUser();
+    if (!currentUser || currentUser.role !== 'EMPLOYEE') {
+      setIsModalOpen(false);
+      return;
+    }
+
+    const payload: CreateEmployeeJobApplicationRequest = {
+      job_id: jobId,
+      cover_letter: undefined,
+    };
+
+    try {
+      setIsSubmitting(true);
+      await createEmployeeJobApplicationUseCase.execute(payload);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Error al enviar la aplicación:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -153,31 +171,33 @@ export const JobDetailContent: React.FC<JobDetailContentProps> = ({
         {(user === null || user.role === 'EMPLOYEE') && (
           <div className="mt-8">
             {hasApplied && !isChecking && (
-              <div className="mb-4 py-3 px-6 font-semibold text-white rounded-lg text-center flex items-center justify-center gap-2 text-sm" style={{ backgroundColor: colors.mainGreen }}>
+              <div className="mb-4 inline-flex items-center justify-center gap-2 py-3 px-6 font-semibold text-white rounded-lg text-sm mx-auto" style={{ backgroundColor: colors.mainGreen }}>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Ya has aplicado a esta oferta
               </div>
             )}
-            <button
-              onClick={handleApplyNow}
-              disabled={isChecking}
-              className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              style={{ backgroundColor: colors.mainGreen }}
-              onMouseEnter={(e) => {
-                if (!isChecking) {
-                  e.currentTarget.style.backgroundColor = colors.hoverGreen;
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isChecking) {
-                  e.currentTarget.style.backgroundColor = colors.mainGreen;
-                }
-              }}
-            >
-              {isChecking ? 'Verificando...' : 'Aplicar'}
-            </button>
+            {!hasApplied && (
+              <button
+                onClick={handleApplyNow}
+                disabled={isChecking || isSubmitting}
+                className="py-4 px-8 font-semibold transition-colors duration-200 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ backgroundColor: colors.mainGreen }}
+                onMouseEnter={(e) => {
+                  if (!isChecking && !isSubmitting) {
+                    e.currentTarget.style.backgroundColor = colors.hoverGreen;
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isChecking && !isSubmitting) {
+                    e.currentTarget.style.backgroundColor = colors.mainGreen;
+                  }
+                }}
+              >
+                {isSubmitting ? 'Enviando...' : isChecking ? 'Verificando...' : 'Aplicar'}
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -190,6 +210,7 @@ export const JobDetailContent: React.FC<JobDetailContentProps> = ({
           onSubmit={handleSubmitApplication}
           companyName="TAXAC GROUP S.A.S"
           jobId={jobId}
+          isSubmitting={isSubmitting}
         />
       )}
     </div>

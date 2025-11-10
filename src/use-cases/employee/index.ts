@@ -10,4 +10,8 @@ export { default as getEmployeeExperiencesUseCase } from './get-experiences.use-
 export { default as createEmployeeExperienceUseCase } from './create-experience.use-case';
 export { default as updateEmployeeExperienceUseCase } from './update-experience.use-case';
 export { default as deleteEmployeeExperienceUseCase } from './delete-experience.use-case';
+export { default as employeeSkillsUseCase } from './employee-skills.use-case';
+export { default as createEmployeeJobApplicationUseCase } from './create-job-application.use-case';
+export { default as checkEmployeeJobApplicationUseCase } from './check-job-application.use-case';
+export { default as getEmployeeJobApplicationsUseCase } from './get-job-applications.use-case';
 

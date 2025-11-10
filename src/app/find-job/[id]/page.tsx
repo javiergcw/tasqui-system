@@ -6,6 +6,8 @@ import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobDetailHeroSect
 import { colorClasses } from '@/lib/colors';
 import { isAuthenticated, getUser } from '@/utils/auth';
 import type { LoginUser } from '@/models/auth/login.model';
+import { createEmployeeJobApplicationUseCase, checkEmployeeJobApplicationUseCase } from '@/use-cases';
+import type { CreateEmployeeJobApplicationRequest } from '@/models/employee/job-application.model';
 
 interface JobDetailPageProps {
   params: {
@@ -18,6 +20,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   const [user, setUser] = useState<LoginUser | null>(null);
   const [hasApplied, setHasApplied] = useState<boolean>(false);
   const [isChecking, setIsChecking] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
     // Verificar autenticación
@@ -28,20 +31,16 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     
     if (authenticated && currentUser) {
       // Verificar si el usuario ya aplicó a este trabajo
-      // TODO: Conectar con API real para verificar aplicación
-      checkIfApplied(params.id, currentUser.id);
+      checkIfApplied(params.id);
     } else {
       setIsChecking(false);
     }
   }, [params.id]);
 
-  const checkIfApplied = async (jobId: string, userId: string) => {
+  const checkIfApplied = async (jobId: string) => {
     try {
-      // TODO: Implementar llamada real a la API
-      // Por ahora, simulamos que no ha aplicado
-      // const response = await checkApplicationUseCase.execute(jobId);
-      // setHasApplied(response.hasApplied);
-      setHasApplied(false);
+      const response = await checkEmployeeJobApplicationUseCase.execute(jobId);
+      setHasApplied(response.hasApplied);
     } catch (error) {
       console.error('Error checking application:', error);
       setHasApplied(false);
@@ -50,7 +49,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     }
   };
 
-  const handleApplyClick = () => {
+  const handleApplyClick = async () => {
     if (!isAuthenticated()) {
       // Redirigir a registro con el rol de empleado
       router.push('/register?role=employee');
@@ -65,11 +64,24 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     }
 
     // Si ya aplicó, no hacer nada (el componente mostrará el mensaje)
-    if (hasApplied) {
+    if (hasApplied || isSubmitting) {
       return;
     }
 
-    // El modal se abrirá desde el componente hijo
+    const payload: CreateEmployeeJobApplicationRequest = {
+      job_id: params.id,
+      cover_letter: undefined,
+    };
+
+    try {
+      setIsSubmitting(true);
+      await createEmployeeJobApplicationUseCase.execute(payload);
+      setHasApplied(true);
+    } catch (error) {
+      console.error('Error al enviar la postulación:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

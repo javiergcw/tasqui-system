@@ -25,6 +25,11 @@ export const API_ROUTES = {
     educationDetail: (id: string) => `/api/v1/employee/educations/${id}`,
     experiences: '/api/v1/employee/experiences',
     experienceDetail: (id: string) => `/api/v1/employee/experiences/${id}`,
+    skills: '/api/v1/employee/skills',
+    skillCategoryDetail: (categoryId: string) => `/api/v1/employee/skill-categories/${categoryId}`,
+    skillSubcategoryDetail: (subcategoryId: string) => `/api/v1/employee/skill-subcategories/${subcategoryId}`,
+    jobApplications: '/api/v1/employee/job-applications',
+    jobApplicationsCheck: (jobId: string) => `/api/v1/employee/job-applications/check/${jobId}`,
   },
   
   // Company

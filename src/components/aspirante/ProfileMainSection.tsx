@@ -7,10 +7,11 @@ import { FormacionAcademica } from './FormacionAcademica';
 import { ExperienciaLaboral } from './ExperienciaLaboral';
 import { VacantesAplicadas } from './VacantesAplicadas';
 import { EntrevistasProgramadas } from './EntrevistasProgramadas';
-import { SkillsSection } from './SkillsSection';
-import type { SkillsSelectionPayload } from './SkillsSection';
+import { Habilidades } from './Habilidades';
 import { colors } from '@/lib/colors';
 import type { EmployeeProfile } from '@/models';
+import type { EmployeeSkillCategoryItem, EmployeeSkillsUpsertRequest } from '@/models/employee/employee-skills.model';
+import type { SkillCategory } from '@/models/master/skills-complete.model';
 import type { EmployeeEducation } from '@/models/employee/education.model';
 import type {
   CreateEmployeeEducationRequest,
@@ -22,7 +23,7 @@ import type {
   UpdateEmployeeExperienceRequest,
 } from '@/models/employee/experience.model';
 import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
-import type { SkillCategory } from '@/models/master/skills-complete.model';
+import type { EmployeeJobApplication } from '@/models/employee/job-application.model';
 
 interface ProfileMainSectionProps {
   profile?: EmployeeProfile | null;
@@ -41,14 +42,18 @@ interface ProfileMainSectionProps {
   onUpdateExperience?: (id: string, data: UpdateEmployeeExperienceRequest) => Promise<EmployeeExperience>;
   onDeleteExperience?: (id: string) => Promise<void>;
   isSavingExperience?: boolean;
-  skillCategories?: SkillCategory[];
+  skillCategories?: EmployeeSkillCategoryItem[] | null;
   isLoadingSkills?: boolean;
-  onSaveSkills?: (selection: SkillsSelectionPayload) => Promise<void> | void;
+  onDeleteSkillSubcategory?: (subcategoryId: string) => Promise<void>;
+  isDeletingSkill?: boolean;
+  onDeleteSkillCategory?: (categoryId: string) => Promise<void>;
+  isDeletingSkillCategory?: boolean;
+  availableSkillCategories?: SkillCategory[];
+  isLoadingAvailableSkills?: boolean;
+  onSaveSkills?: (payload: EmployeeSkillsUpsertRequest) => Promise<void>;
   isSavingSkills?: boolean;
-  savedSkills?: SkillsSelectionPayload | null;
-  onRemoveSkillCategory?: (categoryId: string) => Promise<void> | void;
-  onRemoveSkillSubcategory?: (categoryId: string, subCategoryId: string) => Promise<void> | void;
-  removingSkill?: { categoryId: string; subCategoryId?: string } | null;
+  jobApplications?: EmployeeJobApplication[];
+  isLoadingJobApplications?: boolean;
 }
 
 export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({ 
@@ -70,12 +75,16 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
   isSavingExperience = false,
   skillCategories,
   isLoadingSkills = false,
+  onDeleteSkillSubcategory,
+  isDeletingSkill = false,
+  onDeleteSkillCategory,
+  isDeletingSkillCategory = false,
+  availableSkillCategories,
+  isLoadingAvailableSkills = false,
   onSaveSkills,
-  isSavingSkills,
-  savedSkills,
-  onRemoveSkillCategory,
-  onRemoveSkillSubcategory,
-  removingSkill,
+  isSavingSkills = false,
+  jobApplications,
+  isLoadingJobApplications = false,
 }) => {
   const [activeTab, setActiveTab] = useState('datos-personales');
 
@@ -105,23 +114,30 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
             onDeleteExperience={onDeleteExperience}
           />
         );
-      case 'vacantes-aplicadas':
-        return <VacantesAplicadas />;
-      case 'entrevistas-programadas':
-        return <EntrevistasProgramadas />;
-      case 'skills':
+      case 'habilidades':
         return (
-          <SkillsSection
-            categories={skillCategories}
+          <Habilidades
+            skillCategories={skillCategories}
             isLoading={isLoadingSkills}
+            onDeleteSubcategory={onDeleteSkillSubcategory}
+            isDeleting={isDeletingSkill}
+            onDeleteCategory={onDeleteSkillCategory}
+            isDeletingCategory={isDeletingSkillCategory}
+            availableSkillCategories={availableSkillCategories}
+            isLoadingAvailableSkills={isLoadingAvailableSkills}
             onSaveSkills={onSaveSkills}
-            isSaving={isSavingSkills}
-            savedSkills={savedSkills}
-            onRemoveCategory={onRemoveSkillCategory}
-            onRemoveSubcategory={onRemoveSkillSubcategory}
-            removingSkill={removingSkill}
+            isSavingSkills={isSavingSkills}
           />
         );
+      case 'vacantes-aplicadas':
+        return (
+          <VacantesAplicadas
+            applications={jobApplications}
+            isLoading={isLoadingJobApplications}
+          />
+        );
+      case 'entrevistas-programadas':
+        return <EntrevistasProgramadas />;
       default:
         return (
           <DatosPersonales
@@ -266,6 +282,38 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
 
                 <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
+                {/* Habilidades */}
+                <div 
+                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
+                    activeTab === 'habilidades' 
+                      ? 'border border-dashed rounded-md' 
+                      : 'text-slate-800'
+                  }`}
+                  style={activeTab === 'habilidades' ? { backgroundColor: colors.mainGreen } : {}}
+                  onMouseEnter={(e) => {
+                    if (activeTab !== 'habilidades') {
+                      e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      e.currentTarget.style.color = 'white';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeTab !== 'habilidades') {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '';
+                    }
+                  }}
+                  onClick={() => setActiveTab('habilidades')}
+                >
+                  <div className={`flex items-center px-4 ${activeTab === 'habilidades' ? 'text-white' : 'text-slate-800'}`}>
+                  <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
+                  </svg>
+                    Habilidades
+                </div>
+                </div>
+
+                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
+
                 {/* Vacantes Aplicadas */}
                 <div 
                   className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
@@ -298,37 +346,6 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
 
                 <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
-                {/* Skills */}
-                <div 
-                  className={`w-full flex items-center py-3 cursor-pointer transition-colors ${
-                    activeTab === 'skills' 
-                      ? 'border border-dashed rounded-md' 
-                      : 'text-slate-800'
-                  }`}
-                  style={activeTab === 'skills' ? { backgroundColor: colors.mainGreen } : {}}
-                  onMouseEnter={(e) => {
-                    if (activeTab !== 'skills') {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                      e.currentTarget.style.color = 'white';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (activeTab !== 'skills') {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '';
-                    }
-                  }}
-                  onClick={() => setActiveTab('skills')}
-                >
-                  <div className={`flex items-center px-4 ${activeTab === 'skills' ? 'text-white' : 'text-slate-800'}`}>
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                    Habilidades y Tecnologías
-                  </div>
-                </div>
-
-                <div className={`w-full border-t border-dashed ${colorClasses.border.gray200}`}></div>
 
                 {/* Entrevistas Programadas */}
                 <div 

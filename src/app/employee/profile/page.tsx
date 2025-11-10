@@ -6,7 +6,6 @@ import { Footer, CopyrightSection } from '@/components/home/Footer';
 import { ScrollToTopButton } from '@/components/home/ScrollToTopButton';
 import { ProfileHeroSection } from '@/components/aspirante/ProfileHeroSection';
 import { ProfileMainSection } from '@/components/aspirante/ProfileMainSection';
-import type { SkillsSelectionPayload } from '@/components/aspirante/SkillsSection';
 import { Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import {
@@ -19,7 +18,9 @@ import {
   createEmployeeExperienceUseCase,
   updateEmployeeExperienceUseCase,
   deleteEmployeeExperienceUseCase,
+  employeeSkillsUseCase,
   skillsCompleteUseCase,
+  getEmployeeJobApplicationsUseCase,
 } from '@/use-cases';
 import type { EmployeeProfile } from '@/models';
 import type {
@@ -32,9 +33,10 @@ import type {
   CreateEmployeeExperienceRequest,
   UpdateEmployeeExperienceRequest as UpdateExperienceRequest,
 } from '@/models/employee/experience.model';
-import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
+import type { EmployeeSkillCategoryItem, EmployeeSkillsUpsertRequest } from '@/models/employee/employee-skills.model';
 import type { SkillCategory } from '@/models/master/skills-complete.model';
-
+import type { UpdateEmployeeProfileRequest } from '@/models/employee/profile.model';
+import type { EmployeeJobApplication } from '@/models/employee/job-application.model';
 export default function ProfilePage() {
   const [profile, setProfile] = useState<EmployeeProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,11 +47,15 @@ export default function ProfilePage() {
   const [experiences, setExperiences] = useState<EmployeeExperience[]>([]);
   const [isLoadingExperiences, setIsLoadingExperiences] = useState(true);
   const [isSavingExperience, setIsSavingExperience] = useState(false);
-  const [employeeSkills, setEmployeeSkills] = useState<SkillsSelectionPayload | null>(null);
-  const [isSavingSkills, setIsSavingSkills] = useState(false);
-  const [removingSkill, setRemovingSkill] = useState<{ categoryId: string; subCategoryId?: string } | null>(null);
-  const [skillCategories, setSkillCategories] = useState<SkillCategory[]>([]);
+  const [skillCategories, setSkillCategories] = useState<EmployeeSkillCategoryItem[]>([]);
   const [isLoadingSkills, setIsLoadingSkills] = useState(true);
+  const [isDeletingSkill, setIsDeletingSkill] = useState(false);
+  const [isDeletingSkillCategory, setIsDeletingSkillCategory] = useState(false);
+  const [availableSkillCategories, setAvailableSkillCategories] = useState<SkillCategory[]>([]);
+  const [isLoadingAvailableSkills, setIsLoadingAvailableSkills] = useState(true);
+  const [isSavingSkills, setIsSavingSkills] = useState(false);
+  const [jobApplications, setJobApplications] = useState<EmployeeJobApplication[]>([]);
+  const [isLoadingJobApplications, setIsLoadingJobApplications] = useState(true);
   const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
     show: false,
     message: '',
@@ -90,18 +96,44 @@ export default function ProfilePage() {
 
       try {
         setIsLoadingSkills(true);
-        const skillsResponse = await skillsCompleteUseCase.execute();
-        if (skillsResponse.success) {
-          setSkillCategories(skillsResponse.data?.categories ?? []);
+        const skillsResponse = await employeeSkillsUseCase.execute();
+        if (skillsResponse.success && skillsResponse.data?.skill_categories) {
+          const sanitizedCategories = skillsResponse.data.skill_categories.filter(item => item.subcategories.length > 0);
+          setSkillCategories(sanitizedCategories);
         } else {
           setSkillCategories([]);
         }
       } catch (error) {
-        console.error('Error al obtener habilidades:', error);
-        setSkillCategories([]);
+        console.error('Error al obtener habilidades del empleado:', error);
       } finally {
         setIsLoadingSkills(false);
       }
+
+      try {
+        setIsLoadingAvailableSkills(true);
+        const masterSkillsResponse = await skillsCompleteUseCase.execute();
+        if (masterSkillsResponse.success && masterSkillsResponse.data?.categories) {
+          setAvailableSkillCategories(masterSkillsResponse.data.categories);
+        } else {
+          setAvailableSkillCategories([]);
+        }
+      } catch (error) {
+        console.error('Error al obtener catálogo completo de habilidades:', error);
+      } finally {
+        setIsLoadingAvailableSkills(false);
+      }
+
+      try {
+        setIsLoadingJobApplications(true);
+        const applicationsResponse = await getEmployeeJobApplicationsUseCase.execute();
+        setJobApplications(applicationsResponse.jobApplications);
+      } catch (error) {
+        console.error('Error al obtener las postulaciones del empleado:', error);
+        setJobApplications([]);
+      } finally {
+        setIsLoadingJobApplications(false);
+      }
+
     };
 
     fetchData();
@@ -223,97 +255,71 @@ export default function ProfilePage() {
     }
   };
 
-  const handleSaveSkills = async (selection: SkillsSelectionPayload) => {
+  const handleDeleteSkillSubcategory = async (subcategoryId: string): Promise<void> => {
+    setIsDeletingSkill(true);
+    try {
+      await employeeSkillsUseCase.deleteSubcategory(subcategoryId);
+      setSkillCategories(prev =>
+        prev
+          .map(category => ({
+            ...category,
+            subcategories: category.subcategories.filter(item => item.subcategory.id !== subcategoryId),
+          }))
+          .filter(category => category.subcategories.length > 0)
+      );
+      setToast({ show: true, message: 'Habilidad eliminada exitosamente', type: 'success' });
+    } catch (error) {
+      console.error('Error al eliminar habilidad:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al eliminar la habilidad seleccionada',
+        type: 'error',
+      });
+      throw error;
+    } finally {
+      setIsDeletingSkill(false);
+    }
+  };
+
+  const handleDeleteSkillCategory = async (categoryId: string): Promise<void> => {
+    setIsDeletingSkillCategory(true);
+    try {
+      await employeeSkillsUseCase.deleteCategory(categoryId);
+      setSkillCategories(prev => prev.filter(category => category.category.id !== categoryId));
+      setToast({ show: true, message: 'Categoría de habilidades eliminada exitosamente', type: 'success' });
+    } catch (error) {
+      console.error('Error al eliminar la categoría de habilidades:', error);
+      setToast({
+        show: true,
+        message: error instanceof Error ? error.message : 'Error al eliminar la categoría seleccionada',
+        type: 'error',
+      });
+      throw error;
+    } finally {
+      setIsDeletingSkillCategory(false);
+    }
+  };
+
+  const handleSaveSkills = async (payload: EmployeeSkillsUpsertRequest): Promise<void> => {
     setIsSavingSkills(true);
     try {
-      setEmployeeSkills(selection);
+      await employeeSkillsUseCase.save(payload);
+      const refreshed = await employeeSkillsUseCase.execute();
+      if (refreshed.success && refreshed.data?.skill_categories) {
+        const sanitizedCategories = refreshed.data.skill_categories.filter(item => item.subcategories.length > 0);
+        setSkillCategories(sanitizedCategories);
+      }
       setToast({ show: true, message: 'Habilidades guardadas exitosamente', type: 'success' });
     } catch (error) {
       console.error('Error al guardar habilidades:', error);
       setToast({
         show: true,
-        message: error instanceof Error ? error.message : 'Error al guardar habilidades',
-        type: 'error'
+        message: error instanceof Error ? error.message : 'Error al guardar las habilidades seleccionadas',
+        type: 'error',
       });
       throw error;
     } finally {
       setIsSavingSkills(false);
-    }
-  };
-
-  const handleRemoveSkillCategory = async (categoryId: string) => {
-    setRemovingSkill({ categoryId });
-    try {
-      setEmployeeSkills(prev => {
-        if (!prev) return prev;
-        const nextCategories = prev.categories.filter(id => id !== categoryId);
-        const nextSubcategories = { ...prev.subcategories };
-        delete nextSubcategories[categoryId];
-
-        if (!nextCategories.length) {
-          return null;
-        }
-
-        return {
-          categories: nextCategories,
-          subcategories: nextSubcategories
-        };
-      });
-      setToast({ show: true, message: 'Categoría de habilidades eliminada', type: 'success' });
-    } catch (error) {
-      console.error('Error al eliminar categoría de habilidades:', error);
-      setToast({
-        show: true,
-        message: error instanceof Error ? error.message : 'Error al eliminar la categoría',
-        type: 'error'
-      });
-      throw error;
-    } finally {
-      setRemovingSkill(null);
-    }
-  };
-
-  const handleRemoveSkillSubcategory = async (categoryId: string, subCategoryId: string) => {
-    setRemovingSkill({ categoryId, subCategoryId });
-    try {
-      setEmployeeSkills(prev => {
-        if (!prev) return prev;
-
-        const current = prev.subcategories[categoryId] ?? [];
-        const updated = current.filter(id => id !== subCategoryId);
-        const nextSubcategories = { ...prev.subcategories };
-
-        if (updated.length) {
-          nextSubcategories[categoryId] = updated;
-          return {
-            categories: [...prev.categories],
-            subcategories: nextSubcategories
-          };
-        }
-
-        delete nextSubcategories[categoryId];
-        const nextCategories = prev.categories.filter(id => id !== categoryId);
-
-        if (!nextCategories.length) {
-          return null;
-        }
-
-        return {
-          categories: nextCategories,
-          subcategories: nextSubcategories
-        };
-      });
-      setToast({ show: true, message: 'Habilidad eliminada', type: 'success' });
-    } catch (error) {
-      console.error('Error al eliminar habilidad:', error);
-      setToast({
-        show: true,
-        message: error instanceof Error ? error.message : 'Error al eliminar la habilidad',
-        type: 'error'
-      });
-      throw error;
-    } finally {
-      setRemovingSkill(null);
     }
   };
 
@@ -337,16 +343,20 @@ export default function ProfilePage() {
           onUpdateExperience={handleUpdateExperience}
           onDeleteExperience={handleDeleteExperience}
           isSavingExperience={isSavingExperience}
-          onUpdateProfile={handleUpdateProfile}
-          isUpdatingProfile={isUpdatingProfile}
           skillCategories={skillCategories}
           isLoadingSkills={isLoadingSkills}
-          savedSkills={employeeSkills}
+          onDeleteSkillSubcategory={handleDeleteSkillSubcategory}
+          isDeletingSkill={isDeletingSkill}
+          onDeleteSkillCategory={handleDeleteSkillCategory}
+          isDeletingSkillCategory={isDeletingSkillCategory}
+          availableSkillCategories={availableSkillCategories}
+          isLoadingAvailableSkills={isLoadingAvailableSkills}
           onSaveSkills={handleSaveSkills}
           isSavingSkills={isSavingSkills}
-          onRemoveSkillCategory={handleRemoveSkillCategory}
-          onRemoveSkillSubcategory={handleRemoveSkillSubcategory}
-          removingSkill={removingSkill}
+          onUpdateProfile={handleUpdateProfile}
+          isUpdatingProfile={isUpdatingProfile}
+          jobApplications={jobApplications}
+          isLoadingJobApplications={isLoadingJobApplications}
         />
 
       <Footer />
