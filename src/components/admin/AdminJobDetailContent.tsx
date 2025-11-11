@@ -123,7 +123,7 @@ export const AdminJobDetailContent: React.FC<AdminJobDetailContentProps> = ({ jo
             Editar Trabajo
           </button>
           <button
-            onClick={() => router.push(`/admin/applicants/${job.id}`)}
+            onClick={() => router.push(`/admin/applicants?jobId=${job.id}`)}
             className="py-4 px-8 bg-gray-500 hover:bg-gray-600 text-white font-semibold transition-colors duration-200 rounded-lg"
           >
             Ver Aplicaciones ({job.applications_count || 0})

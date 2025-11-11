@@ -10,6 +10,9 @@ import type {
   UpdateJobStatusRequest,
   UpdateJobStatusResponse
 } from '@/models/admin/job.model';
+import type {
+  AdminJobApplicantsResponse
+} from '@/models/admin/job-applicants.model';
 
 class AdminJobService {
   async createJob(data: CreateJobRequest): Promise<CreateJobResponse> {
@@ -30,6 +33,13 @@ class AdminJobService {
   async getJobById(id: string): Promise<AdminJobDetailResponse> {
     const response = await httpService.get<AdminJobDetailResponse>(
       API_ROUTES.admin.jobDetail(id)
+    );
+    return response.data;
+  }
+
+  async getJobApplicants(jobId: string): Promise<AdminJobApplicantsResponse> {
+    const response = await httpService.get<AdminJobApplicantsResponse>(
+      API_ROUTES.admin.jobApplicants(jobId)
     );
     return response.data;
   }

@@ -5,4 +5,5 @@ export { default as adminTicketService } from './ticket.service';
 export { default as adminJobService } from './job.service';
 export { default as adminStatsService } from './stats.service';
 export { default as adminLeadService } from './lead.service';
+export { default as adminJobApplicationService } from './job-application.service';
 

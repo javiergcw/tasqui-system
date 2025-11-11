@@ -11,4 +11,6 @@ export { default as getJobByIdUseCase } from './get-job-by-id.use-case';
 export { default as updateJobStatusUseCase } from './update-job-status.use-case';
 export { default as convertLeadUseCase } from './send-lead-email.use-case';
 export { default as updateLeadEmailUseCase } from './update-lead-email.use-case';
+export { default as getJobApplicantsUseCase } from './get-job-applicants.use-case';
+export { default as updateJobApplicationStatusUseCase } from './update-job-application-status.use-case';
 

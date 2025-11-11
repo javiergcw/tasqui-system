@@ -48,6 +48,9 @@ export const API_ROUTES = {
     jobs: '/api/v1/admin/jobs',
     jobDetail: (id: string) => `/api/v1/admin/jobs/${id}`,
     updateJobStatus: (id: string) => `/api/v1/admin/jobs/${id}/status`,
+    jobApplicants: (jobId: string) => `/api/v1/admin/jobs/${jobId}/applicants`,
+    jobApplicationStatus: (applicationId: string) =>
+      `/api/v1/admin/job-applications/${applicationId}/status`,
     stats: '/api/v1/admin/stats',
     leads: '/api/v1/admin/leads',
     leadDetail: (id: string) => `/api/v1/admin/leads/${id}`,

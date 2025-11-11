@@ -1,18 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, AdminJobDetailHeroSection, AdminJobDetailMainSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import { getJobByIdUseCase } from '@/use-cases';
 import type { AdminJob } from '@/models/admin/job.model';
 
-interface AdminViewJobPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function AdminViewJobPage({ params }: AdminViewJobPageProps) {
+export default function AdminViewJobPage() {
+  const params = useParams<{ id: string }>();
   const [job, setJob] = useState<AdminJob | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +18,12 @@ export default function AdminViewJobPage({ params }: AdminViewJobPageProps) {
       try {
         setIsLoading(true);
         setError(null);
-        const jobData = await getJobByIdUseCase.execute(params.id);
+        const jobId = params?.id ?? '';
+        if (!jobId) {
+          throw new Error('El ID del trabajo es requerido');
+        }
+
+        const jobData = await getJobByIdUseCase.execute(jobId);
         setJob(jobData);
       } catch (err) {
         console.error('Error fetching job:', err);
@@ -32,10 +33,10 @@ export default function AdminViewJobPage({ params }: AdminViewJobPageProps) {
       }
     };
 
-    if (params.id) {
+    if (params?.id) {
       fetchJob();
     }
-  }, [params.id]);
+  }, [params?.id]);
   
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50} dark:from-gray-900 dark:to-gray-800`}>

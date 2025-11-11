@@ -1,7 +1,20 @@
 import { colors } from '@/lib/colors';
 import Link from 'next/link';
 
-export const AdminApplicantDetailHeroSection = () => {
+interface AdminApplicantDetailHeroSectionProps {
+  breadcrumbs?: Array<{
+    label: string;
+    href?: string;
+  }>;
+}
+
+export const AdminApplicantDetailHeroSection = ({
+  breadcrumbs = [
+    { label: 'Inicio', href: '/' },
+    { label: 'Candidatos', href: '/admin/applicants' },
+    { label: 'Detalle del Candidato' },
+  ],
+}: AdminApplicantDetailHeroSectionProps) => {
   return (
     <section 
       className="relative py-16 px-4"
@@ -16,11 +29,21 @@ export const AdminApplicantDetailHeroSection = () => {
             Detalle del Candidato
           </h1>
           <nav className="text-gray-300">
-            <Link href="/" className="text-gray-400 hover:text-white transition-colors">Inicio</Link>
-            <span className="mx-2">›</span>
-            <Link href="/admin/applicants" className="text-gray-400 hover:text-white transition-colors">Candidatos</Link>
-            <span className="mx-2">›</span>
-            <span className="text-white">Detalle del Candidato</span>
+            {breadcrumbs.map((item, index) => (
+              <span key={`${item.label}-${index}`} className="inline-flex items-center text-sm sm:text-base">
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <span className="text-white">{item.label}</span>
+                )}
+                {index < breadcrumbs.length - 1 && <span className="mx-2">›</span>}
+              </span>
+            ))}
           </nav>
         </div>
       </div>
