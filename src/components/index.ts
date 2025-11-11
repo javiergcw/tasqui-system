@@ -2,6 +2,7 @@
 export { Logo } from './Logo';
 export { Navigation } from './Navigation';
 export { ActionButtons } from './ActionButtons';
+export { UnderConstruction } from './common/UnderConstruction';
 export { SearchBar } from './SearchBar';
 export { JobCard } from './JobCard';
 export { CompanyCard } from './CompanyCard';

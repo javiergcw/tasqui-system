@@ -12,7 +12,7 @@ export type JobApplicationStatus =
 export interface AdminJobApplicantCategory {
   id: string;
   name: string;
-  description: string;
+  description: string | null;
 }
 
 export interface AdminJobApplicantJob {
@@ -34,7 +34,22 @@ export interface AdminJobApplicantJob {
   published_at: string | null;
   created_at: string;
   updated_at: string;
-  category: AdminJobApplicantCategory;
+  category: AdminJobApplicantCategory | null;
+}
+
+export interface AdminJobApplicantProfile {
+  profile_id: string;
+  full_name: string;
+  email: string;
+  role: string;
+  country: string | null;
+  region: string | null;
+  city: string | null;
+  facebook_url?: string | null;
+  twitter_url?: string | null;
+  linkedin_url?: string | null;
+  github_url?: string | null;
+  skills?: string[];
 }
 
 export interface AdminJobApplication {
@@ -45,6 +60,7 @@ export interface AdminJobApplication {
   created_at: string;
   updated_at: string;
   job: AdminJobApplicantJob;
+  applicant?: AdminJobApplicantProfile | null;
 }
 
 export interface AdminJobApplicantsResponse {

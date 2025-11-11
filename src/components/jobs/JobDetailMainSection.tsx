@@ -3,13 +3,17 @@ import React from 'react';
 import { JobDetailContent } from './JobDetailContent';
 import { JobDetailSidebar } from './JobDetailSidebar';
 import type { LoginUser } from '@/models/auth/login.model';
+import type { PublicJob } from '@/models/public-web/public-jobs.model';
 
 interface JobDetailMainSectionProps {
   jobId: string;
   user: LoginUser | null;
   hasApplied: boolean;
   isChecking: boolean;
-  onApplyClick: () => void;
+  onApplyClick: () => Promise<void> | void;
+  job: PublicJob | null;
+  isJobLoading: boolean;
+  jobError: string | null;
 }
 
 export const JobDetailMainSection: React.FC<JobDetailMainSectionProps> = ({
@@ -17,7 +21,10 @@ export const JobDetailMainSection: React.FC<JobDetailMainSectionProps> = ({
   user,
   hasApplied,
   isChecking,
-  onApplyClick
+  onApplyClick,
+  job,
+  isJobLoading,
+  jobError,
 }) => {
   return (
     <section className="py-8 md:py-12 lg:py-20 bg-white">
@@ -29,8 +36,11 @@ export const JobDetailMainSection: React.FC<JobDetailMainSectionProps> = ({
             hasApplied={hasApplied}
             isChecking={isChecking}
             onApplyClick={onApplyClick}
+            job={job}
+            isJobLoading={isJobLoading}
+            jobError={jobError}
           />
-          <JobDetailSidebar />
+          <JobDetailSidebar job={job} isLoading={isJobLoading} />
         </div>
       </div>
     </section>

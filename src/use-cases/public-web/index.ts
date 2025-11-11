@@ -2,5 +2,6 @@
 
 export { default as publicCompaniesUseCase } from './public-companies.use-case';
 export { default as publicJobsUseCase } from './public-jobs.use-case';
+export { default as publicJobDetailUseCase } from './public-job-detail.use-case';
 export { default as publicNewsletterUseCase } from './public-newsletter.use-case';
 

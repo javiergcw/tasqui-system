@@ -56,9 +56,11 @@ export const JobsInterestedSection: React.FC<JobsInterestedSectionProps> = ({
     return jobs.map((job) => ({
       id: job.id,
       jobTitle: job.title || 'Cargo sin título',
-      companyName: job.company_id ? `Empresa #${job.company_id.substring(0, 8)}` : 'Empresa confidencial',
+      companyName:
+        job.company?.legal_name?.trim() ||
+        (job.company_id ? `Empresa #${job.company_id.substring(0, 8)}` : 'Empresa confidencial'),
       location: job.location ?? 'Ubicación no especificada',
-      category: job.category_id ? `Categoría #${job.category_id.substring(0, 8)}` : 'Categoría no especificada',
+      category: job.category?.name?.trim() || (job.category_id ? `Categoría #${job.category_id.substring(0, 8)}` : 'Categoría no especificada'),
       jobType: jobTypeLabels[job.job_type ?? ''] ?? 'Modalidad no especificada',
       postedTime: formatDateLabel(job.published_at ?? job.updated_at ?? job.created_at),
       contractType: jobTypeLabels[job.job_type ?? ''] ?? null,

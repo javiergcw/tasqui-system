@@ -6,6 +6,8 @@ interface AdminApplicantDetailHeroSectionProps {
     label: string;
     href?: string;
   }>;
+  applicantName?: string | null;
+  jobTitle?: string | null;
 }
 
 export const AdminApplicantDetailHeroSection = ({
@@ -14,6 +16,8 @@ export const AdminApplicantDetailHeroSection = ({
     { label: 'Candidatos', href: '/admin/applicants' },
     { label: 'Detalle del Candidato' },
   ],
+  applicantName = null,
+  jobTitle = null,
 }: AdminApplicantDetailHeroSectionProps) => {
   return (
     <section 
@@ -26,8 +30,13 @@ export const AdminApplicantDetailHeroSection = ({
       <div className="relative max-w-7xl mx-auto">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Detalle del Candidato
+            {applicantName ? `Detalle de ${applicantName}` : 'Detalle del Candidato'}
           </h1>
+          {jobTitle && (
+            <p className="text-lg md:text-xl text-white/80 mb-6">
+              Aplicando al puesto: <span className="font-semibold text-white">{jobTitle}</span>
+            </p>
+          )}
           <nav className="text-gray-300">
             {breadcrumbs.map((item, index) => (
               <span key={`${item.label}-${index}`} className="inline-flex items-center text-sm sm:text-base">

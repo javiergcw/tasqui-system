@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sidebar, Footer, CopyrightSection, ScrollToTopButton, JobDetailHeroSection, JobDetailMainSection } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import { isAuthenticated, getUser } from '@/utils/auth';
 import type { LoginUser } from '@/models/auth/login.model';
-import { createEmployeeJobApplicationUseCase, checkEmployeeJobApplicationUseCase } from '@/use-cases';
+import type { PublicJob } from '@/models/public-web/public-jobs.model';
+import { createEmployeeJobApplicationUseCase, checkEmployeeJobApplicationUseCase, publicJobDetailUseCase } from '@/use-cases';
 import type { CreateEmployeeJobApplicationRequest } from '@/models/employee/job-application.model';
 
 interface JobDetailPageProps {
@@ -21,6 +22,9 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
   const [hasApplied, setHasApplied] = useState<boolean>(false);
   const [isChecking, setIsChecking] = useState<boolean>(true);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [job, setJob] = useState<PublicJob | null>(null);
+  const [isJobLoading, setIsJobLoading] = useState<boolean>(true);
+  const [jobError, setJobError] = useState<string | null>(null);
 
   useEffect(() => {
     // Verificar autenticación
@@ -35,6 +39,8 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     } else {
       setIsChecking(false);
     }
+
+    fetchJobDetails(params.id);
   }, [params.id]);
 
   const checkIfApplied = async (jobId: string) => {
@@ -84,12 +90,41 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     }
   };
 
+  const fetchJobDetails = async (jobId: string) => {
+    try {
+      setIsJobLoading(true);
+      setJobError(null);
+      const response = await publicJobDetailUseCase.execute(jobId);
+      setJob(response.data.job);
+    } catch (error) {
+      console.error('Error al obtener el detalle del empleo público:', error);
+      setJob(null);
+      setJobError('No fue posible cargar la información del empleo.');
+    } finally {
+      setIsJobLoading(false);
+    }
+  };
+
+  const heroJobTitle = useMemo(() => {
+    if (isJobLoading) {
+      return 'Cargando detalles del trabajo...';
+    }
+    if (jobError || !job) {
+      return 'Detalles del Trabajo';
+    }
+    return job.title || 'Cargo sin título';
+  }, [isJobLoading, jobError, job]);
+
   return (
     <div className={`min-h-screen ${colorClasses.background.gray50} dark:from-gray-900 dark:to-gray-800`}>
       <Sidebar />
       
       {/* Hero Section */}
-      <JobDetailHeroSection />
+      <JobDetailHeroSection
+        jobTitle={heroJobTitle}
+        companyName={job?.company?.legal_name ?? null}
+        location={job?.location ?? null}
+      />
       
       {/* Main Content Section */}
       <JobDetailMainSection 
@@ -98,6 +133,9 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
         hasApplied={hasApplied}
         isChecking={isChecking}
         onApplyClick={handleApplyClick}
+        job={job}
+        isJobLoading={isJobLoading}
+        jobError={jobError}
       />
       
       <Footer />

@@ -5,6 +5,22 @@ export type PublicJobExperienceLevel = 'ENTRY_LEVEL' | 'MID_LEVEL' | 'SENIOR_LEV
 export type PublicJobStatus = 'OPEN' | 'CLOSED' | 'DRAFT';
 export type PublicJobVisibility = 'PUBLIC' | 'PRIVATE';
 
+export interface PublicJobCompany {
+  id: string;
+  legal_name: string;
+  contact_name: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  billing_plan: string | null;
+  max_open_jobs: number | null;
+}
+
+export interface PublicJobCategory {
+  id: string;
+  name: string;
+  description: string | null;
+}
+
 export interface PublicJob {
   id: string;
   company_id: string;
@@ -24,6 +40,8 @@ export interface PublicJob {
   published_at: string | null;
   created_at: string;
   updated_at: string;
+  company: PublicJobCompany | null;
+  category: PublicJobCategory | null;
 }
 
 export interface PublicJobsData {
@@ -37,6 +55,16 @@ export interface PublicJobsResponse {
   success: boolean;
   message: string;
   data: PublicJobsData;
+}
+
+export interface PublicJobDetailData {
+  job: PublicJob;
+}
+
+export interface PublicJobDetailResponse {
+  success: boolean;
+  message: string;
+  data: PublicJobDetailData;
 }
 
 

@@ -3,7 +3,17 @@ import React from 'react';
 import Link from 'next/link';
 import { colors, colorClasses } from '@/lib/colors';
 
-export const JobDetailHeroSection: React.FC = () => {
+interface JobDetailHeroSectionProps {
+  jobTitle?: string;
+  companyName?: string | null;
+  location?: string | null;
+}
+
+export const JobDetailHeroSection: React.FC<JobDetailHeroSectionProps> = ({
+  jobTitle = 'Detalles del Trabajo',
+  companyName,
+  location,
+}) => {
   return (
     <section 
       className="relative py-20" 
@@ -14,8 +24,16 @@ export const JobDetailHeroSection: React.FC = () => {
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className={`text-5xl md:text-6xl font-bold ${colorClasses.sidebar.text} mb-6`}>
-          Detalles del Trabajo
+          {jobTitle}
         </h1>
+
+        {(companyName || location) && (
+          <p className={`${colorClasses.sidebar.text} text-lg md:text-xl`}>
+            {companyName && <span>{companyName}</span>}
+            {companyName && location && <span className="mx-2">•</span>}
+            {location && <span>{location}</span>}
+          </p>
+        )}
 
         {/* Breadcrumb Navigation */}
         <div className="flex justify-center">

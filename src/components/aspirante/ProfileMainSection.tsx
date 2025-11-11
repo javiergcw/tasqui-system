@@ -6,9 +6,9 @@ import { DatosPersonales } from './DatosPersonales';
 import { FormacionAcademica } from './FormacionAcademica';
 import { ExperienciaLaboral } from './ExperienciaLaboral';
 import { VacantesAplicadas } from './VacantesAplicadas';
-import { EntrevistasProgramadas } from './EntrevistasProgramadas';
 import { Habilidades } from './Habilidades';
 import { colors } from '@/lib/colors';
+import { UnderConstruction } from '@/components';
 import type { EmployeeProfile } from '@/models';
 import type { EmployeeSkillCategoryItem, EmployeeSkillsUpsertRequest } from '@/models/employee/employee-skills.model';
 import type { SkillCategory } from '@/models/master/skills-complete.model';
@@ -137,7 +137,13 @@ export const ProfileMainSection: React.FC<ProfileMainSectionProps> = ({
           />
         );
       case 'entrevistas-programadas':
-        return <EntrevistasProgramadas />;
+        return (
+          <UnderConstruction
+            title="¡Entrevistas programadas en camino!"
+            description="Estamos trabajando en esta sección para que puedas gestionar tus entrevistas desde Tasqui."
+            hint="Pronto podrás ver tus entrevistas agendadas y recibir recordatorios directamente aquí."
+          />
+        );
       default:
         return (
           <DatosPersonales

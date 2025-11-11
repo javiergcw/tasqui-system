@@ -63,12 +63,19 @@ export const AdminApplicantInfoCard = ({
     );
   }
 
-  const name = application.employee_profile_id || 'Candidato sin nombre';
+  const name =
+    application.applicant?.full_name?.trim() ||
+    application.employee_profile_id ||
+    'Candidato sin nombre';
   const title = application.job?.title || 'Sin cargo definido';
   const status = application.status;
   const statusLabel = STATUS_LABELS[status];
   const statusColor = STATUS_COLORS[status];
-  const location = application.job?.location || 'Ubicación no disponible';
+  const location =
+    [application.applicant?.city, application.applicant?.region, application.applicant?.country]
+      .filter(Boolean)
+      .join(', ') || application.job?.location || 'Ubicación no disponible';
+  const email = application.applicant?.email || 'Correo no disponible';
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(
     name
   )}&background=0D8ABC&color=fff&size=300`;
@@ -111,7 +118,7 @@ export const AdminApplicantInfoCard = ({
               <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
             </svg>
           </div>
-          <span className="text-gray-700">Correo no disponible</span>
+          <span className="text-gray-700 break-all">{email}</span>
         </div>
       </div>
 

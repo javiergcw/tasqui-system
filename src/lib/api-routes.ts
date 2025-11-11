@@ -77,6 +77,7 @@ export const API_ROUTES = {
   publicWeb: {
     companies: '/api/v1/public/companies',
     jobs: '/api/v1/public/jobs',
+    jobDetail: (id: string) => `/api/v1/public/jobs/${id}`,
     newsletter: '/api/v1/public/newsletter',
   },
 } as const;

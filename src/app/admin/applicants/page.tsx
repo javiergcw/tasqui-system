@@ -29,21 +29,29 @@ const mapApplicationToCard = (
 ): AdminApplicantCard => ({
   id: application.id,
   jobId: application.job_id,
-  name: application.employee_profile_id || 'Candidato',
+  name:
+    application.applicant?.full_name?.trim() ||
+    application.employee_profile_id ||
+    'Candidato',
   title: application.job?.title || 'Sin título',
   image: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-    application.employee_profile_id || 'Candidato'
+    application.applicant?.full_name?.trim() ||
+      application.employee_profile_id ||
+      'Candidato'
   )}&background=0D8ABC&color=fff&size=300`,
   rating: 4,
   stage: statusToStage[application.status] || 'pending',
   status: application.status,
-  skills: application.job?.category?.name
-    ? [application.job.category.name]
-    : [],
+  skills:
+    (application.applicant?.skills && application.applicant.skills.length > 0
+      ? application.applicant.skills
+      : application.job?.category?.name
+      ? [application.job.category.name]
+      : []),
   social: {
-    facebook: '#',
-    twitter: '#',
-    linkedin: '#',
+    facebook: application.applicant?.facebook_url || '#',
+    twitter: application.applicant?.twitter_url || '#',
+    linkedin: application.applicant?.linkedin_url || '#',
   },
 });
 

@@ -2,7 +2,7 @@
 
 import httpService from '@/utils/http';
 import { API_ROUTES } from '@/lib/api-routes';
-import type { PublicJobsResponse } from '@/models/public-web/public-jobs.model';
+import type { PublicJobDetailResponse, PublicJobsResponse } from '@/models/public-web/public-jobs.model';
 
 export class PublicJobsService {
   async getPublicJobs(): Promise<PublicJobsResponse> {
@@ -13,6 +13,18 @@ export class PublicJobsService {
       return response.data;
     } catch (error) {
       console.error('Error fetching public jobs:', error);
+      throw error;
+    }
+  }
+
+  async getPublicJobById(jobId: string): Promise<PublicJobDetailResponse> {
+    try {
+      const response = await httpService.get<PublicJobDetailResponse>(
+        API_ROUTES.publicWeb.jobDetail(jobId)
+      );
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching public job with id ${jobId}:`, error);
       throw error;
     }
   }

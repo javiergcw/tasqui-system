@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Sidebar } from '@/components/home/Sidebar';
 import { Footer, CopyrightSection } from '@/components/home/Footer';
@@ -14,14 +14,15 @@ import type {
 } from '@/models/admin/job-applicants.model';
 
 interface AdminApplicantDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function AdminApplicantDetailPage({
   params,
 }: AdminApplicantDetailPageProps) {
+  const { id: applicantId } = use(params);
   const searchParams = useSearchParams();
   const jobId = searchParams?.get('jobId') ?? '';
   const [application, setApplication] = useState<AdminJobApplication | null>(null);
@@ -29,6 +30,11 @@ export default function AdminApplicantDetailPage({
   const [error, setError] = useState<string | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
+  const applicantName =
+    application?.applicant?.full_name?.trim() ||
+    application?.employee_profile_id ||
+    null;
+  const jobTitle = application?.job?.title ?? null;
 
   const breadcrumbs = [
     { label: 'Inicio', href: '/' },
@@ -52,7 +58,7 @@ export default function AdminApplicantDetailPage({
         setError(null);
         const response = await getJobApplicantsUseCase.execute(jobId);
         const foundApplication = response.job_applications.find(
-          (app) => app.id === params.id
+          (app) => app.id === applicantId
         );
 
         if (!foundApplication) {
@@ -74,16 +80,16 @@ export default function AdminApplicantDetailPage({
     };
 
     fetchApplication();
-  }, [jobId, params.id]);
+  }, [jobId, applicantId]);
 
   const handleUpdateStatus = async (status: JobApplicationStatus): Promise<boolean> => {
-    if (!params.id) return false;
+    if (!applicantId) return false;
 
     try {
       setIsUpdating(true);
       setUpdateError(null);
       const updatedApplication = await updateJobApplicationStatusUseCase.execute(
-        params.id,
+        applicantId,
         status
       );
       setApplication(updatedApplication);
@@ -105,7 +111,11 @@ export default function AdminApplicantDetailPage({
     <div className={`min-h-screen ${colorClasses.background.gray50}`}>
       <Sidebar />
       <main>
-        <AdminApplicantDetailHeroSection breadcrumbs={breadcrumbs} />
+        <AdminApplicantDetailHeroSection
+          breadcrumbs={breadcrumbs}
+          applicantName={applicantName}
+          jobTitle={jobTitle}
+        />
         <AdminApplicantDetailMainSection
           application={application}
           isLoading={isLoading}

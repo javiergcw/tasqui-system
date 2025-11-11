@@ -27,6 +27,7 @@ export const AdminApplicantDetailMainSection = ({
   updateError,
   onUpdateStatus,
 }: AdminApplicantDetailMainSectionProps) => {
+  const applicant = application?.applicant;
   return (
     <section className="py-12 px-4">
       <div className="max-w-7xl mx-auto">
@@ -51,7 +52,7 @@ export const AdminApplicantDetailMainSection = ({
             <AdminAboutMeCard />
             <AdminEducationCard />
             <AdminExperienceCard />
-            <AdminSkillsCard />
+            <AdminSkillsCard skills={applicant?.skills ?? null} />
           </div>
         </div>
       </div>
