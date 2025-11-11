@@ -123,20 +123,25 @@ export const AdminApplicantInfoCard = ({
       </div>
 
       {/* Información adicional */}
-      <div className="space-y-3 text-sm text-gray-600">
-        <div className="flex justify-between">
-          <span className="font-medium">ID de solicitud:</span>
-          <span className="text-gray-800">{application.id}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">ID de perfil:</span>
-          <span className="text-gray-800">{application.employee_profile_id}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="font-medium">Fecha de aplicación:</span>
-          <span className="text-gray-800">
-            {new Date(application.created_at).toLocaleString('es-ES')}
-          </span>
+      <div className="space-y-4 text-sm text-gray-600">
+        <div className="flex items-center space-x-3">
+          <div className="w-5 h-5 flex items-center justify-center" style={{ color: colors.mainGreen }}>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div className="flex flex-col">
+            <span className="font-medium text-gray-700">Fecha de aplicación</span>
+            <span className="text-gray-800">
+              {new Date(application.created_at).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
+          </div>
         </div>
       </div>
     </div>
