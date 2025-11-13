@@ -36,9 +36,14 @@ export const ExperienciaLaboral: React.FC<ExperienciaLaboralProps> = ({
   });
 
   const sortedExperiences = useMemo(
-    () =>
-      [...experiences].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()),
-    [experiences]
+    () => {
+      // Filtrar la experiencia que se está editando para que no aparezca en la lista
+      const filteredExperiences = editingExperience
+        ? experiences.filter((exp) => exp.id !== editingExperience.id)
+        : experiences;
+      return [...filteredExperiences].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+    },
+    [experiences, editingExperience]
   );
 
   const resetForm = () => {
@@ -124,9 +129,20 @@ export const ExperienciaLaboral: React.FC<ExperienciaLaboralProps> = ({
         </h2>
         {onCreateExperience && (
           <button
-            onClick={handleStartCreate}
-            className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-            style={{ backgroundColor: colors.mainGreen }}
+            onClick={() => {
+              if (showForm) {
+                setShowForm(false);
+                resetForm();
+              } else {
+                handleStartCreate();
+              }
+            }}
+            className={`px-4 py-2 font-medium rounded-md transition-colors ${
+              showForm
+                ? 'text-red-600 border border-red-200 hover:bg-red-50'
+                : 'text-white'
+            }`}
+            style={showForm ? {} : { backgroundColor: colors.mainGreen }}
           >
             {showForm ? 'Cancelar' : '+ Agregar Experiencia'}
           </button>
@@ -214,7 +230,7 @@ export const ExperienciaLaboral: React.FC<ExperienciaLaboralProps> = ({
                 setShowForm(false);
                 resetForm();
               }}
-              className="px-6 py-2 text-gray-600 font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 text-red-600 font-medium border border-red-200 rounded-md hover:bg-red-50 transition-colors"
             >
               Cancelar
             </button>

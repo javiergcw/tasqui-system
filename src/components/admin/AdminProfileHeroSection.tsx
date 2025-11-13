@@ -17,7 +17,7 @@ export const AdminProfileHeroSection: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-            Admin Profile
+            Perfil de Administrador
           </h1>
           
           <nav className="flex justify-center items-center space-x-2 text-white/80">
@@ -25,10 +25,10 @@ export const AdminProfileHeroSection: React.FC = () => {
               href="/" 
               className="hover:text-white transition-colors duration-200"
             >
-              Home
+              Inicio
             </Link>
             <span className="text-white/60">&gt;</span>
-            <span className="text-white">Admin Profile</span>
+            <span className="text-white">Perfil de Administrador</span>
           </nav>
         </div>
       </div>

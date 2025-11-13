@@ -1,5 +1,6 @@
 'use client';
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
 interface NavItem {
@@ -44,35 +45,67 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
           onMouseEnter={() => handleMouseEnter(item.label)}
           onMouseLeave={handleMouseLeave}
         >
-          <a
-            href={item.href}
-             className={`
-               flex items-center space-x-1 px-3 py-2 text-base font-medium transition-colors duration-200 whitespace-nowrap
-               ${activeItem === item.label 
-                 ? '' 
-                 : 'text-white hover:text-slate-100'
-               }
-             `}
-            style={activeItem === item.label ? { color: colors.mainGreen } : {}}
-            onClick={() => setActiveItem(item.label)}
-          >
-            <span>{item.label}</span>
-            {item.hasDropdown && (
-              <svg 
-                className="w-4 h-4" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M19 9l-7 7-7-7" 
-                />
-              </svg>
-            )}
-          </a>
+          {item.href !== '#' ? (
+            <Link
+              href={item.href}
+              className={`
+                flex items-center space-x-1 px-3 py-2 text-base font-medium transition-colors duration-200 whitespace-nowrap
+                ${activeItem === item.label 
+                  ? '' 
+                  : 'text-white hover:text-slate-100'
+                }
+              `}
+              style={activeItem === item.label ? { color: colors.mainGreen } : {}}
+              onClick={() => setActiveItem(item.label)}
+            >
+              <span>{item.label}</span>
+              {item.hasDropdown && (
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M19 9l-7 7-7-7" 
+                  />
+                </svg>
+              )}
+            </Link>
+          ) : (
+            <a
+              href={item.href}
+              className={`
+                flex items-center space-x-1 px-3 py-2 text-base font-medium transition-colors duration-200 whitespace-nowrap
+                ${activeItem === item.label 
+                  ? '' 
+                  : 'text-white hover:text-slate-100'
+                }
+              `}
+              style={activeItem === item.label ? { color: colors.mainGreen } : {}}
+              onClick={() => setActiveItem(item.label)}
+            >
+              <span>{item.label}</span>
+              {item.hasDropdown && (
+                <svg 
+                  className="w-4 h-4" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M19 9l-7 7-7-7" 
+                  />
+                </svg>
+              )}
+            </a>
+          )}
           
           {/* Dropdown Menu */}
           {item.hasDropdown && item.subItems && (
@@ -87,22 +120,41 @@ export const Navigation: React.FC<NavigationProps> = ({ items, className = '' })
             >
               <div className="py-2">
                 {item.subItems.map((subItem) => (
-                  <a
-                    key={subItem.label}
-                    href={subItem.href}
-                    className="block px-6 py-3 text-sm text-gray-700 hover:text-white transition-all duration-200 font-medium"
-                    style={{
-                      backgroundColor: 'transparent'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.mainGreen;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                    }}
-                  >
-                    {subItem.label}
-                  </a>
+                  subItem.href !== '#' ? (
+                    <Link
+                      key={subItem.label}
+                      href={subItem.href}
+                      className="block px-6 py-3 text-sm text-gray-700 hover:text-white transition-all duration-200 font-medium"
+                      style={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      {subItem.label}
+                    </Link>
+                  ) : (
+                    <a
+                      key={subItem.label}
+                      href={subItem.href}
+                      className="block px-6 py-3 text-sm text-gray-700 hover:text-white transition-all duration-200 font-medium"
+                      style={{
+                        backgroundColor: 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = colors.mainGreen;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      {subItem.label}
+                    </a>
+                  )
                 ))}
               </div>
             </div>

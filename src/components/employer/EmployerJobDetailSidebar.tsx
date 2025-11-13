@@ -5,13 +5,21 @@ import { EmployerLocationCard } from './EmployerLocationCard';
 import { EmployerKeywordsCard } from './EmployerKeywordsCard';
 import { EmployerShareInCard } from './EmployerShareInCard';
 
-export const EmployerJobDetailSidebar: React.FC = () => {
+interface EmployerJobDetailSidebarProps {
+  job?: {
+    title?: string;
+    description?: string;
+    location?: string | null;
+  } | null;
+}
+
+export const EmployerJobDetailSidebar: React.FC<EmployerJobDetailSidebarProps> = ({ job }) => {
   return (
     <div className="lg:col-span-1">
       <EmployerPostedByCard />
       <EmployerLocationCard />
       <EmployerKeywordsCard />
-      <EmployerShareInCard />
+      <EmployerShareInCard job={job} />
     </div>
   );
 };

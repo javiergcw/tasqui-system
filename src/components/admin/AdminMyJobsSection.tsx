@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { MyJobCard } from '../employer/MyJobCard';
 import { MyJobsFilter } from '../employer/MyJobsFilter';
 import { colorClasses, colors } from '@/lib/colors';
-import { formatRelativeTime } from '@/utils/format';
+import { formatRelativeTime, formatSalary } from '@/utils/format';
 import { Toast } from '@/components/ui/Toast';
 import { updateJobStatusUseCase } from '@/use-cases';
 import type { AdminJobListItem } from '@/models/admin/job.model';
@@ -74,6 +74,19 @@ const getCompanyInitial = (title: string): string => {
   return 'A';
 };
 
+// Mapear job_type a formato legible
+const mapJobType = (jobType: string): string => {
+  const jobTypeMap: Record<string, string> = {
+    'FULL_TIME': 'Tiempo Completo',
+    'PART_TIME': 'Medio Tiempo',
+    'CONTRACT': 'Contrato',
+    'TEMPORARY': 'Temporal',
+    'INTERNSHIP': 'Pasantía',
+    'FREELANCE': 'Freelance',
+  };
+  return jobTypeMap[jobType] || jobType;
+};
+
 export const AdminMyJobsSection: React.FC<AdminMyJobsSectionProps> = ({ 
   jobs: apiJobs = [], 
   isLoading = false,
@@ -95,18 +108,26 @@ export const AdminMyJobsSection: React.FC<AdminMyJobsSectionProps> = ({
       const postedDate = new Date(apiJob.created_at);
       const city = extractCity(apiJob.location);
       
+      // Formatear salario
+      const salary = apiJob.salary_min && apiJob.salary_max
+        ? formatSalary(apiJob.salary_min, apiJob.salary_max, apiJob.currency)
+        : 'No especificado';
+      
+      // Mapear job_type
+      const jobType = apiJob.job_type ? mapJobType(apiJob.job_type) : 'No especificado';
+      
       return {
         id: apiJob.id,
         companyInitial: getCompanyInitial(apiJob.title),
         jobTitle: apiJob.title,
         jobCategory: 'Sin categoría', // AdminJobListItem no tiene category
-        salary: 'No especificado', // AdminJobListItem no tiene salary
+        salary: salary,
         location: apiJob.location,
         postedTime: formatRelativeTime(postedDate),
-        jobType: 'No especificado', // AdminJobListItem no tiene job_type
+        jobType: jobType,
         status: mapApiStatusToComponentStatus(apiJob.status),
         city: city,
-        modality: 'full-time', // Valor por defecto
+        modality: apiJob.job_type?.toLowerCase() || 'full-time',
         postedDate: postedDate
       };
     });

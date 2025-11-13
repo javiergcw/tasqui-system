@@ -1,5 +1,7 @@
 // Modelo para jobs de admin
 
+import type { SoftSkillItem, HardSkillItem } from '../master';
+
 export type JobStatus = 'DRAFT' | 'OPEN' | 'PAUSED' | 'CLOSED' | 'CANCELLED';
 
 export interface SoftSkill {
@@ -36,6 +38,12 @@ export interface AdminJobListItem {
   company_id: string;
   title: string;
   location: string;
+  salary_min: number;
+  salary_max: number;
+  currency: string;
+  job_type: string;
+  soft_skills: SoftSkillItem[];
+  hard_skills: HardSkillItem[];
   status: string;
   created_at: string;
   updated_at: string;

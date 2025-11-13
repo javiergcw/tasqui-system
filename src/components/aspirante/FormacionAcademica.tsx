@@ -36,9 +36,14 @@ export const FormacionAcademica: React.FC<FormacionAcademicaProps> = ({
   });
 
   const sortedEducations = useMemo(
-    () =>
-      [...educations].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime()),
-    [educations]
+    () => {
+      // Filtrar la educación que se está editando para que no aparezca en la lista
+      const filteredEducations = editingEducation
+        ? educations.filter((edu) => edu.id !== editingEducation.id)
+        : educations;
+      return [...filteredEducations].sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+    },
+    [educations, editingEducation]
   );
 
   const resetForm = () => {
@@ -124,9 +129,20 @@ export const FormacionAcademica: React.FC<FormacionAcademicaProps> = ({
         </h2>
         {onCreateEducation && (
           <button
-            onClick={handleStartCreate}
-            className="px-4 py-2 text-white font-medium rounded-md transition-colors"
-            style={{ backgroundColor: colors.mainGreen }}
+            onClick={() => {
+              if (showForm) {
+                setShowForm(false);
+                resetForm();
+              } else {
+                handleStartCreate();
+              }
+            }}
+            className={`px-4 py-2 font-medium rounded-md transition-colors ${
+              showForm
+                ? 'text-red-600 border border-red-200 hover:bg-red-50'
+                : 'text-white'
+            }`}
+            style={showForm ? {} : { backgroundColor: colors.mainGreen }}
           >
             {showForm ? 'Cancelar' : '+ Agregar Formación'}
           </button>
@@ -215,7 +231,7 @@ export const FormacionAcademica: React.FC<FormacionAcademicaProps> = ({
                 setShowForm(false);
                 resetForm();
               }}
-              className="px-6 py-2 text-gray-600 font-medium border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 text-red-600 font-medium border border-red-200 rounded-md hover:bg-red-50 transition-colors"
             >
               Cancelar
             </button>

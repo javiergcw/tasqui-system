@@ -17,7 +17,7 @@ export const JobDetailSidebar: React.FC<JobDetailSidebarProps> = ({ job, isLoadi
       <PostedByCard job={job} isLoading={isLoading} />
       <LocationCard job={job} isLoading={isLoading} />
       <KeywordsCard job={job} isLoading={isLoading} />
-      <ShareInCard />
+      <ShareInCard job={job} />
     </div>
   );
 };

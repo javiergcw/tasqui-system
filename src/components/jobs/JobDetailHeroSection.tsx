@@ -36,7 +36,7 @@ export const JobDetailHeroSection: React.FC<JobDetailHeroSectionProps> = ({
         )}
 
         {/* Breadcrumb Navigation */}
-        <div className="flex justify-center">
+        <div className="flex justify-center pt-6">
           <nav className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
             <Link
               href="/"

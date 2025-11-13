@@ -6,6 +6,7 @@ import { colorClasses, colors } from '@/lib/colors';
 import type { CompanyProfile } from '@/models';
 import type { Ticket } from '@/models/company/ticket.model';
 import type { UpdateCompanyProfileRequest } from '@/models/company/profile.model';
+import type { CompanyStatsData } from '@/models/company/stats.model';
 
 interface LocalTicket extends Ticket {
   assigned_admin: string | null;
@@ -23,6 +24,8 @@ interface EmployerProfileMainSectionProps {
   isAddingNote?: boolean;
   onUpdateProfile?: (data: UpdateCompanyProfileRequest) => Promise<CompanyProfile>;
   isUpdatingProfile?: boolean;
+  stats?: CompanyStatsData | null;
+  isLoadingStats?: boolean;
 }
 
 export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProps> = ({ 
@@ -36,7 +39,9 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
   onAddTicketNote,
   isAddingNote = false,
   onUpdateProfile,
-  isUpdatingProfile = false
+  isUpdatingProfile = false,
+  stats = null,
+  isLoadingStats = false
 }) => {
   const [activeTab, setActiveTab] = useState('company-data');
 
@@ -45,7 +50,7 @@ export const EmployerProfileMainSection: React.FC<EmployerProfileMainSectionProp
       case 'company-data':
         return <CompanyDataForm profile={profile} isLoading={isLoading} onUpdateProfile={onUpdateProfile} isUpdatingProfile={isUpdatingProfile} />;
       case 'dashboard':
-        return <DashboardTab />;
+        return <DashboardTab stats={stats} isLoadingStats={isLoadingStats} />;
       case 'kanban':
         return <KanbanTab />;
       case 'tickets':
@@ -424,36 +429,12 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({
         {/* Divider */}
         <div className="border-t border-dashed border-gray-300 my-8"></div>
 
-        {/* Billing Plan and Max Open Jobs */}
+        {/* Max Open Jobs */}
         {profile && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Plan de Facturación
-              </label>
-              {isEditing ? (
-                <select
-                  name="billing_plan"
-                  value={formData.billing_plan}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:border-transparent text-gray-900"
-                  style={{
-                    '--tw-ring-color': colors.mainGreen
-                  } as React.CSSProperties}
-                >
-                  <option value="basic">Basic</option>
-                  <option value="premium">Premium</option>
-                </select>
-              ) : (
-                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                  {profile.billing_plan || 'N/A'}
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Máximo de Trabajos Abiertos
+                Aproximados Trabajos
               </label>
               {isEditing ? (
                 <input
@@ -472,24 +453,6 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({
                   {profile.max_open_jobs || 'N/A'}
                 </div>
               )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Fecha de Creación
-              </label>
-              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                {profile.created_at ? new Date(profile.created_at).toLocaleDateString('es-ES') : 'N/A'}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Última Actualización
-              </label>
-              <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700">
-                {profile.updated_at ? new Date(profile.updated_at).toLocaleDateString('es-ES') : 'N/A'}
-              </div>
             </div>
           </div>
         )}
@@ -528,41 +491,87 @@ const CompanyDataForm: React.FC<CompanyDataFormProps> = ({
 };
 
 // Dashboard Tab Component
-const DashboardTab: React.FC = () => {
+interface DashboardTabProps {
+  stats?: CompanyStatsData | null;
+  isLoadingStats?: boolean;
+}
+
+const DashboardTab: React.FC<DashboardTabProps> = ({ stats, isLoadingStats = false }) => {
   const router = useRouter();
   const [selectedJob, setSelectedJob] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
 
+  // Funciones helper para traducir estados
+  const translateJobStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'OPEN': 'Activo',
+      'PAUSED': 'Pausado',
+      'CLOSED': 'Cerrado',
+      'DRAFT': 'Borrador',
+      'CANCELLED': 'Cancelado'
+    };
+    return statusMap[status] || status;
+  };
+
+  const translateApplicationStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'Pending': 'Pendiente',
+      'Reviewed': 'Revisado',
+      'Interviewed': 'Entrevistado',
+      'Rejected': 'Rechazado',
+      'Hired': 'Contratado'
+    };
+    return statusMap[status] || status;
+  };
+
+  // Mapear estado de API a estado del componente
+  const mapApiStatusToComponentStatus = (apiStatus: string): string => {
+    const statusMap: Record<string, string> = {
+      'OPEN': 'Active',
+      'PAUSED': 'Paused',
+      'CLOSED': 'Closed',
+      'DRAFT': 'Draft',
+      'CANCELLED': 'Closed'
+    };
+    return statusMap[apiStatus] || apiStatus;
+  };
+
   const handleViewJob = (jobId: string) => {
-    router.push(`/employer/view-job/${jobId}`);
+    router.push(`/company/view-job/${jobId}`);
   };
 
   const handleEditJob = (jobId: string) => {
-    router.push(`/employer/edit-job/${jobId}`);
+    router.push(`/company/edit-job/${jobId}`);
   };
 
-  // Mock data
-  const jobs = [
-    { id: '1', title: 'Frontend Developer', status: 'Active', applications: 25, views: 150 },
-    { id: '2', title: 'Backend Developer', status: 'Paused', applications: 12, views: 89 },
-    { id: '3', title: 'UI/UX Designer', status: 'Active', applications: 18, views: 120 },
-    { id: '4', title: 'Project Manager', status: 'Closed', applications: 8, views: 45 }
-  ];
+  const handleDeleteJob = (jobId: string) => {
+    if (confirm('¿Estás seguro de que deseas eliminar este trabajo?')) {
+      // TODO: Implementar eliminación de trabajo
+      console.log('Eliminar trabajo:', jobId);
+    }
+  };
 
-  const applications = [
-    { id: '1', name: 'John Smith', job: 'Frontend Developer', status: 'Pending', date: '2024-01-20' },
-    { id: '2', name: 'Sarah Johnson', job: 'Frontend Developer', status: 'Reviewed', date: '2024-01-19' },
-    { id: '3', name: 'Mike Wilson', job: 'Backend Developer', status: 'Interviewed', date: '2024-01-18' },
-    { id: '4', name: 'Emily Davis', job: 'UI/UX Designer', status: 'Pending', date: '2024-01-17' }
-  ];
+  // Mapear datos de la API a formato del componente
+  const jobs = stats?.latest_jobs.map(job => ({
+    id: job.id,
+    title: job.title,
+    status: mapApiStatusToComponentStatus(job.status),
+    apiStatus: job.status, // Guardar estado original de la API para traducción
+    applications: job.applications_count,
+    views: 0 // No disponible en la API actual
+  })) || [];
 
-  // Mock tickets data para el conteo
-  const tickets = [
-    { id: '1', status: 'OPEN' },
-    { id: '2', status: 'IN_PROGRESS' },
-    { id: '3', status: 'CLOSED' },
-    { id: '4', status: 'OPEN' }
-  ];
+  // Mock applications (no disponible en stats actual)
+  const applications: Array<{ id: string; name: string; job: string; status: string; date: string }> = [];
+
+  const handleToggleJobStatus = (jobId: string) => {
+    // Esta funcionalidad requeriría una llamada a la API para actualizar el estado
+    // Por ahora solo actualizamos localmente si es necesario
+    console.log('Toggle job status:', jobId);
+  };
+
+  // Usar estadísticas de tickets de la API
+  const ticketStats = stats?.ticket_statistics || { total: 0, by_status: {} };
 
   const filteredJobs = jobs.filter(job =>
     selectedJob === 'all' || job.id === selectedJob
@@ -572,6 +581,20 @@ const DashboardTab: React.FC = () => {
     (selectedJob === 'all' || app.job === jobs.find(j => j.id === selectedJob)?.title) &&
     (statusFilter === 'all' || app.status.toLowerCase() === statusFilter.toLowerCase())
   );
+
+  if (isLoadingStats) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
+          <p className="mt-4 text-gray-600">Cargando estadísticas...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const jobStats = stats?.job_statistics || { total: 0, by_status: {}, by_visibility: {} };
+  const activeJobsCount = jobStats.by_status['OPEN'] || 0;
 
   return (
     <div className="space-y-8">
@@ -588,7 +611,7 @@ const DashboardTab: React.FC = () => {
             </div>
             <div className="ml-3 md:ml-4">
               <p className="text-xs md:text-sm font-medium text-blue-600">Total de Trabajos</p>
-              <p className="text-lg md:text-2xl font-bold text-blue-900">{jobs.length}</p>
+              <p className="text-lg md:text-2xl font-bold text-blue-900">{jobStats.total}</p>
             </div>
           </div>
         </div>
@@ -602,7 +625,9 @@ const DashboardTab: React.FC = () => {
             </div>
             <div className="ml-3 md:ml-4">
               <p className="text-xs md:text-sm font-medium text-green-600">Total de Aplicaciones</p>
-              <p className="text-lg md:text-2xl font-bold text-green-900">{applications.length}</p>
+              <p className="text-lg md:text-2xl font-bold text-green-900">
+                {jobs.reduce((sum, job) => sum + job.applications, 0)}
+              </p>
             </div>
           </div>
         </div>
@@ -616,7 +641,7 @@ const DashboardTab: React.FC = () => {
             </div>
             <div className="ml-3 md:ml-4">
               <p className="text-xs md:text-sm font-medium text-yellow-600">Total de Tickets</p>
-              <p className="text-lg md:text-2xl font-bold text-yellow-900">{tickets.length}</p>
+              <p className="text-lg md:text-2xl font-bold text-yellow-900">{ticketStats.total}</p>
             </div>
           </div>
         </div>
@@ -630,7 +655,7 @@ const DashboardTab: React.FC = () => {
             </div>
             <div className="ml-3 md:ml-4">
               <p className="text-xs md:text-sm font-medium text-purple-600">Trabajos Activos</p>
-              <p className="text-lg md:text-2xl font-bold text-purple-900">{jobs.filter(job => job.status === 'Active').length}</p>
+              <p className="text-lg md:text-2xl font-bold text-purple-900">{activeJobsCount}</p>
             </div>
           </div>
         </div>
@@ -640,9 +665,19 @@ const DashboardTab: React.FC = () => {
       <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
         <h3 className="text-lg font-semibold text-gray-800 mb-4">Métricas de Trabajos</h3>
 
-        {/* Mobile Cards View */}
-        <div className="block md:hidden space-y-4">
-          {filteredJobs.map((job) => (
+        {jobs.length === 0 ? (
+          <div className="text-center py-12">
+            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2" />
+            </svg>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No hay trabajos</h3>
+            <p className="mt-1 text-sm text-gray-500">Aún no has creado ningún trabajo.</p>
+          </div>
+        ) : (
+          <>
+            {/* Mobile Cards View */}
+            <div className="block md:hidden space-y-4">
+              {filteredJobs.map((job) => (
             <div key={job.id} className="bg-gray-50 p-4 rounded-lg border">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="font-medium text-gray-900 text-sm">{job.title}</h4>
@@ -650,7 +685,7 @@ const DashboardTab: React.FC = () => {
                     job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
                       'bg-red-100 text-red-800'
                   }`}>
-                  {job.status}
+                  {translateJobStatus((job as any).apiStatus || job.status)}
                 </span>
               </div>
               <div className="grid grid-cols-2 gap-4 mb-3 text-sm">
@@ -665,19 +700,22 @@ const DashboardTab: React.FC = () => {
               </div>
               <div className="flex flex-wrap gap-2">
                 <button
-                  onClick={() => handleViewJob(job.id)}
-                  className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
-                >
-                  Ver
-                </button>
-                <button
                   onClick={() => handleEditJob(job.id)}
                   className="px-3 py-1 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200"
                 >
                   Editar
                 </button>
-                <button className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200">
+                <button
+                  onClick={() => handleToggleJobStatus(job.id)}
+                  className="px-3 py-1 text-xs bg-orange-100 text-orange-700 rounded hover:bg-orange-200"
+                >
                   {job.status === 'Active' ? 'Pausar' : 'Activar'}
+                </button>
+                <button
+                  onClick={() => handleDeleteJob(job.id)}
+                  className="px-3 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                >
+                  Eliminar
                 </button>
               </div>
             </div>
@@ -705,26 +743,29 @@ const DashboardTab: React.FC = () => {
                         job.status === 'Paused' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-red-100 text-red-800'
                       }`}>
-                      {job.status}
+                      {translateJobStatus((job as any).apiStatus || job.status)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.applications}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.views}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <button
-                      onClick={() => handleViewJob(job.id)}
-                      className="text-green-600 hover:text-green-900 mr-3"
-                    >
-                      Ver
-                    </button>
-                    <button
                       onClick={() => handleEditJob(job.id)}
                       className="text-green-600 hover:text-green-900 mr-3"
                     >
                       Editar
                     </button>
-                    <button className="text-orange-600 hover:text-orange-900">
+                    <button
+                      onClick={() => handleToggleJobStatus(job.id)}
+                      className="text-orange-600 hover:text-orange-900 mr-3"
+                    >
                       {job.status === 'Active' ? 'Pausar' : 'Activar'}
+                    </button>
+                    <button
+                      onClick={() => handleDeleteJob(job.id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      Eliminar
                     </button>
                   </td>
                 </tr>
@@ -732,6 +773,8 @@ const DashboardTab: React.FC = () => {
             </tbody>
           </table>
         </div>
+          </>
+        )}
       </div>
 
       {/* Applications Section */}
@@ -763,9 +806,19 @@ const DashboardTab: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Cards View */}
-        <div className="block md:hidden space-y-4">
-          {filteredApplications.map((app) => (
+        {filteredApplications.length === 0 ? (
+          <div className="text-center py-12">
+            <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <h3 className="mt-2 text-sm font-medium text-gray-900">No hay aplicaciones</h3>
+            <p className="mt-1 text-sm text-gray-500">Aún no hay aplicaciones para mostrar.</p>
+          </div>
+        ) : (
+          <>
+            {/* Mobile Cards View */}
+            <div className="block md:hidden space-y-4">
+              {filteredApplications.map((app) => (
             <div key={app.id} className="bg-gray-50 p-4 rounded-lg border">
               <div className="flex justify-between items-start mb-3">
                 <h4 className="font-medium text-gray-900 text-sm">{app.name}</h4>
@@ -774,7 +827,7 @@ const DashboardTab: React.FC = () => {
                       app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
                         'bg-red-100 text-red-800'
                   }`}>
-                  {app.status}
+                  {translateApplicationStatus(app.status)}
                 </span>
               </div>
               <div className="space-y-2 mb-3 text-sm">
@@ -825,7 +878,7 @@ const DashboardTab: React.FC = () => {
                           app.status === 'Interviewed' ? 'bg-green-100 text-green-800' :
                             'bg-red-100 text-red-800'
                       }`}>
-                      {app.status}
+                      {translateApplicationStatus(app.status)}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{app.date}</td>
@@ -839,6 +892,8 @@ const DashboardTab: React.FC = () => {
             </tbody>
           </table>
         </div>
+          </>
+        )}
       </div>
     </div>
   );

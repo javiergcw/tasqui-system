@@ -58,7 +58,7 @@ export const DatosPersonales: React.FC<DatosPersonalesProps> = ({
     }
   }, [profile]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
@@ -275,18 +275,23 @@ export const DatosPersonales: React.FC<DatosPersonalesProps> = ({
             <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>
               Idioma Principal
             </label>
-            <input
-              type="text"
+            <select
               name="primary_language"
-              placeholder="Idioma Principal"
-              value={formData.primary_language}
+              value={formData.primary_language || ''}
               onChange={handleInputChange}
               disabled={!isEditing}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900 disabled:bg-gray-50"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 text-gray-900 disabled:bg-gray-50 disabled:cursor-not-allowed"
               style={{ 
                 '--tw-ring-color': colors.mainGreen 
               } as React.CSSProperties}
-            />
+            >
+              <option value="">Seleccionar idioma</option>
+              <option value="es">Español</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="it">Italiano</option>
+            </select>
           </div>
           <div>
             <label className={`block text-sm font-medium ${colorClasses.text.gray600} mb-2`}>

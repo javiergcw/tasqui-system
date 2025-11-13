@@ -38,6 +38,7 @@ export const API_ROUTES = {
     tickets: '/api/v1/company/tickets',
     ticketNotes: (ticketId: string) => `/api/v1/company/tickets/${ticketId}/notes`,
     jobs: '/api/v1/company/jobs',
+    stats: '/api/v1/company/stats',
   },
   
   // Admin

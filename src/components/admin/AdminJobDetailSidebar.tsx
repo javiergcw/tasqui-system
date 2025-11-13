@@ -16,7 +16,7 @@ export const AdminJobDetailSidebar: React.FC<AdminJobDetailSidebarProps> = ({ jo
       <AdminPostedByCard job={job} />
       <AdminLocationCard job={job} />
       <AdminKeywordsCard job={job} />
-      <AdminShareInCard />
+      <AdminShareInCard job={job} />
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Build as BuildIcon } from '@mui/icons-material';
 import { colors, colorClasses } from '@/lib/colors';
 
 interface UnderConstructionProps {
@@ -22,20 +23,12 @@ export const UnderConstruction: React.FC<UnderConstructionProps> = ({
         className="flex h-20 w-20 items-center justify-center rounded-full border border-dashed border-gray-300"
         style={{ backgroundColor: colors.lighterGreen }}
       >
-        <svg
-          className="h-10 w-10 text-green-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={1.5}
-            d="M9 12h6m-2-2v4m0 6a9 9 0 100-18 9 9 0 000 18z"
-          />
-        </svg>
+        <BuildIcon
+          sx={{
+            fontSize: 40,
+            color: colors.mainGreen,
+          }}
+        />
       </div>
 
       <div className="space-y-3 max-w-2xl">

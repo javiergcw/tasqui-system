@@ -1,7 +1,9 @@
 // Utilidades para formateo de datos
 
 export const formatCurrency = (amount: number, currency: string = 'USD'): string => {
-  return new Intl.NumberFormat('es-ES', {
+  // Usar 'es-CO' para COP y 'es-ES' para otras monedas
+  const locale = currency === 'COP' ? 'es-CO' : 'es-ES';
+  return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency: currency,
     minimumFractionDigits: 0,

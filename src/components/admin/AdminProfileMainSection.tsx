@@ -125,7 +125,7 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                   {/* Admin Data */}
                   <button
                     type="button"
-                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'admin-data'
+                    className={`flex flex-col items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'admin-data'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
                       }`}
@@ -144,16 +144,23 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                     }}
                     onClick={() => setActiveTab('admin-data')}
                   >
-                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                    </svg>
-                    <span>Datos del Administrador</span>
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                      </svg>
+                      <span>Datos del Administrador</span>
+                    </div>
+                    {activeTab === 'admin-data' && (
+                      <span className="text-[10px] sm:text-xs mt-1 opacity-90 text-center whitespace-normal px-1">
+                        Gestiona tu información personal
+                      </span>
+                    )}
                   </button>
 
                   {/* Dashboard */}
                   <button
                     type="button"
-                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'dashboard'
+                    className={`flex flex-col items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'dashboard'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
                       }`}
@@ -172,16 +179,23 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                     }}
                     onClick={() => setActiveTab('dashboard')}
                   >
-                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
-                    <span>Panel de Control</span>
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                      </svg>
+                      <span>Panel de Control</span>
+                    </div>
+                    {activeTab === 'dashboard' && (
+                      <span className="text-[10px] sm:text-xs mt-1 opacity-90 text-center whitespace-normal px-1">
+                        Estadísticas y trabajos recientes
+                      </span>
+                    )}
                   </button>
 
                   {/* Tickets */}
                   <button
                     type="button"
-                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'tickets'
+                    className={`flex flex-col items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'tickets'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
                       }`}
@@ -200,17 +214,24 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                     }}
                     onClick={() => setActiveTab('tickets')}
                   >
-                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <span className="inline sm:hidden md:inline">Tickets de Soporte</span>
-                    <span className="hidden sm:inline md:hidden">Tickets</span>
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <span className="inline sm:hidden md:inline">Tickets de Soporte</span>
+                      <span className="hidden sm:inline md:hidden">Tickets</span>
+                    </div>
+                    {activeTab === 'tickets' && (
+                      <span className="text-[10px] sm:text-xs mt-1 opacity-90 text-center whitespace-normal px-1">
+                        Revisa y gestiona solicitudes
+                      </span>
+                    )}
                   </button>
 
                   {/* Employees */}
                   <button
                     type="button"
-                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'employees'
+                    className={`flex flex-col items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'employees'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
                       }`}
@@ -229,16 +250,23 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                     }}
                     onClick={() => setActiveTab('employees')}
                   >
-                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                    </svg>
-                    <span>Empleados</span>
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                      </svg>
+                      <span>Empleados</span>
+                    </div>
+                    {activeTab === 'employees' && (
+                      <span className="text-[10px] sm:text-xs mt-1 opacity-90 text-center whitespace-normal px-1">
+                        Administra información de empleados
+                      </span>
+                    )}
                   </button>
 
                   {/* Leads */}
                   <button
                     type="button"
-                    className={`flex items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'leads'
+                    className={`flex flex-col items-center px-2 py-2 sm:px-3 sm:py-2.5 md:px-4 md:py-3 cursor-pointer transition-colors whitespace-nowrap text-xs sm:text-sm md:text-base ${activeTab === 'leads'
                       ? 'border border-dashed rounded-md'
                       : 'text-slate-800'
                       }`}
@@ -257,10 +285,17 @@ export const AdminProfileMainSection: React.FC<AdminProfileMainSectionProps> = (
                     }}
                     onClick={() => setActiveTab('leads')}
                   >
-                    <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2a4 4 0 00-3-3.874M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2a4 4 0 013-3.874m0 0a3.001 3.001 0 11-4.005-3.52M10 14.126a3.001 3.001 0 104.005-3.52M12 7a3 3 0 100-6 3 3 0 000 6z" />
-                    </svg>
-                    <span>Leads</span>
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 sm:w-4 sm:h-4 md:w-5 md:h-5 mr-1 sm:mr-1.5 md:mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      <span>Leads</span>
+                    </div>
+                    {activeTab === 'leads' && (
+                      <span className="text-[10px] sm:text-xs mt-1 opacity-90 text-center whitespace-normal px-1">
+                        Monitorea y convierte leads
+                      </span>
+                    )}
                   </button>
                 </div>
               </nav>
@@ -388,30 +423,6 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              ID <span className="text-gray-400 text-xs">(solo lectura)</span>
-            </label>
-            <input
-              type="text"
-              value={profile?.id || ''}
-              disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              ID de Usuario <span className="text-gray-400 text-xs">(solo lectura)</span>
-            </label>
-            <input
-              type="text"
-              value={profile?.user_id || ''}
-              disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
               Nombre del Administrador
             </label>
             <input
@@ -444,42 +455,6 @@ const AdminDataForm: React.FC<AdminDataFormProps> = ({ profile, isLoading = fals
                 {formData.canPublishDirect ? 'Acceso Completo' : 'Acceso Limitado'}
               </span>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Fecha de Creación <span className="text-gray-400 text-xs">(solo lectura)</span>
-            </label>
-            <input
-              type="text"
-              value={profile?.created_at ? new Date(profile.created_at).toLocaleDateString('es-ES', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              }) : ''}
-              disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Última Actualización <span className="text-gray-400 text-xs">(solo lectura)</span>
-            </label>
-            <input
-              type="text"
-              value={profile?.updated_at ? new Date(profile.updated_at).toLocaleDateString('es-ES', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              }) : ''}
-              disabled
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-600 cursor-not-allowed"
-            />
           </div>
         </div>
 
@@ -557,6 +532,22 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState<AdminStatsData['latest_tickets'][number] | null>(null);
   const ticketStats = statsData?.ticket_statistics;
+  const jobStats = statsData?.job_statistics;
+
+  const getTicketStatusLabel = (status: string) => {
+    switch (status.toUpperCase()) {
+      case 'OPEN':
+        return 'Abierto';
+      case 'IN_PROGRESS':
+        return 'En Progreso';
+      case 'RESOLVED':
+        return 'Resuelto';
+      case 'CLOSED':
+        return 'Cerrado';
+      default:
+        return status;
+    }
+  };
 
   const stats = [
     { title: 'Total de Tickets', value: ticketStats?.total ?? 0, color: 'bg-blue-50 border-blue-200', iconColor: 'text-blue-600' },
@@ -566,6 +557,37 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
   ];
 
   const recentTickets = statsData?.latest_tickets ?? [];
+  const recentJobs = statsData?.latest_jobs ?? [];
+
+  const getJobStatusColor = (status: string) => {
+    switch (status.toUpperCase()) {
+      case 'OPEN':
+        return 'bg-green-100 text-green-800';
+      case 'PAUSED':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'CLOSED':
+        return 'bg-red-100 text-red-800';
+      case 'DRAFT':
+        return 'bg-gray-100 text-gray-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getJobStatusLabel = (status: string) => {
+    switch (status.toUpperCase()) {
+      case 'OPEN':
+        return 'Abierto';
+      case 'PAUSED':
+        return 'Pausado';
+      case 'CLOSED':
+        return 'Cerrado';
+      case 'DRAFT':
+        return 'Borrador';
+      default:
+        return status;
+    }
+  };
 
   if (isLoading) {
     return (
@@ -629,7 +651,7 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                       ticket.status === 'RESOLVED' ? 'bg-green-100 text-green-800' :
                       'bg-gray-100 text-gray-800'
                     }`}>
-                          {ticket.status}
+                          {getTicketStatusLabel(ticket.status)}
                         </span>
                       </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -657,6 +679,56 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                 <tr>
                   <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                     No hay tickets recientes disponibles.
+                  </td>
+                </tr>
+              )}
+                </tbody>
+              </table>
+            </div>
+        </div>
+
+      {/* Recent Jobs */}
+        <div className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">Trabajos Recientes</h3>
+
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trabajo</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aplicaciones</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creado</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+              {recentJobs.map((job) => (
+                <tr key={job.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{job.title}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.location || 'No especificado'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getJobStatusColor(job.status)}`}>
+                      {getJobStatusLabel(job.status)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{job.applications_count || 0}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{new Date(job.created_at).toLocaleDateString()}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => router.push(`/admin/view-job/${job.id}`)}
+                      className="text-green-600 hover:text-green-900 transition-colors"
+                    >
+                      Ver
+                    </button>
+                  </td>
+                    </tr>
+                  ))}
+              {recentJobs.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                    No hay trabajos recientes disponibles.
                   </td>
                 </tr>
               )}
@@ -693,21 +765,17 @@ const DashboardTab: React.FC<DashboardTabProps> = ({ statsData, isLoading = fals
                 <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
                   <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Estado</p>
                   <span className="mt-2 inline-flex items-center rounded-full bg-gradient-to-r from-green-100 to-green-200 px-3 py-1 text-sm font-semibold text-green-700">
-                    {selectedTicket.status}
+                    {getTicketStatusLabel(selectedTicket.status)}
                   </span>
                 </div>
                 <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
-                  <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Empresa</p>
-                  <p className="mt-2 text-sm text-gray-900">{selectedTicket.company_id}</p>
-                </div>
-                <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
                   <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Solicitado por</p>
-                  <p className="mt-2 text-sm text-gray-900">{selectedTicket.requested_by_user_id}</p>
+                  <p className="mt-2 text-sm text-gray-900">Usuario</p>
                 </div>
                 {selectedTicket.assigned_admin_id ? (
                   <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
                     <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Administrador asignado</p>
-                    <p className="mt-2 text-sm text-gray-900">{selectedTicket.assigned_admin_id}</p>
+                    <p className="mt-2 text-sm text-gray-900">Administrador</p>
                   </div>
                 ) : (
                   <div className="rounded-2xl bg-white/70 p-4 shadow-sm backdrop-blur">
@@ -911,6 +979,21 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
     }
   };
 
+  const getTicketStatusLabel = (status: string) => {
+    switch (status.toUpperCase()) {
+      case 'OPEN':
+        return 'Abierto';
+      case 'IN_PROGRESS':
+        return 'En Progreso';
+      case 'RESOLVED':
+        return 'Resuelto';
+      case 'CLOSED':
+        return 'Cerrado';
+      default:
+        return status;
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
@@ -956,7 +1039,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
                     <div className="flex items-start justify-between mb-2">
                       <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
-                        {ticket.status}
+                        {getTicketStatusLabel(ticket.status)}
                       </span>
                     </div>
 
@@ -994,10 +1077,6 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
               <div className="bg-gray-50 rounded-lg p-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Solicitud</label>
-                    <p className="text-sm text-gray-900 font-mono">#{selectedTicket.id}</p>
-                  </div>
-                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                     <select
                       value={selectedTicket.status}
@@ -1015,20 +1094,8 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
                     )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Empresa</label>
-                    <p className="text-sm text-gray-900 font-mono">{selectedTicket.company_id}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">ID de Usuario</label>
-                    <p className="text-sm text-gray-900 font-mono">{selectedTicket.requested_by_user_id}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Creación</label>
-                    <p className="text-sm text-gray-900">{new Date(selectedTicket.created_at).toLocaleDateString()}</p>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Última Actualización</label>
-                    <p className="text-sm text-gray-900">{new Date(selectedTicket.updated_at).toLocaleDateString()}</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Solicitado por</label>
+                    <p className="text-sm text-gray-900">Usuario</p>
                   </div>
                 </div>
               </div>
@@ -1184,6 +1251,111 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onCo
     }
   };
 
+  const getLeadStatusLabel = (status: string) => {
+    switch (status.toUpperCase()) {
+      case 'PENDING':
+        return 'Pendiente';
+      case 'CONTACTED':
+        return 'Contactado';
+      case 'QUALIFIED':
+        return 'Calificado';
+      case 'NEGOTIATION':
+        return 'En Negociación';
+      default:
+        return status;
+    }
+  };
+
+  const handleExportCSV = () => {
+    if (leads.length === 0) {
+      setToast({
+        show: true,
+        message: 'No hay leads para exportar.',
+        type: 'error',
+      });
+      return;
+    }
+
+    // Encabezados del CSV
+    const headers = [
+      'ID',
+      'Email',
+      'Nombre',
+      'Apellido',
+      'Teléfono',
+      'Ubicación',
+      'País',
+      'Ciudad',
+      'Título del Trabajo',
+      'Compañía',
+      'Experiencia',
+      'Habilidades',
+      'Intereses',
+      'LinkedIn',
+      'GitHub',
+      'Website',
+      'Fuente',
+      'Estado',
+      'Fecha de Creación',
+      'Última Actualización',
+    ];
+
+    // Convertir los leads a filas CSV
+    const rows = leads.map((lead) => [
+      lead.id || '',
+      lead.email || '',
+      lead.first_name || '',
+      lead.last_name || '',
+      lead.phone || '',
+      lead.location || '',
+      lead.country || '',
+      lead.city || '',
+      lead.job_title || '',
+      lead.company || '',
+      lead.experience || '',
+      lead.skills || '',
+      lead.interests || '',
+      lead.linkedin_url || '',
+      lead.github_url || '',
+      lead.website || '',
+      lead.source || '',
+      getLeadStatusLabel(lead.status),
+      new Date(lead.created_at).toLocaleString('es-ES'),
+      new Date(lead.updated_at).toLocaleString('es-ES'),
+    ]);
+
+    // Función para escapar valores CSV (manejar comas, comillas, saltos de línea)
+    const escapeCSVValue = (value: string): string => {
+      if (value.includes(',') || value.includes('"') || value.includes('\n')) {
+        return `"${value.replace(/"/g, '""')}"`;
+      }
+      return value;
+    };
+
+    // Crear el contenido CSV
+    const csvContent = [
+      headers.map(escapeCSVValue).join(','),
+      ...rows.map((row) => row.map((cell) => escapeCSVValue(String(cell))).join(',')),
+    ].join('\n');
+
+    // Crear el blob y descargar
+    const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' }); // BOM para Excel
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `leads_${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    setToast({
+      show: true,
+      message: `Se exportaron ${leads.length} leads correctamente.`,
+      type: 'success',
+    });
+  };
+
   const getFullName = (lead: AdminLead) => {
     const fullName = `${lead.first_name ?? ''} ${lead.last_name ?? ''}`.trim();
     return fullName.length > 0 ? fullName : 'Sin nombre';
@@ -1314,10 +1486,14 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onCo
           <p className="text-sm text-gray-600 mt-1">Monitorea y da seguimiento a los leads que llegan a la plataforma.</p>
         </div>
         <div className="flex gap-2">
-          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+          <button
+            onClick={handleExportCSV}
+            className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+          >
             Exportar CSV
           </button>
           <button
+            onClick={() => window.open('https://tasqui.com/unete-a-nuestro-equipo', '_blank')}
             className="px-4 py-2 text-white rounded-lg transition-colors"
             style={{ backgroundColor: colors.mainGreen }}
             onMouseEnter={(e) => {
@@ -1364,7 +1540,7 @@ const LeadsTab: React.FC<LeadsTabProps> = ({ leads = [], isLoading = false, onCo
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.company || 'No especificado'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadgeColor(lead.status)}`}>
-                        {lead.status}
+                        {getLeadStatusLabel(lead.status)}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.source || 'Desconocido'}</td>

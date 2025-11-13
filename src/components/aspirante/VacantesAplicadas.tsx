@@ -1,6 +1,7 @@
 'use client';
 import React, { useMemo, useState } from 'react';
 import { colors } from '@/lib/colors';
+import { formatCurrency } from '@/utils/format';
 import type { EmployeeJobApplication } from '@/models/employee/job-application.model';
 
 interface VacantesAplicadasProps {
@@ -50,11 +51,68 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
     }
   };
 
+  const getStatusLabel = (status?: string | null) => {
+    if (!status) return 'Sin estado';
+    switch (status.toUpperCase()) {
+      case 'APPLIED':
+        return 'Aplicado';
+      case 'IN_REVIEW':
+        return 'En Revisión';
+      case 'SHORTLISTED':
+        return 'Preseleccionado';
+      case 'INTERVIEW':
+        return 'Entrevista';
+      case 'OFFERED':
+        return 'Oferta Realizada';
+      case 'REJECTED':
+        return 'Rechazado';
+      case 'WITHDRAWN':
+        return 'Retirado';
+      case 'HIRED':
+        return 'Contratado';
+      default:
+        return status;
+    }
+  };
+
   const formatDate = (value?: string | null) => {
     if (!value) return 'No indicado';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return 'No indicado';
-    return date.toLocaleDateString();
+    return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+  };
+
+  const jobTypeLabels: Record<string, string> = {
+    FULL_TIME: 'Tiempo Completo',
+    PART_TIME: 'Medio Tiempo',
+    CONTRACT: 'Contrato',
+    TEMPORARY: 'Temporal',
+    INTERNSHIP: 'Pasantía',
+    FREELANCE: 'Freelance',
+  };
+
+  const experienceLevelLabels: Record<string, string> = {
+    ENTRY_LEVEL: 'Nivel Junior',
+    MID_LEVEL: 'Nivel Semi Senior',
+    SENIOR_LEVEL: 'Nivel Senior',
+    EXECUTIVE: 'Nivel Ejecutivo',
+  };
+
+  const formatSalaryRange = (min?: number | null, max?: number | null, currency?: string | null): string => {
+    if (min == null && max == null) {
+      return 'Salario no especificado';
+    }
+
+    const currencyCode = currency || 'COP';
+    if (min != null && max != null) {
+      return `${formatCurrency(min, currencyCode)} - ${formatCurrency(max, currencyCode)}`;
+    }
+
+    if (min != null) {
+      return `Desde ${formatCurrency(min, currencyCode)}`;
+    }
+
+    return `Hasta ${formatCurrency(max as number, currencyCode)}`;
   };
 
   return (
@@ -72,7 +130,7 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
             <option value="todos">Todos los estados</option>
             {uniqueStatuses.map(status => (
               <option key={status} value={status}>
-                {status}
+                {getStatusLabel(status)}
               </option>
             ))}
           </select>
@@ -92,19 +150,16 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID de la postulación
+                  Vacante
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  ID de la vacante
+                  Ubicación
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Estado
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Fecha de postulación
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Última actualización
                 </th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                   Acciones
@@ -114,22 +169,26 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredApplications.map(application => (
                 <tr key={application.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-4 text-sm font-medium text-gray-900">
-                    {application.id}
+                  <td className="px-4 py-4">
+                    <div className="text-sm font-medium text-gray-900">
+                      {application.job?.title || 'Sin título'}
+                    </div>
+                    {application.job?.category && (
+                      <div className="text-xs text-gray-500 mt-1">
+                        {application.job.category.name}
+                      </div>
+                    )}
                   </td>
                   <td className="px-4 py-4 text-sm text-gray-600">
-                    {application.job_id}
+                    {application.job?.location || 'Ubicación no especificada'}
                   </td>
                   <td className="px-4 py-4">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(application.status)}`}>
-                      {application.status ?? 'Sin estado'}
+                      {getStatusLabel(application.status)}
                     </span>
                   </td>
                   <td className="px-4 py-4 text-sm text-gray-600">
                     {formatDate(application.created_at)}
-                  </td>
-                  <td className="px-4 py-4 text-sm text-gray-600">
-                    {formatDate(application.updated_at)}
                   </td>
                   <td className="px-4 py-4 text-center">
                     <button
@@ -155,18 +214,20 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
           <p className="text-sm">
             {statusFilter === 'todos'
               ? 'Aún no has aplicado a ninguna vacante.'
-              : `No hay postulaciones con estado "${statusFilter}"`}
+              : `No hay postulaciones con estado "${getStatusLabel(statusFilter)}"`}
           </p>
         </div>
       )}
 
       {selectedApplication && (
         <div className="fixed inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-xl w-full shadow-xl">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="bg-white rounded-lg max-w-3xl w-full shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900">Detalle de la postulación</h3>
-                <p className="text-sm text-gray-500">ID vacante: {selectedApplication.job_id}</p>
+                {selectedApplication.job && (
+                  <p className="text-sm text-gray-500 mt-1">{selectedApplication.job.title}</p>
+                )}
               </div>
               <button
                 onClick={() => setSelectedApplication(null)}
@@ -177,27 +238,82 @@ export const VacantesAplicadas: React.FC<VacantesAplicadasProps> = ({
                 </svg>
               </button>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-6">
+              {/* Estado de la aplicación */}
               <div>
-                <span className="text-sm text-gray-500">Estado</span>
-                <div className={`mt-1 inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStatusBadge(selectedApplication.status)}`}>
-                  {selectedApplication.status ?? 'Sin estado'}
+                <span className="block text-sm font-medium text-gray-500 mb-2">Estado de la postulación</span>
+                <div className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${getStatusBadge(selectedApplication.status)}`}>
+                  {getStatusLabel(selectedApplication.status)}
                 </div>
               </div>
-              <div>
-                <span className="block text-sm text-gray-500">Fecha de postulación</span>
-                <p className="text-gray-800 font-medium">{formatDate(selectedApplication.created_at)}</p>
-              </div>
-              <div>
-                <span className="block text-sm text-gray-500">Última actualización</span>
-                <p className="text-gray-800 font-medium">{formatDate(selectedApplication.updated_at)}</p>
-              </div>
-              <div>
-                <span className="block text-sm text-gray-500">Identificador de postulación</span>
-                <p className="text-gray-800 font-medium break-all">{selectedApplication.id}</p>
+
+              {/* Información del trabajo */}
+              {selectedApplication.job && (
+                <div className="border-t border-gray-200 pt-6">
+                  <h4 className="text-md font-semibold text-gray-900 mb-4">Información de la vacante</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <span className="block text-sm text-gray-500 mb-1">Título</span>
+                      <p className="text-gray-900 font-medium">{selectedApplication.job.title}</p>
+                    </div>
+                    {selectedApplication.job.category && (
+                      <div>
+                        <span className="block text-sm text-gray-500 mb-1">Categoría</span>
+                        <p className="text-gray-900 font-medium">{selectedApplication.job.category.name}</p>
+                      </div>
+                    )}
+                    <div>
+                      <span className="block text-sm text-gray-500 mb-1">Ubicación</span>
+                      <p className="text-gray-900 font-medium">{selectedApplication.job.location || 'No especificada'}</p>
+                    </div>
+                    <div>
+                      <span className="block text-sm text-gray-500 mb-1">Tipo de trabajo</span>
+                      <p className="text-gray-900 font-medium">
+                        {jobTypeLabels[selectedApplication.job.job_type] || selectedApplication.job.job_type || 'No especificado'}
+                      </p>
+                    </div>
+                    {selectedApplication.job.experience_level && (
+                      <div>
+                        <span className="block text-sm text-gray-500 mb-1">Nivel de experiencia</span>
+                        <p className="text-gray-900 font-medium">
+                          {experienceLevelLabels[selectedApplication.job.experience_level] || selectedApplication.job.experience_level}
+                        </p>
+                      </div>
+                    )}
+                    <div>
+                      <span className="block text-sm text-gray-500 mb-1">Salario</span>
+                      <p className="text-gray-900 font-medium">
+                        {formatSalaryRange(selectedApplication.job.salary_min, selectedApplication.job.salary_max, selectedApplication.job.currency)}
+                      </p>
+                    </div>
+                  </div>
+                  {selectedApplication.job.description && (
+                    <div className="mt-4">
+                      <span className="block text-sm text-gray-500 mb-2">Descripción</span>
+                      <div className="text-gray-700 whitespace-pre-wrap bg-gray-50 p-4 rounded-md">
+                        {selectedApplication.job.description}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Fechas de la aplicación */}
+              <div className="border-t border-gray-200 pt-6">
+                <h4 className="text-md font-semibold text-gray-900 mb-4">Información de la postulación</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <span className="block text-sm text-gray-500 mb-1">Fecha de postulación</span>
+                    <p className="text-gray-900 font-medium">{formatDate(selectedApplication.created_at)}</p>
+                  </div>
+                  <div>
+                    <span className="block text-sm text-gray-500 mb-1">Última actualización</span>
+                    <p className="text-gray-900 font-medium">{formatDate(selectedApplication.updated_at)}</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="flex justify-end gap-3 p-6 border-t border-gray-200">
+            <div className="flex justify-end gap-3 p-6 border-t border-gray-200 sticky bottom-0 bg-white">
               <button
                 onClick={() => setSelectedApplication(null)}
                 className="px-4 py-2 text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"

@@ -9,16 +9,19 @@ import { EmployerProfileMainSection } from '@/components/employer/EmployerProfil
 import { Toast } from '@/components';
 import { colorClasses } from '@/lib/colors';
 import { companyProfileUseCase, createTicketUseCase } from '@/use-cases';
-import { getTicketsUseCase as companyGetTicketsUseCase, addTicketNoteUseCase } from '@/use-cases/company';
+import { getTicketsUseCase as companyGetTicketsUseCase, addTicketNoteUseCase, getCompanyStatsUseCase } from '@/use-cases/company';
 import type { CompanyProfile } from '@/models';
 import type { Ticket, TicketNote } from '@/models/company/ticket.model';
 import type { UpdateCompanyProfileRequest } from '@/models/company/profile.model';
+import type { CompanyStatsData } from '@/models/company/stats.model';
 
 export default function EmployerProfilePage() {
   const [profile, setProfile] = useState<CompanyProfile | null>(null);
   const [tickets, setTickets] = useState<Ticket[]>([]);
+  const [stats, setStats] = useState<CompanyStatsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingTickets, setIsLoadingTickets] = useState(true);
+  const [isLoadingStats, setIsLoadingStats] = useState(true);
   const [isCreatingTicket, setIsCreatingTicket] = useState(false);
   const [isAddingNote, setIsAddingNote] = useState(false);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
@@ -57,6 +60,22 @@ export default function EmployerProfilePage() {
     };
 
     fetchTickets();
+  }, []);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        setIsLoadingStats(true);
+        const statsData = await getCompanyStatsUseCase.execute();
+        setStats(statsData);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setIsLoadingStats(false);
+      }
+    };
+
+    fetchStats();
   }, []);
 
   const handleCreateTicket = async (formData: { title: string; description: string }) => {
@@ -175,6 +194,8 @@ export default function EmployerProfilePage() {
           isAddingNote={isAddingNote}
           onUpdateProfile={handleUpdateProfile}
           isUpdatingProfile={isUpdatingProfile}
+          stats={stats}
+          isLoadingStats={isLoadingStats}
         />
 
       <Footer />

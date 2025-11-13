@@ -104,25 +104,64 @@ const getCityKey = (location: string): string => {
   return city?.trim().toLowerCase() || '';
 };
 
+const mapJobType = (jobType: string): string => {
+  const jobTypeMap: Record<string, string> = {
+    'FULL_TIME': 'Tiempo Completo',
+    'PART_TIME': 'Medio Tiempo',
+    'CONTRACT': 'Contrato',
+    'TEMPORARY': 'Temporal',
+    'INTERNSHIP': 'Pasantía',
+    'FREELANCE': 'Freelance',
+  };
+  return jobTypeMap[jobType] || jobType;
+};
+
+const formatSalary = (min: number, max: number, currency: string = 'COP'): string => {
+  const locale = currency === 'COP' ? 'es-CO' : 'es-ES';
+  const formatter = new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  if (min && max) {
+    return `${formatter.format(min)} - ${formatter.format(max)}`;
+  }
+  if (min) {
+    return `Desde ${formatter.format(min)}`;
+  }
+  if (max) {
+    return `Hasta ${formatter.format(max)}`;
+  }
+  return 'Salario no especificado';
+};
+
 const mapJobsToDisplay = (jobs: CompanyJobListItem[]): DisplayJob[] => {
   return jobs.map((job) => {
     const relative = getRelativeTime(job.created_at);
     const statusForCard = normalizeStatusForCard(job.status);
     const rawStatus = job.status ?? 'UNKNOWN';
 
+    const salary = job.salary_min && job.salary_max
+      ? formatSalary(job.salary_min, job.salary_max, job.currency)
+      : 'Salario no especificado';
+
+    const jobType = job.job_type ? mapJobType(job.job_type) : 'Tipo no especificado';
+
     return {
       id: job.id,
       companyInitial: job.title?.charAt(0)?.toUpperCase() || 'T',
       jobTitle: job.title || 'Trabajo sin título',
       jobCategory: 'Categoría no especificada',
-      salary: 'Salario no especificado',
+      salary: salary,
       location: job.location || 'Ubicación no especificada',
       postedTime: relative.label,
-      jobType: 'Tipo no especificado',
+      jobType: jobType,
       status: statusForCard,
       statusFilterValue: rawStatus.toLowerCase(),
       city: getCityKey(job.location),
-      modality: 'unknown',
+      modality: job.job_type?.toLowerCase() || 'unknown',
       postedDate: relative.date,
     };
   });
