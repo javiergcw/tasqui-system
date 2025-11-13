@@ -37,12 +37,31 @@ export const AdminLeadDetailMainSection = ({ lead, isLoading = false, error = nu
 
   const { lead: leadInfo, educations, experiences, languages, resume, skills } = lead;
 
-  const renderEducations = (items: AdminLeadEducation[]) => {
-    if (!items.length) return <p className="text-sm text-gray-500">Sin registros educativos.</p>;
+  const translateStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'NEW': 'Nuevo',
+      'PENDING': 'Pendiente',
+      'CONTACTED': 'Contactado',
+      'QUALIFIED': 'Calificado',
+      'UNQUALIFIED': 'No calificado',
+      'CONVERTED': 'Convertido',
+      'LOST': 'Perdido',
+      'ACTIVE': 'Activo',
+      'INACTIVE': 'Inactivo',
+      'OPEN': 'Abierto',
+      'CLOSED': 'Cerrado',
+      'IN_PROGRESS': 'En Progreso',
+    };
+    return statusMap[status.toUpperCase()] || status;
+  };
+
+  const renderEducations = (items?: AdminLeadEducation[] | null) => {
+    const safeItems = items ?? [];
+    if (!safeItems.length) return <p className="text-sm text-gray-500">Sin registros educativos.</p>;
 
     return (
       <div className="space-y-4">
-        {items.map((education) => (
+        {safeItems.map((education) => (
           <div key={education.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <h4 className="text-base font-semibold text-gray-900">{education.degree_name}</h4>
             <p className="text-sm text-gray-600">{education.institution_name}</p>
@@ -60,12 +79,13 @@ export const AdminLeadDetailMainSection = ({ lead, isLoading = false, error = nu
     );
   };
 
-  const renderExperiences = (items: AdminLeadExperience[]) => {
-    if (!items.length) return <p className="text-sm text-gray-500">Sin registros de experiencia.</p>;
+  const renderExperiences = (items?: AdminLeadExperience[] | null) => {
+    const safeItems = items ?? [];
+    if (!safeItems.length) return <p className="text-sm text-gray-500">Sin registros de experiencia.</p>;
 
     return (
       <div className="space-y-4">
-        {items.map((experience) => (
+        {safeItems.map((experience) => (
           <div key={experience.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <h4 className="text-base font-semibold text-gray-900">{experience.job_title}</h4>
             <p className="text-sm text-gray-600">{experience.company_name}</p>
@@ -153,7 +173,7 @@ export const AdminLeadDetailMainSection = ({ lead, isLoading = false, error = nu
                 <div>
                   <p className="font-medium text-gray-900">Estado</p>
                   <span className="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-800">
-                    {leadInfo.status}
+                    {translateStatus(leadInfo.status)}
                   </span>
                 </div>
               </div>

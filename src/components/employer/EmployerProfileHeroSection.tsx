@@ -1,3 +1,5 @@
+'use client';
+import React from 'react';
 import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
@@ -6,10 +8,11 @@ export const EmployerProfileHeroSection: React.FC = () => {
     <section 
       className="relative py-16 md:py-24"
       style={{
-        background: `linear-gradient(135deg, ${colors.dark[800]} 0%, ${colors.dark[900]} 100%)`
+        background: `linear-gradient(135deg, ${colors.heroGreen} 0%, ${colors.ctaGreen} 50%, ${colors.heroGreen} 100%)`
       }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="absolute inset-0 bg-black/20"></div>
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-4">
             Perfil de la Empresa

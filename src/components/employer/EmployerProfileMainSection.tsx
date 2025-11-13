@@ -1208,6 +1208,15 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
     }
   };
 
+  const translateTicketStatus = (status: string): string => {
+    const statusMap: Record<string, string> = {
+      'OPEN': 'Abierto',
+      'IN_PROGRESS': 'En Progreso',
+      'CLOSED': 'Cerrado'
+    };
+    return statusMap[status] || status;
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'OPEN':
@@ -1292,7 +1301,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
                         <div className="flex items-start justify-between mb-2">
                           <h4 className="font-medium text-gray-900 text-sm md:text-base">{ticket.title}</h4>
                           <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(ticket.status)}`}>
-                            {ticket.status}
+                            {translateTicketStatus(ticket.status)}
                           </span>
                         </div>
 
@@ -1549,8 +1558,7 @@ const TicketsTab: React.FC<TicketsTabProps> = ({
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedTicket.status)}`}>
-                      {selectedTicket.status === 'OPEN' ? 'Abierto' : 
-                       selectedTicket.status === 'IN_PROGRESS' ? 'En Progreso' : 'Cerrado'}
+                      {translateTicketStatus(selectedTicket.status)}
                     </span>
                   </div>
                   <div>

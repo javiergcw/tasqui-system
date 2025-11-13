@@ -229,26 +229,9 @@ export const Footer: React.FC = () => {
               <div className="w-16 border-b border-white mt-2"></div>
             </h6>
             <div className="space-y-4">
-              {/* Phone */}
-              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.hoverGreen; e.currentTarget.querySelector('p')!.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
-                <div className="flex items-center mb-1">
-                  <svg 
-                    className="w-4 h-4 mr-2" 
-                    fill="none" 
-                    stroke={colors.hoverGreen} 
-                    viewBox="0 0 24 24"
-                    style={{ stroke: colors.hoverGreen }}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                  </svg>
-                  <span className={`${colorClasses.text.gray300} text-sm transition-colors`}>Teléfono:</span>
-                </div>
-                <p className={`${colorClasses.text.gray300} text-sm ml-6 transition-colors`}>+57 1 234 5678</p>
-              </div>
-
-              {/* Email */}
-              <div className="transition-colors cursor-pointer" onMouseEnter={(e) => { e.currentTarget.querySelector('span')!.style.color = colors.hoverGreen; e.currentTarget.querySelector('p')!.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.querySelector('span')!.style.color = ''; e.currentTarget.querySelector('p')!.style.color = ''; }}>
-                <div className="flex items-center mb-1">
+              {/* Contáctanos */}
+              <div>
+                <div className="flex items-center mb-3">
                   <svg 
                     className="w-4 h-4 mr-2" 
                     fill="none" 
@@ -258,9 +241,34 @@ export const Footer: React.FC = () => {
                   >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  <span className={`${colorClasses.text.gray300} text-sm transition-colors`}>Correo:</span>
+                  <span className={`${colorClasses.text.gray300} text-sm font-semibold transition-colors`}>Contáctanos a</span>
                 </div>
-                <p className={`${colorClasses.text.gray300} text-sm ml-6 transition-colors`}>info@tasqui.com</p>
+                
+                {/* Área comercial */}
+                <div className="ml-6 mb-3 transition-colors">
+                  <p className={`${colorClasses.text.gray300} text-xs font-medium mb-1 transition-colors`}>Área comercial</p>
+                  <a 
+                    href="mailto:comercial@tasqui.com"
+                    className={`${colorClasses.text.gray300} text-sm transition-colors`}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                  >
+                    comercial@tasqui.com
+                  </a>
+                </div>
+
+                {/* Gerencia */}
+                <div className="ml-6 transition-colors">
+                  <p className={`${colorClasses.text.gray300} text-xs font-medium mb-1 transition-colors`}>Gerencia</p>
+                  <a 
+                    href="mailto:direccionacademica@tasqui.com"
+                    className={`${colorClasses.text.gray300} text-sm transition-colors`}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                  >
+                    direccionacademica@tasqui.com
+                  </a>
+                </div>
               </div>
 
               {/* Address */}
