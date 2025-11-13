@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { colors } from '@/lib/colors';
 
 export const HeroSection: React.FC = () => {
@@ -39,8 +38,10 @@ export const HeroSection: React.FC = () => {
             
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link 
-                href="/login"
+              <a 
+                href="https://tasqui.com/unete-a-nuestro-equipo"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200 text-center"
                 style={{ backgroundColor: colors.heroGreen }}
                 onMouseEnter={(e) => {
@@ -51,9 +52,12 @@ export const HeroSection: React.FC = () => {
                 }}
               >
                 Sube tu CV
-              </Link>
-              <button 
-                className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200"
+              </a>
+              <a 
+                href="https://tasqui.com/contactanos"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors duration-200 text-center"
                 style={{ backgroundColor: colors.heroGreen }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = colors.hoverGreen;
@@ -63,7 +67,7 @@ export const HeroSection: React.FC = () => {
                 }}
               >
                 Contáctanos
-              </button>
+              </a>
             </div>
           </div>
           

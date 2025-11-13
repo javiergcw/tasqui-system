@@ -207,7 +207,14 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}>
+                <a 
+                  href="https://tasqui.com/contactanos" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center ${colorClasses.text.gray300} transition-colors text-sm`} 
+                  onMouseEnter={(e) => { e.currentTarget.style.color = colors.hoverGreen; }} 
+                  onMouseLeave={(e) => { e.currentTarget.style.color = ''; }}
+                >
                   <span className="mr-2" style={{ color: colors.hoverGreen }}>»</span>
                   Contacto
                 </a>
