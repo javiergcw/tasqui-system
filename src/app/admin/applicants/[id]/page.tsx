@@ -92,7 +92,21 @@ export default function AdminApplicantDetailPage({
         applicantId,
         status
       );
-      setApplication(updatedApplication);
+      
+      // Preservar los datos del trabajador (applicant) y del trabajo (job) 
+      // que pueden no venir en la respuesta del update
+      setApplication((prevApplication) => {
+        if (!prevApplication) return updatedApplication;
+        
+        return {
+          ...updatedApplication,
+          // Preservar el applicant si no viene en la respuesta actualizada
+          applicant: updatedApplication.applicant ?? prevApplication.applicant,
+          // Preservar el job completo si no viene en la respuesta actualizada
+          job: updatedApplication.job ?? prevApplication.job,
+        };
+      });
+      
       return true;
     } catch (err) {
       console.error('Error updating job application status:', err);
